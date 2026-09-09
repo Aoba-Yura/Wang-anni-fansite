@@ -127,21 +127,31 @@ document.querySelectorAll(".copy-color").forEach((button) => {
 });
 
 const cheerButton = document.querySelector(".cheer-button");
-const cheerCount = document.querySelector(".cheer-count");
-let cheers = Number.parseInt(readStorage("annie-cheers", "0"), 10) || 0;
-
-if (cheerCount) cheerCount.textContent = "♡ " + String(cheers).padStart(3, "0");
+const cheerLabel = cheerButton?.querySelector(".cheer-label");
 
 cheerButton?.addEventListener("click", () => {
-  cheers += 1;
-  writeStorage("annie-cheers", String(cheers));
-  if (cheerCount) cheerCount.textContent = "♥ " + String(cheers).padStart(3, "0");
-  cheerButton.animate(
-    [
-      { transform: "translateY(0) scale(1)" },
-      { transform: "translateY(-3px) scale(1.025)" },
-      { transform: "translateY(0) scale(1)" }
-    ],
-    { duration: 280, easing: "ease-out" }
-  );
+  const particles = ["✦", "♡", "✿", "✧", "·", "✦", "♡"];
+  cheerButton.classList.remove("is-sent");
+  void cheerButton.offsetWidth;
+  cheerButton.classList.add("is-sent");
+  if (cheerLabel) cheerLabel.textContent = "应援已送达 ✦";
+
+  particles.forEach((symbol, index) => {
+    const particle = document.createElement("i");
+    particle.className = "cheer-particle";
+    particle.textContent = symbol;
+    particle.style.setProperty("--particle-x", `${(index - 3) * 42 + (index % 2 ? 10 : -8)}px`);
+    particle.style.setProperty("--particle-y", `${-28 - (index % 3) * 19}px`);
+    particle.style.setProperty("--particle-rotate", `${(index - 3) * 28}deg`);
+    particle.style.setProperty("--particle-size", `${.75 + (index % 3) * .2}rem`);
+    particle.style.setProperty("--particle-color", index % 2 ? "var(--blush)" : "var(--cream)");
+    particle.addEventListener("animationend", () => particle.remove(), { once: true });
+    cheerButton.append(particle);
+  });
+
+  window.clearTimeout(cheerButton.resetTimer);
+  cheerButton.resetTimer = window.setTimeout(() => {
+    cheerButton.classList.remove("is-sent");
+    if (cheerLabel) cheerLabel.textContent = "为安妮应援";
+  }, 1400);
 });
