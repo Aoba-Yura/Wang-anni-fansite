@@ -26,9 +26,11 @@
 @keyframes page-in { from { opacity: 0; transform: translateY(12px); } }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: clip; overscroll-behavior-x: none; }
 body {
   margin: 0;
+  width: 100%;
+  max-width: 100%;
   min-width: 320px;
   color: var(--ink);
   background:
@@ -36,7 +38,8 @@ body {
     radial-gradient(circle at 8% 86%, rgba(183,186,107,.07), transparent 28rem),
     var(--bg);
   font-family: var(--sans);
-  overflow-x: hidden;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
   transition: background .6s ease;
 }
 body.matcha-mode {
@@ -363,7 +366,7 @@ img { display: block; max-width: 100%; }
 .month-index-heading { min-height: 92px; padding: 15px 17px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(255,231,197,.2); color: #f5dfc2; background: rgba(58,36,29,.7); }
 .month-index-heading span { color: #d7b99b; font-size: .68rem; letter-spacing: .12em; }
 .month-index-heading strong { font: 900 1.2rem var(--sans); }
-.month-card { position: relative; min-height: 92px; padding: 13px 10px 11px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; border: 1px solid rgba(89,56,43,.22); color: #5b4033; background: #f1dfbd; cursor: pointer; text-align: left; transform: rotate(var(--month-tilt, 0deg)); transition: transform .2s ease, color .2s ease, background .2s ease, box-shadow .2s ease; }
+.month-card { position: relative; min-width: 0; min-height: 92px; padding: 13px 10px 11px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; border: 1px solid rgba(89,56,43,.22); color: #5b4033; background: #f1dfbd; cursor: pointer; text-align: left; transform: rotate(var(--month-tilt, 0deg)); transition: transform .2s ease, color .2s ease, background .2s ease, box-shadow .2s ease; }
 .month-card:nth-child(3) { --month-tilt: 1.2deg; background: #d9dca6; }
 .month-card:nth-child(4) { --month-tilt: -1deg; background: #e8c2be; }
 .month-card:nth-child(5) { --month-tilt: 1.4deg; background: #d9cbe0; }
@@ -515,7 +518,7 @@ img { display: block; max-width: 100%; }
   .home-copy h1 > b { font-size: clamp(3rem,16vw,5rem); }
   .hero-statement { margin-top: 30px; }
   .hero-actions { flex-wrap: wrap; gap: 20px; }
-  .home-portrait { width: calc(100% + 10px); max-height: 570px; }
+  .home-portrait { width: 100%; max-width: 100%; max-height: 570px; }
   .hero-facts { grid-column: 1; grid-template-columns: repeat(2,1fr); }
   .hero-facts div { flex-direction: column; }
   .portal-section { padding-top: 82px; }
