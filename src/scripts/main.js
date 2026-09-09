@@ -56,6 +56,23 @@ filterButtons.forEach((button) => {
   });
 });
 
+const noticeMonthButtons = document.querySelectorAll("[data-notice-month]");
+const noticeCards = document.querySelectorAll("[data-notice-card]");
+
+noticeMonthButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const month = button.dataset.noticeMonth;
+    noticeMonthButtons.forEach((item) => {
+      const selected = item === button;
+      item.classList.toggle("active", selected);
+      item.setAttribute("aria-pressed", String(selected));
+    });
+    noticeCards.forEach((card) => {
+      card.hidden = month !== "all" && card.dataset.noticeMonth !== month;
+    });
+  });
+});
+
 const literaryTabs = document.querySelectorAll("[data-literary-tab]");
 const literaryPanels = document.querySelectorAll("[data-literary-panel]");
 

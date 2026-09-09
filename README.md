@@ -7,6 +7,7 @@
 ```text
 src/
 ├─ pages/       页面源码
+├─ partials/     构建时注入的共享片段
 ├─ styles/      样式源码
 ├─ scripts/     交互脚本
 ├─ assets/      图片、图标、字体等静态资源

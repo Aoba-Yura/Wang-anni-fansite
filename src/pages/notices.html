@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090713">
+  <meta name="description" content="お知らせ：王安妮应援信息站的更新通知、站内公告与红豆妮留言板">
+  <title>お知らせ · 王安妮应援信息站</title>
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body data-page="notices">
+  <div class="cursor-glow" aria-hidden="true"></div><div class="noise" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="logo" href="./index.html" aria-label="王安妮应援信息站首页"><span class="logo-mark" aria-hidden="true"></span><span class="logo-type" lang="ja">安妮<br>アーカイブ</span></a>
+    <nav class="desktop-nav" aria-label="主导航"><a href="./index.html">首页</a><a href="./profile.html">人物档案</a><a href="./diary.html">安妮日志</a><a class="active" href="./notices.html" aria-current="page">お知らせ</a><a href="./hymn.html">安妮颂</a></nav>
+    <button class="light-switch" type="button" aria-pressed="false"><span class="switch-dot" aria-hidden="true"></span><span class="switch-text">抹茶模式</span></button>
+  </header>
+
+  <main class="inner-main notices-main">
+    <header class="page-hero content-width">
+      <div><p class="eyebrow"><span></span> <span lang="ja">校内掲示板</span></p><h1>お知らせ</h1></div>
+      <p>一楼黑板旁的那面墙，贴着每一张值得被看见的小纸条；这里有站内更新、应援提醒，也有红豆妮路过时留下的话</p>
+    </header>
+
+    <section class="notice-board content-width" aria-labelledby="notice-board-title">
+      <nav class="month-index" aria-label="按月份浏览公告">
+        <div class="month-index-heading"><span lang="ja">月ごとの掲示</span><strong>公告月份</strong></div>
+        <button class="month-card active" type="button" data-notice-month="all" aria-pressed="true"><b>ALL</b><span>全部</span></button>
+        <button class="month-card" type="button" data-notice-month="2026-09" aria-pressed="false"><b>09</b><span>2026 · 九月</span></button>
+        <button class="month-card" type="button" data-notice-month="2026-08" aria-pressed="false"><b>08</b><span>2026 · 八月</span></button>
+        <button class="month-card" type="button" data-notice-month="2026-07" aria-pressed="false"><b>07</b><span>2026 · 七月</span></button>
+        <button class="month-card" type="button" data-notice-month="2026-02" aria-pressed="false"><b>02</b><span>2026 · 二月</span></button>
+      </nav>
+      <div class="board-frame">
+        <div class="board-header">
+          <div><span lang="ja">ANNIE ARCHIVE · 1F</span><h2 id="notice-board-title">掲示板</h2></div>
+          <p><b>今月のお知らせ</b><br>大切なお知らせ</p>
+        </div>
+        <div class="board-grid">
+          <article class="notice-card notice-card--red notice-card--wide" data-notice-card data-notice-month="2026-09">
+            <i class="pushpin" aria-hidden="true"></i>
+            <div class="notice-card-top"><span class="notice-label">站内更新</span><time datetime="2026-09-07">2026.09.07</time></div>
+            <h3>安妮颂，已经贴在四楼窗边</h3>
+            <p>新开一栏粉丝原创文学，收录赞美诗与赞颂骈文；欢迎在安静的课间读完，再把想说的话带去下一次相见</p>
+            <span class="notice-signature">— 紅豆妮編集室</span>
+          </article>
+
+          <article class="notice-card notice-card--cream notice-card--tilt-left" data-notice-card data-notice-month="2026-08">
+            <i class="pushpin" aria-hidden="true"></i>
+            <div class="notice-card-top"><span class="notice-label">温馨提示</span><time datetime="2026-08-23">2026.08.23</time></div>
+            <h3>最新消息，记得去官方渠道确认</h3>
+            <p>本站是非官方粉丝创作与公开资料整理站；成员动态、活动安排与原始内容，请以王安妮及 TSH48 官方渠道为准</p>
+            <span class="notice-stamp">CHECK</span>
+          </article>
+
+          <article class="notice-card notice-card--matcha notice-card--tilt-right" data-notice-card data-notice-month="2026-07">
+            <i class="pushpin" aria-hidden="true"></i>
+            <div class="notice-card-top"><span class="notice-label">应援小抄</span><time datetime="2026-07-19">毎日</time></div>
+            <h3>红豆红 × 抹茶绿</h3>
+            <p>她的应援色已经收录在人物档案里；想找色值时，回到档案页就能找到</p>
+            <a href="./profile.html">去看人物档案 ↗</a>
+          </article>
+
+          <article class="notice-card notice-card--lilac notice-card--small" data-notice-card data-notice-month="2026-02">
+            <i class="pushpin" aria-hidden="true"></i>
+            <div class="notice-card-top"><span class="notice-label">给红豆妮</span><time datetime="2026-02-19">02.19</time></div>
+            <h3>生日快乐，安妮</h3>
+            <p>愿每一张举起的灯牌，都被她在舞台上看见</p>
+          </article>
+
+          <article class="notice-card notice-card--paper notice-card--small notice-card--tilt-left" data-notice-card data-notice-month="2026-09">
+            <i class="pushpin" aria-hidden="true"></i>
+            <div class="notice-card-top"><span class="notice-label">今日值日</span><time datetime="2026-09-09">09.09</time></div>
+            <h3>把喜欢好好收好</h3>
+            <p>看日志，读颂文，偶尔也在这里停一下</p>
+            <span class="notice-doodle" aria-hidden="true">♡</span>
+          </article>
+        </div>
+        <div class="board-footer"><span lang="ja">忘れ物はないかな</span><span>最后更新：2026.09.09</span></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- SITE_FOOTER -->
+  <nav class="mobile-nav" aria-label="手机端主导航"><a href="./index.html"><b>⌂</b><span>首页</span></a><a href="./profile.html"><b>01</b><span>档案</span></a><a href="./diary.html"><b>02</b><span>日志</span></a><a class="active" href="./notices.html" aria-current="page"><b>03</b><span>公告</span></a><a href="./hymn.html"><b>04</b><span>安妮颂</span></a></nav>
+  <script src="../scripts/main.js"></script>
+</body>
+</html>
