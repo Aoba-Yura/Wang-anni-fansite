@@ -391,7 +391,7 @@ img { display: block; max-width: 100%; }
 .board-header p { margin: 0; color: #ddc5aa; font-size: .78rem; line-height: 1.8; text-align: right; }
 .board-header p b { color: #fff0d7; font-size: .9rem; }
 .board-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: clamp(17px,2.5vw,32px); align-items: start; }
-.notice-card { position: relative; min-height: 245px; padding: 28px 27px 25px; color: #33251f; box-shadow: 8px 13px 17px rgba(38,20,14,.22); transform: rotate(0deg); transition: transform .25s ease, box-shadow .25s ease; }
+.notice-card { position: relative; min-height: 245px; padding: 28px 27px 25px; color: #33251f; cursor: default; box-shadow: 8px 13px 17px rgba(38,20,14,.22); transform: rotate(0deg); transition: transform .25s ease, box-shadow .25s ease; }
 .notice-card:hover { z-index: 3; box-shadow: 12px 20px 26px rgba(38,20,14,.3); transform: translateY(-6px) rotate(0deg); }
 .notice-card--wide { grid-column: span 4; min-height: 305px; }
 .notice-card--small { grid-column: span 2; min-height: 210px; }
@@ -412,7 +412,7 @@ img { display: block; max-width: 100%; }
 .notice-card time { font: 400 .72rem var(--display); }
 .notice-card h3 { margin: 24px 0 13px; font-size: clamp(1.25rem,2vw,2rem); line-height: 1.35; letter-spacing: -.05em; }
 .notice-card p { margin: 0; color: rgba(52,37,31,.78); font-size: .88rem; line-height: 1.85; }
-.notice-card a { display: inline-block; margin-top: 22px; padding-bottom: 3px; border-bottom: 1px solid currentColor; color: #4d5a25; font-size: .8rem; font-weight: 900; }
+.notice-card a { display: inline-block; margin-top: 22px; padding-bottom: 3px; border-bottom: 1px solid currentColor; color: #4d5a25; cursor: pointer; font-size: .8rem; font-weight: 900; }
 .notice-signature { display: block; margin-top: 25px; color: rgba(52,37,31,.68); font-size: .75rem; text-align: right; }
 .notice-stamp { position: absolute; right: 24px; bottom: 21px; padding: 6px 8px; border: 2px solid rgba(155,42,44,.65); color: rgba(155,42,44,.78); font-size: .68rem; font-weight: 900; letter-spacing: .12em; transform: rotate(-8deg); }
 .notice-doodle { position: absolute; right: 22px; bottom: 13px; color: var(--redbean); font-size: 2.8rem; line-height: 1; transform: rotate(12deg); }
@@ -473,8 +473,6 @@ img { display: block; max-width: 100%; }
 .site-footer > div:first-child { display: flex; flex-direction: column; gap: 9px; }
 .site-footer strong { font: 400 clamp(2.7rem,6vw,6.2rem)/.9 var(--display); color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.18); letter-spacing: -.06em; }
 .site-footer span, .site-footer a { color: var(--faint); font-size: .75rem; letter-spacing: .1em; }
-.footer-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 14px 28px; }
-.site-footer a:hover { color: var(--active-soft); }
 .footer-meta { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 24px; padding-top: 18px; border-top: 1px solid var(--line); }
 .footer-meta span { color: var(--faint); font-size: .68rem; line-height: 1.8; letter-spacing: .03em; }
 .footer-meta span:last-child { text-align: right; }
@@ -585,7 +583,6 @@ img { display: block; max-width: 100%; }
   .genre-note { margin-top: -28px; }
   .prose-text { padding-left: 0; }
   .site-footer { min-height: 215px; grid-template-columns: 1fr; padding-bottom: 90px; }
-  .footer-links { justify-content: flex-start; }
   .footer-meta { grid-column: 1; flex-direction: column; gap: 8px; }
   .footer-meta span:last-child { text-align: left; }
 }

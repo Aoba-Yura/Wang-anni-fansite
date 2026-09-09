@@ -56,8 +56,17 @@ filterButtons.forEach((button) => {
   });
 });
 
-const noticeMonthButtons = document.querySelectorAll("[data-notice-month]");
+const noticeMonthButtons = document.querySelectorAll(".month-card[data-notice-month]");
 const noticeCards = document.querySelectorAll("[data-notice-card]");
+
+noticeCards.forEach((card) => {
+  card.addEventListener("click", (event) => {
+    if (!event.target.closest("a")) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  });
+});
 
 noticeMonthButtons.forEach((button) => {
   button.addEventListener("click", () => {
