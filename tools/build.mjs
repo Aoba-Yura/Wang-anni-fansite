@@ -17,15 +17,20 @@ for (const file of await readdir(pages)) {
   let html = await readFile(join(pages, file), "utf8");
   html = html
     .replaceAll("../assets/icons/favicon.svg", "./favicon.svg")
+    .replaceAll("../assets/", "./assets/")
     .replaceAll("../styles/main.css", "./styles.css")
+    .replaceAll("../styles/game.css", "./game.css")
     .replaceAll("../scripts/main.js", "./script.js")
+    .replaceAll("../scripts/game.js", "./game.js")
     .replaceAll("<!-- SITE_FOOTER -->", footer);
   await writeFile(join(dist, file), html);
 }
 
 const stylesheet = await readFile(join(source, "styles/main.css"), "utf8");
 await writeFile(join(dist, "styles.css"), stylesheet.replaceAll("../assets/", "./assets/"));
+await cp(join(source, "styles/game.css"), join(dist, "game.css"));
 await cp(join(source, "scripts/main.js"), join(dist, "script.js"));
+await cp(join(source, "scripts/game.js"), join(dist, "game.js"));
 await cp(join(source, "assets/icons/favicon.svg"), join(dist, "favicon.svg"));
 await cp(join(source, "assets"), join(dist, "assets"), { recursive: true });
 

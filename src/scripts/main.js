@@ -129,6 +129,52 @@ document.querySelectorAll(".copy-color").forEach((button) => {
 const cheerButton = document.querySelector(".cheer-button");
 const cheerLabel = cheerButton?.querySelector(".cheer-label");
 
+const loveHero = document.querySelector(".love-hero");
+const homeBento = document.querySelector(".home-bento");
+const loveScroll = document.querySelector(".love-scroll");
+
+if (loveHero && homeBento) {
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  let scrollLocked = false;
+  const showPanel = (panel, immediate = false) => {
+    const headerHeight = document.querySelector(".site-header")?.offsetHeight ?? 0;
+    const top = panel === loveHero ? 0 : Math.max(0, panel.offsetTop - headerHeight);
+    if (immediate || reducedMotion.matches) {
+      const previousBehavior = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = "auto";
+      window.scrollTo(0, top);
+      document.documentElement.style.scrollBehavior = previousBehavior;
+    } else {
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+    scrollLocked = true;
+    window.setTimeout(() => { scrollLocked = false; }, immediate || reducedMotion.matches ? 50 : 650);
+  };
+
+  loveScroll?.addEventListener("click", (event) => {
+    event.preventDefault();
+    showPanel(homeBento);
+  });
+
+  window.addEventListener("wheel", (event) => {
+    if (scrollLocked || Math.abs(event.deltaY) < 12 || event.ctrlKey) return;
+    const onHero = window.scrollY < loveHero.offsetHeight / 2;
+    const onBento = window.scrollY >= loveHero.offsetHeight / 2
+      && window.scrollY < loveHero.offsetHeight + homeBento.offsetHeight;
+    if (event.deltaY > 0 && onHero) {
+      event.preventDefault();
+      showPanel(homeBento);
+    } else if (event.deltaY < 0 && onBento) {
+      event.preventDefault();
+      showPanel(loveHero);
+    }
+  }, { passive: false });
+
+  if (location.hash === "#explore") {
+    window.setTimeout(() => showPanel(homeBento, true), 50);
+  }
+}
+
 cheerButton?.addEventListener("click", () => {
   const particles = ["✦", "♡", "✿", "✧", "·", "✦", "♡"];
   cheerButton.classList.remove("is-sent");
