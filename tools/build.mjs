@@ -10,7 +10,31 @@ const dist = join(root, "dist");
 
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
+const header = await readFile(join(partials, "header.html"), "utf8");
 const footer = await readFile(join(partials, "footer.html"), "utf8");
+
+const navigation = [
+  ["index.html", "首页"],
+  ["profile.html", "人物档案"],
+  ["diary.html", "安妮日志"],
+  ["notices.html", "お知らせ"],
+  ["hymn.html", "安妮颂"],
+  ["game.html", "小游戏"],
+];
+
+function renderHeader(file) {
+  const activeFile = file === "redbean-breakout.html" ? "game.html" : file;
+  const desktopNav = file === "index.html"
+    ? ""
+    : `  <nav class="desktop-nav" aria-label="主导航">${navigation.map(([href, label]) => {
+        const current = href === activeFile ? ' class="active" aria-current="page"' : "";
+        return `<a${current} href="./${href}">${label}</a>`;
+      }).join("")}</nav>`;
+
+  return header
+    .replace("{{HOME_HEADER_CLASS}}", file === "index.html" ? " home-header" : "")
+    .replace("{{DESKTOP_NAV}}", desktopNav);
+}
 
 for (const file of await readdir(pages)) {
   if (!file.endsWith(".html")) continue;
@@ -22,6 +46,7 @@ for (const file of await readdir(pages)) {
     .replaceAll("../styles/game.css", "./game.css")
     .replaceAll("../scripts/main.js", "./script.js")
     .replaceAll("../scripts/game.js", "./game.js")
+    .replaceAll("<!-- SITE_HEADER -->", renderHeader(file))
     .replaceAll("<!-- SITE_FOOTER -->", footer);
   await writeFile(join(dist, file), html);
 }

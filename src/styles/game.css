@@ -41,10 +41,6 @@
 .game-buttons button { min-height: 45px; padding: 0 14px; border: 1px solid var(--line); color: var(--ink); background: rgba(255,255,255,.035); cursor: pointer; font-size: .86rem; font-weight: 700; }
 .game-buttons button:first-child { color: var(--on-active); border-color: var(--active); background: var(--active); }
 .game-buttons button:disabled { cursor: default; opacity: .45; }
-.game-help { margin: 26px 0 0; border-top: 1px solid var(--line); }
-.game-help div { padding: 13px 0; display: grid; grid-template-columns: 55px 1fr; gap: 12px; border-bottom: 1px solid var(--line); }
-.game-help dt { color: var(--faint); font-size: .75rem; }
-.game-help dd { margin: 0; color: var(--muted); font-size: .78rem; line-height: 1.5; }
 .game-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
 
 @media (max-width: 900px) {
@@ -62,7 +58,6 @@
   .game-console { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .score-grid { grid-column: 1 / -1; }
   .lives-row, .game-buttons { margin-top: 0; }
-  .game-help { grid-column: 1 / -1; margin-top: 2px; }
   .game-overlay { padding: 20px; }
   .game-overlay h2 + p { max-width: 250px; font-size: .82rem; }
   .game-overlay button { min-width: 175px; min-height: 48px; margin-top: 20px; }
@@ -70,5 +65,5 @@
 
 @media (max-width: 410px) {
   .game-console { grid-template-columns: 1fr; }
-  .score-grid, .game-help { grid-column: auto; }
+  .score-grid { grid-column: auto; }
 }

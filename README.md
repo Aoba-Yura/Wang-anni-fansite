@@ -19,15 +19,15 @@ tools/          构建脚本
 
 ## 本地构建
 
-需要 Node.js 18 或更新版本。运行：
+需要 Node.js 24 LTS。运行：
 
 ```bash
 npm run build
 ```
 
-构建脚本会把 `src/` 中的源码整理为可直接部署的 `dist/`。GitHub Pages 发布时，可将 `dist/` 内的内容上传到仓库根目录，或将 `dist/` 改为 `docs/` 后选择 `main /docs`。
+构建脚本会把 `src/` 中的源码整理为可直接部署的 `dist/`。
 
-项目已经附带 GitHub Actions 自动发布配置。将整个项目上传到 GitHub 后，在仓库的 **Settings → Pages** 中把发布来源切换为 **GitHub Actions**；此后每次推送到 `main`，GitHub 都会自动把 `dist/` 发布为网站。
+项目已经附带 GitHub Actions 自动发布配置。请在仓库的 **Settings → Pages** 中把发布来源设为 **GitHub Actions**。此后每次推送到 `main`，工作流会使用 Node.js 24 LTS 构建并检查脚本，然后自动发布 `dist/`；也可在 **Actions** 页面手动运行。
 
 ## 内容约定
 

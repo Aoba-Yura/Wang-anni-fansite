@@ -4,6 +4,9 @@
   "private": true,
   "description": "王安妮应援信息站：中日双语静态网站",
   "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
   "scripts": {
     "build": "node tools/build.mjs"
   }

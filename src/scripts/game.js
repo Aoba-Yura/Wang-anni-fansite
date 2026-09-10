@@ -119,7 +119,7 @@ if (canvas) {
       state = "playing";
       hideOverlay();
       pauseButton.disabled = false;
-      setStatus("小博美出发！");
+      setStatus("红豆出发！");
     }
     updateHud();
   }
@@ -133,7 +133,7 @@ if (canvas) {
     pauseButton.disabled = true;
     pauseButton.textContent = "暂停";
     updateHud();
-    showOverlay("READY?", "接住小博美", "方向键、A / D 或手指拖动挡板", "开始游戏");
+    showOverlay("READY?", "红豆打砖块", "方向键、A / D 或手指拖动挡板", "开始游戏");
     setStatus("等待开始");
   }
 
@@ -173,20 +173,20 @@ if (canvas) {
     if (lives <= 0) {
       state = "over";
       pauseButton.disabled = true;
-      showOverlay("GAME OVER", "本轮结束", `得分 ${score}，再陪小博美玩一局吧`, "再来一局");
+      showOverlay("GAME OVER", "本轮结束", `得分 ${score}，再陪红豆玩一局吧`, "再来一局");
       setStatus(`本轮得分 ${score}`);
       return;
     }
     state = "ready";
     resetBall();
-    showOverlay("ONE MORE!", "小博美回来了", `还剩 ${lives} 次机会`, "继续游戏");
+    showOverlay("ONE MORE!", "红豆回来了", `还剩 ${lives} 次机会`, "继续游戏");
     setStatus(`还剩 ${lives} 次机会`);
   }
 
   function completeGame() {
     state = "won";
     pauseButton.disabled = true;
-    showOverlay("CLEAR!", "全部击破", `得分 ${score}，小博美完成任务`, "再玩一次");
+    showOverlay("CLEAR!", "全部击破", `得分 ${score}，红豆完成任务`, "再玩一次");
     setStatus("全部砖块已清空");
   }
 
