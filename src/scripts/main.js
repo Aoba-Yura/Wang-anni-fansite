@@ -25,6 +25,50 @@ themeButton?.addEventListener("click", () => {
   writeStorage("annie-theme", next);
 });
 
+const disclaimerDialog = document.querySelector("[data-disclaimer-dialog]");
+const disclaimerOpen = document.querySelector("[data-disclaimer-open]");
+const disclaimerClose = document.querySelector("[data-disclaimer-close]");
+const disclaimerTitle = document.querySelector("[data-disclaimer-title]");
+const disclaimerTabs = [...document.querySelectorAll("[data-disclaimer-tab]")];
+const disclaimerPanels = [...document.querySelectorAll("[data-disclaimer-panel]")];
+const disclaimerTitles = { zh: "免责声明", ja: "免責事項", en: "Disclaimer" };
+
+const selectDisclaimerLanguage = (language, focus = false) => {
+  if (disclaimerTitle) disclaimerTitle.textContent = disclaimerTitles[language] ?? disclaimerTitles.zh;
+  disclaimerTabs.forEach((tab) => {
+    const selected = tab.dataset.disclaimerTab === language;
+    tab.classList.toggle("active", selected);
+    tab.setAttribute("aria-selected", String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    if (selected && focus) tab.focus();
+  });
+  disclaimerPanels.forEach((panel) => {
+    panel.hidden = panel.dataset.disclaimerPanel !== language;
+  });
+};
+
+disclaimerOpen?.addEventListener("click", () => {
+  if (typeof disclaimerDialog?.showModal === "function") disclaimerDialog.showModal();
+});
+
+disclaimerClose?.addEventListener("click", () => disclaimerDialog?.close());
+disclaimerDialog?.addEventListener("click", (event) => {
+  if (event.target === disclaimerDialog) disclaimerDialog.close();
+});
+
+disclaimerTabs.forEach((tab) => {
+  tab.addEventListener("click", () => selectDisclaimerLanguage(tab.dataset.disclaimerTab));
+  tab.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const current = disclaimerTabs.indexOf(tab);
+    const next = event.key === "Home" ? 0
+      : event.key === "End" ? disclaimerTabs.length - 1
+      : (current + (event.key === "ArrowRight" ? 1 : -1) + disclaimerTabs.length) % disclaimerTabs.length;
+    selectDisclaimerLanguage(disclaimerTabs[next].dataset.disclaimerTab, true);
+  });
+});
+
 document.querySelectorAll(".oshi-photo").forEach((photo) => {
   photo.addEventListener("error", () => {
     photo.hidden = true;

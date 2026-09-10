@@ -1,13 +1,38 @@
 <footer class="site-footer">
   <div><strong>Anni Suki</strong><span>王安妮非官方应援站</span></div>
   <div class="footer-meta">
-    <div class="footer-disclaimer">
-      <span class="footer-label">免责声明 / DISCLAIMER</span>
+    <button class="disclaimer-trigger" type="button" data-disclaimer-open aria-haspopup="dialog">免责声明 · 免責事項 · Disclaimer <span aria-hidden="true">↗</span></button>
+    <span class="footer-credit">技術協力：曾经跟鲑鱼一起看蒋公逆流而上</span>
+  </div>
+</footer>
+
+<dialog class="disclaimer-dialog" data-disclaimer-dialog aria-labelledby="disclaimer-title">
+  <div class="disclaimer-dialog-inner">
+    <button class="disclaimer-close" type="button" data-disclaimer-close aria-label="关闭 / 閉じる / Close">×</button>
+    <p class="disclaimer-kicker">PLEASE READ</p>
+    <h2 id="disclaimer-title" data-disclaimer-title>免责声明</h2>
+    <div class="disclaimer-tabs" role="tablist" aria-label="免责声明语言">
+      <button class="active" type="button" role="tab" aria-selected="true" aria-controls="disclaimer-zh" id="disclaimer-tab-zh" data-disclaimer-tab="zh">中文</button>
+      <button type="button" role="tab" aria-selected="false" aria-controls="disclaimer-ja" id="disclaimer-tab-ja" data-disclaimer-tab="ja" tabindex="-1">日本語</button>
+      <button type="button" role="tab" aria-selected="false" aria-controls="disclaimer-en" id="disclaimer-tab-en" data-disclaimer-tab="en" tabindex="-1">English</button>
+    </div>
+    <section class="disclaimer-panel" id="disclaimer-zh" role="tabpanel" aria-labelledby="disclaimer-tab-zh" data-disclaimer-panel="zh" lang="zh-CN">
       <p>本站为粉丝自发制作的非官方、非商业项目，与王安妮、TSH48 及其成员、经纪公司、运营方或其他相关机构均无隶属、授权、合作或背书关系，亦不代表任何当事方立场。</p>
       <p>站内资料整理自公开信息，可能存在遗漏、误差或更新延迟，仅供同好交流与纪念，不构成官方公告、新闻来源或任何形式的承诺；涉及活动、行程及成员信息时，请始终以官方渠道发布为准。</p>
       <p>人物姓名、团体名称、商标以及所引用的图片、音视频与其他素材，其权利归原作者或相应权利人所有。本站无意主张相关权利，也不将其用于商业用途；如有不当使用、事实错误或权利人要求处理，请通过项目维护渠道联系，我们会尽快核实、更正或移除。</p>
       <p>小游戏、文案和视觉设计均属粉丝向创作表达，不应被理解为对真实人物经历、性格、观点或关系的事实陈述。本站不会主动收集或上传个人信息；主题偏好与游戏最高分仅保存在访客浏览器本地，托管平台可能依其自身政策处理必要的访问数据。</p>
-    </div>
-    <span class="footer-credit">技術協力：曾经跟鲑鱼一起看蒋公逆流而上</span>
+    </section>
+    <section class="disclaimer-panel" id="disclaimer-ja" role="tabpanel" aria-labelledby="disclaimer-tab-ja" data-disclaimer-panel="ja" lang="ja" hidden>
+      <p>当サイトはファン有志による非公式・非営利のプロジェクトです。王安妮、TSH48、そのメンバー、所属事務所、運営会社およびその他の関係組織との間に、所属・許諾・提携・推薦等の関係はなく、いずれの当事者の見解も代表しません。</p>
+      <p>掲載内容は公開情報をもとに整理しており、欠落、誤記、更新の遅れが生じる場合があります。ファン同士の交流と記録のみを目的とし、公式発表、報道、保証ではありません。活動、日程、メンバーに関する情報は、必ず公式発表をご確認ください。</p>
+      <p>氏名、団体名、商標、画像、音声、映像その他の素材に関する権利は、それぞれの作者または権利者に帰属します。当サイトはこれらの権利を主張せず、商業利用を目的としません。不適切な使用、事実誤認、または権利者からの申し出がある場合は、プロジェクトの管理窓口までご連絡ください。確認のうえ、速やかに訂正または削除します。</p>
+      <p>ミニゲーム、文章、ビジュアルデザインはファンによる創作表現であり、実在する人物の経歴、性格、意見、関係性についての事実を示すものではありません。当サイト自体は個人情報を能動的に収集・送信しません。テーマ設定とゲームの最高得点は閲覧者のブラウザ内にのみ保存されますが、ホスティング事業者が独自の方針に基づき必要なアクセスデータを処理する場合があります。</p>
+    </section>
+    <section class="disclaimer-panel" id="disclaimer-en" role="tabpanel" aria-labelledby="disclaimer-tab-en" data-disclaimer-panel="en" lang="en" hidden>
+      <p>This is an unofficial, non-commercial fan project. It is not affiliated with, authorized by, partnered with, or endorsed by Wang Anni, TSH48, their members, management, operators, or any related organization, and it does not represent the views of any such party.</p>
+      <p>Information on this site is compiled from public sources and may contain omissions, errors, or delays. It is provided solely for fan discussion and archival purposes and is not an official announcement, news source, or guarantee. Always refer to official channels for current event, schedule, and member information.</p>
+      <p>Names, group names, trademarks, images, audio, video, and other referenced materials remain the property of their respective creators or rights holders. This site claims no ownership and does not use them commercially. If any material is used improperly, contains a factual error, or requires action at a rights holder’s request, please contact the project maintainers so it can be reviewed, corrected, or removed promptly.</p>
+      <p>The mini-games, writing, and visual design are fan-made creative expressions and should not be treated as factual statements about any real person’s experiences, personality, opinions, or relationships. The site itself does not actively collect or upload personal information. Theme preferences and game high scores are stored only in the visitor’s browser; the hosting provider may process necessary access data under its own policies.</p>
+    </section>
   </div>
-</footer>
+</dialog>
