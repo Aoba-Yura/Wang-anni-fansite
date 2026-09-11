@@ -12,7 +12,9 @@
 .game-cover-info { min-height: 116px; padding: 22px 24px; display: flex; align-items: end; justify-content: space-between; gap: 20px; }
 .game-cover-info small { color: var(--active-soft); font: 400 .68rem var(--display); letter-spacing: .12em; }
 .game-cover-info h2 { margin: 8px 0 0; font-size: 1.55rem; }
+.game-cover-info h2 small { display:block; margin-top:5px; color:var(--faint); font:500 .62rem/1.2 var(--sans); }
 .game-cover-info > b { color: var(--active-soft); font-size: .78rem; white-space: nowrap; }
+.game-cover-info > b small,.games-back small { display:block; margin-top:3px; font-size:.56rem; font-weight:500; opacity:.72; }
 
 .game-shell { width: min(100% - 48px, 1280px); min-height: calc(100svh - var(--header-h)); margin-inline: auto; padding: clamp(38px, 6vw, 78px) 0 70px; }
 .games-back { display: inline-block; margin-bottom: 28px; color: var(--muted); font-size: .82rem; }
@@ -27,8 +29,11 @@
 .game-overlay { position: absolute; z-index: 3; inset: 0; padding: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: rgba(9,7,19,.64); backdrop-filter: blur(7px); }
 .game-overlay > p:first-child { margin: 0 0 10px; color: var(--active-soft); font: 400 .76rem var(--display); letter-spacing: .2em; }
 .game-overlay h2 { margin: 0; font-size: clamp(2rem, 5vw, 4.8rem); line-height: 1; letter-spacing: -.06em; }
+.game-overlay h2 small { display:block; margin-top:9px; color:var(--muted); font-size:.22em; font-weight:500; letter-spacing:.04em; }
 .game-overlay h2 + p { margin: 19px 0 0; color: #c9c3d1; font-size: .95rem; }
+.game-overlay h2 + p small { display:block; margin-top:5px; color:var(--faint); font-size:.72rem; }
 .game-overlay button { min-width: 210px; min-height: 56px; margin-top: 28px; padding: 0 18px; display: flex; align-items: center; justify-content: space-between; border: 0; color: var(--on-active); background: var(--active); cursor: pointer; font-weight: 900; transition: transform .2s ease, box-shadow .2s ease; }
+.game-overlay button small,.game-status small { display:block; margin-top:3px; font-size:.58rem; font-weight:500; opacity:.72; }
 .game-overlay button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px color-mix(in srgb, var(--active) 30%, transparent); }
 .game-console { padding: 24px; display: flex; flex-direction: column; border: 1px solid var(--line); background: linear-gradient(160deg, color-mix(in srgb, var(--active) 8%, transparent), rgba(255,255,255,.018)); }
 .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -78,12 +83,14 @@
 .breakout-game .game-hud-title small { color: var(--active-soft); font: 400 .55rem/1 var(--display); letter-spacing: .12em; }
 .breakout-game .game-hud-stats { display: flex; align-items: center; gap: 14px; color: var(--faint); font: 400 .6rem/1 var(--display); letter-spacing: .08em; white-space: nowrap; }
 .breakout-game .game-hud-stats b { margin-left: 4px; color: var(--ink); font-size: .84rem; letter-spacing: .05em; }
+.breakout-game .game-hud-stats span > small { display:block; margin-bottom:3px; color:var(--faint); font:500 .48rem/1 var(--sans); letter-spacing:0; }
 .breakout-game .game-hud-stats .hud-life { color: var(--active-soft); font: 700 .8rem/1 var(--sans); letter-spacing: 0; }
 .breakout-game .game-hud-stats .hud-life b { color: var(--active-soft); font-size: .8rem; letter-spacing: .1em; }
 .breakout-game .game-hud-actions { display: flex; align-items: center; gap: 7px; pointer-events: auto; }
 .breakout-game .hud-icon-button, .breakout-game .hud-reset-button { min-height: 34px; border: 1px solid var(--line); color: var(--ink); background: rgba(255,255,255,.06); cursor: pointer; font-weight: 900; }
 .breakout-game .hud-icon-button { width: 36px; padding: 0; color: var(--on-active); border-color: var(--active); background: var(--active); font-size: 1.05rem; }
 .breakout-game .hud-reset-button { padding: 0 10px; font-size: .7rem; }
+.breakout-game .hud-reset-button small { display:block; font-size:.48rem; font-weight:500; opacity:.72; }
 .breakout-game .game-overlay { z-index: 4; }
 .breakout-game .game-overlay-actions { display: grid; gap: 10px; margin-top: 28px; }
 .breakout-game .game-overlay-actions button { margin-top: 0; }

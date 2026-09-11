@@ -16,28 +16,35 @@ const diaryData = await readFile(join(source, "data/diary.json"), "utf8");
 const diaryDataScript = `<script id="diary-data" type="application/json">${diaryData.replaceAll("<", "\\u003c")}</script>`;
 const noticeData = await readFile(join(source, "data/notices.json"), "utf8");
 const noticeDataScript = `<script id="notice-data" type="application/json">${noticeData.replaceAll("<", "\\u003c")}</script>`;
+const hymnData = await readFile(join(source, "data/hymns.json"), "utf8");
+const hymnDataScript = `<script id="hymn-data" type="application/json">${hymnData.replaceAll("<", "\\u003c")}</script>`;
 
 const navigation = [
-  ["index.html", "首页"],
-  ["profile.html", "人物档案"],
-  ["diary.html", "安妮日志"],
-  ["notices.html", "お知らせ"],
-  ["hymn.html", "安妮颂"],
-  ["game.html", "小游戏"],
+  ["index.html", "首页", "ホーム"],
+  ["profile.html", "人物档案", "プロフィール"],
+  ["diary.html", "安妮日志", "日記"],
+  ["notices.html", "公告栏", "お知らせ"],
+  ["hymn.html", "安妮颂", "賛歌"],
+  ["game.html", "小游戏", "ミニゲーム"],
 ];
 
 function renderHeader(file) {
   const activeFile = file === "redbean-breakout.html" ? "game.html" : file;
   const desktopNav = file === "index.html"
     ? ""
-    : `  <nav class="desktop-nav" aria-label="主导航">${navigation.map(([href, label]) => {
+    : `  <nav class="desktop-nav" aria-label="主导航 / メインナビゲーション">${navigation.map(([href, label, japanese]) => {
         const current = href === activeFile ? ' class="active" aria-current="page"' : "";
-        return `<a${current} href="./${href}">${label}</a>`;
+        return `<a${current} href="./${href}"><span>${label}</span><small lang="ja">${japanese}</small></a>`;
       }).join("")}</nav>`;
 
   return header
     .replace("{{HOME_HEADER_CLASS}}", file === "index.html" ? " home-header" : "")
     .replace("{{DESKTOP_NAV}}", desktopNav);
+}
+
+function renderMobileLabels(html) {
+  const labels = [["首页", "ホーム"], ["档案", "人物"], ["日志", "日記"], ["公告", "告知"], ["安妮颂", "賛歌"], ["游戏", "遊ぶ"]];
+  return html.replace(/<nav class="mobile-nav"[\s\S]*?<\/nav>/g, (navigationHtml) => labels.reduce((output, [chinese, japanese]) => output.replaceAll(`<span>${chinese}</span>`, `<span>${chinese}<small lang="ja">${japanese}</small></span>`), navigationHtml).replace('aria-label="手机端主导航"', 'aria-label="手机端主导航 / モバイルナビゲーション"'));
 }
 
 for (const file of await readdir(pages)) {
@@ -54,7 +61,9 @@ for (const file of await readdir(pages)) {
     .replaceAll("<!-- SITE_HEADER -->", renderHeader(file))
     .replaceAll("<!-- SITE_FOOTER -->", footer)
     .replaceAll("<!-- DIARY_DATA -->", file === "diary.html" ? diaryDataScript : "")
-    .replaceAll("<!-- NOTICE_DATA -->", file === "notices.html" ? noticeDataScript : "");
+    .replaceAll("<!-- NOTICE_DATA -->", file === "notices.html" ? noticeDataScript : "")
+    .replaceAll("<!-- HYMN_DATA -->", file === "hymn.html" ? hymnDataScript : "");
+  html = renderMobileLabels(html);
   await writeFile(join(dist, file), html);
 }
 

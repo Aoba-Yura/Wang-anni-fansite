@@ -14,7 +14,7 @@ const applyTheme = (theme) => {
   const matcha = theme === "matcha";
   body.classList.toggle("matcha-mode", matcha);
   if (themeButton) themeButton.setAttribute("aria-pressed", String(matcha));
-  if (themeText) themeText.textContent = matcha ? "红豆模式" : "抹茶模式";
+  if (themeText) themeText.innerHTML = matcha ? '<b>红豆模式</b><small lang="ja">小豆モード</small>' : '<b>抹茶模式</b><small lang="ja">抹茶モード</small>';
 };
 
 applyTheme(readStorage("annie-theme", "redbean"));
@@ -87,6 +87,8 @@ const diaryList = document.querySelector("[data-diary-list]");
 if (diaryList) {
   const countLabel = document.querySelector("[data-diary-count]");
   const platformNames = { weibo: "微博", bilibili: "哔哩哔哩", haokan: "好看视频", official: "官方记录" };
+  const platformNamesJa = { weibo: "Weibo", bilibili: "ビリビリ", haokan: "動画", official: "公式記録" };
+  const kindNamesJa = { "原创短引": "本人投稿・抜粋", "原创视频": "本人動画", "官方提及": "公式言及", "官方记录": "公式記録", "官方视频": "公式動画", "视频记录": "動画記録", "现场视频": "ライブ映像", "视频合集": "動画まとめ" };
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
   const renderDiary = (items) => {
     countLabel.textContent = items.length;
@@ -95,8 +97,8 @@ if (diaryList) {
       const year = date.getFullYear();
       const monthDay = `${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
       return `<article class="diary-entry" data-entry data-source="${escapeHtml(item.platform)}">
-        <div class="entry-date"><time datetime="${escapeHtml(item.date)}">${year}<br><b>${monthDay}</b></time><span>${escapeHtml(platformNames[item.platform] || item.platform)}</span></div>
-        <div class="entry-copy"><p class="entry-tag">${escapeHtml(item.tag)} · ${escapeHtml(item.kind || "公开记录")}</p><h2>${escapeHtml(item.title)}</h2>${item.excerpt ? `<blockquote>“${escapeHtml(item.excerpt)}”</blockquote>` : ""}<a href="${escapeHtml(item.source)}" target="_blank" rel="noreferrer">查看原动态 ↗</a></div>
+        <div class="entry-date"><time datetime="${escapeHtml(item.date)}">${year}<br><b>${monthDay}</b></time><span>${escapeHtml(platformNames[item.platform] || item.platform)}<small lang="ja">${escapeHtml(platformNamesJa[item.platform] || "")}</small></span></div>
+        <div class="entry-copy"><p class="entry-tag">${escapeHtml(item.tag)} · <span>${escapeHtml(item.kind || "公开记录")}<small lang="ja">${escapeHtml(kindNamesJa[item.kind] || "公開記録")}</small></span></p><h2>${escapeHtml(item.title)}</h2>${item.excerpt ? `<blockquote>“${escapeHtml(item.excerpt)}”</blockquote>` : ""}<a href="${escapeHtml(item.source)}" target="_blank" rel="noreferrer"><span>查看原动态</span><small lang="ja">元の投稿を見る</small> ↗</a></div>
       </article>`;
     }).join("");
   };
@@ -116,7 +118,7 @@ if (diaryList) {
       document.querySelectorAll("[data-filter]").forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
       document.querySelectorAll("[data-entry]").forEach((entry) => { entry.hidden = filter !== "all" && entry.dataset.source !== filter; });
     }));
-  }).catch(() => { diaryList.innerHTML = '<p class="source-note">日志资料暂时无法载入，请稍后重试。</p>'; });
+  }).catch(() => { diaryList.innerHTML = '<p class="source-note">日志资料暂时无法载入。<small lang="ja">日記データを読み込めませんでした。</small></p>'; });
 }
 
 const noticeList = document.querySelector("[data-notice-list]");
@@ -133,15 +135,15 @@ if (noticeList) {
   loadNotices.then((data) => {
     const items = [...data.items].sort((a, b) => b.date.localeCompare(a.date));
     const months = [...new Set(items.map((item) => item.date.slice(0, 7)))];
-    monthList.innerHTML = `<button class="month-card active" type="button" data-notice-month="all" aria-pressed="true"><b>ALL</b><span>全部</span></button>${months.map((month) => {
+    monthList.innerHTML = `<button class="month-card active" type="button" data-notice-month="all" aria-pressed="true"><b>ALL</b><span>全部<small lang="ja">すべて</small></span></button>${months.map((month) => {
       const [year, number] = month.split("-");
-      return `<button class="month-card" type="button" data-notice-month="${month}" aria-pressed="false"><b>${number}</b><span>${year} · ${monthNames[Number(number) - 1]}</span></button>`;
+      return `<button class="month-card" type="button" data-notice-month="${month}" aria-pressed="false"><b>${number}</b><span>${year} · ${monthNames[Number(number) - 1]}<small lang="ja">${Number(number)}月</small></span></button>`;
     }).join("")}`;
     noticeList.innerHTML = items.map((item) => {
       const classes = ["notice-card", `notice-card--${item.theme || "paper"}`, item.size ? `notice-card--${item.size}` : "", item.tilt ? `notice-card--tilt-${item.tilt}` : ""].filter(Boolean).join(" ");
-      return `<article class="${classes}" data-notice-card data-notice-month="${item.date.slice(0, 7)}"><i class="pushpin" aria-hidden="true"></i><div class="notice-card-top"><span class="notice-label">${escapeNotice(item.label)}</span><time datetime="${escapeNotice(item.date)}">${escapeNotice(item.displayDate || item.date.replaceAll("-", "."))}</time></div><h3>${escapeNotice(item.title)}</h3><p>${escapeNotice(item.body)}</p>${item.href ? `<a href="${escapeNotice(item.href)}">${escapeNotice(item.linkLabel || "查看详情 ↗")}</a>` : ""}${item.signature ? `<span class="notice-signature">${escapeNotice(item.signature)}</span>` : ""}${item.stamp ? `<span class="notice-stamp">${escapeNotice(item.stamp)}</span>` : ""}${item.doodle ? `<span class="notice-doodle" aria-hidden="true">${escapeNotice(item.doodle)}</span>` : ""}</article>`;
+      return `<article class="${classes}" data-notice-card data-notice-month="${item.date.slice(0, 7)}"><i class="pushpin" aria-hidden="true"></i><div class="notice-card-top"><span class="notice-label">${escapeNotice(item.label)}${item.labelJa ? `<small lang="ja">${escapeNotice(item.labelJa)}</small>` : ""}</span><time datetime="${escapeNotice(item.date)}">${escapeNotice(item.displayDate || item.date.replaceAll("-", "."))}</time></div><h3>${escapeNotice(item.title)}</h3><p>${escapeNotice(item.body)}</p>${item.href ? `<a href="${escapeNotice(item.href)}"><span>${escapeNotice(item.linkLabel || "查看详情 ↗")}</span></a>` : ""}${item.signature ? `<span class="notice-signature">${escapeNotice(item.signature)}</span>` : ""}${item.stamp ? `<span class="notice-stamp">${escapeNotice(item.stamp)}</span>` : ""}${item.doodle ? `<span class="notice-doodle" aria-hidden="true">${escapeNotice(item.doodle)}</span>` : ""}</article>`;
     }).join("");
-    if (updated) updated.textContent = `最后更新：${String(data.updated || "").replaceAll("-", ".")}`;
+    if (updated) updated.innerHTML = `最后更新：${String(data.updated || "").replaceAll("-", ".")} <small lang="ja">最終更新</small>`;
 
     const buttons = [...document.querySelectorAll(".month-card[data-notice-month]")];
     const cards = [...document.querySelectorAll("[data-notice-card]")];
@@ -150,37 +152,62 @@ if (noticeList) {
       buttons.forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
       cards.forEach((card) => { card.hidden = month !== "all" && card.dataset.noticeMonth !== month; });
     }));
-  }).catch(() => { noticeList.innerHTML = '<p class="source-note">公告暂时无法载入。</p>'; });
+  }).catch(() => { noticeList.innerHTML = '<p class="source-note">公告暂时无法载入。<small lang="ja">お知らせを読み込めませんでした。</small></p>'; });
 }
 
-const literaryTabs = document.querySelectorAll("[data-literary-tab]");
-const literaryPanels = document.querySelectorAll("[data-literary-panel]");
+const literaryTabsRoot = document.querySelector("[data-literary-tabs]");
+const literaryPanelsRoot = document.querySelector("[data-literary-panels]");
 
-literaryTabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    const target = tab.dataset.literaryTab;
-    literaryTabs.forEach((item) => {
-      const selected = item === tab;
-      item.classList.toggle("active", selected);
-      item.setAttribute("aria-selected", String(selected));
-      item.tabIndex = selected ? 0 : -1;
+if (literaryTabsRoot && literaryPanelsRoot) {
+  const escapeLiterary = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
+  const renderLiterary = ({ items }) => {
+    literaryTabsRoot.innerHTML = items.map((item, index) => `<button class="${index === 0 ? "active" : ""}" id="${escapeLiterary(item.id)}-tab" type="button" role="tab" aria-selected="${index === 0}" aria-controls="${escapeLiterary(item.id)}-panel" ${index === 0 ? "" : 'tabindex="-1"'} data-literary-tab="${escapeLiterary(item.id)}"><span>${String(index + 1).padStart(2, "0")}</span><b>${escapeLiterary(item.tabTitle)}</b><small lang="ja">${escapeLiterary(item.tabTitleJa)}</small></button>`).join("");
+    literaryPanelsRoot.innerHTML = items.map((item, index) => {
+      const copyClass = item.kind === "prose" ? "prose-text" : "poem-text";
+      const copy = item.paragraphs.map((lines) => `<p>${lines.map(escapeLiterary).join("<br>")}</p>`).join("");
+      const links = (item.links || []).map((link) => `<a href="${escapeLiterary(link.href)}" target="_blank" rel="noreferrer">${escapeLiterary(link.label)}</a>`).join("　");
+      const footer = `${escapeLiterary(item.footerLabel)}${item.footerLabelJa ? ` <small lang="ja">${escapeLiterary(item.footerLabelJa)}</small>` : ""}${escapeLiterary(item.footerText || (item.footerLabel?.endsWith("：") ? "" : "："))}${links}`;
+      return `<article class="literary-panel ${index === 0 ? "active" : ""} ${item.id === "bangs" ? "bangs-panel" : ""}" id="${escapeLiterary(item.id)}-panel" role="tabpanel" aria-labelledby="${escapeLiterary(item.id)}-tab" data-literary-panel="${escapeLiterary(item.id)}" ${index === 0 ? "" : "hidden"}><div class="work-meta"><span>${escapeLiterary(item.meta)} <small lang="ja">${escapeLiterary(item.metaJa)}</small></span><time datetime="${escapeLiterary(item.date)}">${escapeLiterary(item.date.replaceAll("-", "."))}</time></div><h2${index === 0 ? ' id="literary-title"' : ""}>${escapeLiterary(item.title)}</h2>${item.kind === "poem" ? `<div class="poem-layout"><div class="${copyClass}"${item.language ? ` lang="${escapeLiterary(item.language)}"` : ""}>${copy}</div></div>` : `<div class="${copyClass}">${copy}</div>`}<p class="inspiration">${footer}</p></article>`;
+    }).join("");
+
+    const literaryTabs = [...literaryTabsRoot.querySelectorAll("[data-literary-tab]")];
+    const literaryPanels = [...literaryPanelsRoot.querySelectorAll("[data-literary-panel]")];
+    literaryTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.literaryTab;
+        literaryTabs.forEach((item) => {
+          const selected = item === tab;
+          item.classList.toggle("active", selected);
+          item.setAttribute("aria-selected", String(selected));
+          item.tabIndex = selected ? 0 : -1;
+        });
+        literaryPanels.forEach((panel) => {
+          const selected = panel.dataset.literaryPanel === target;
+          panel.hidden = !selected;
+          panel.classList.toggle("active", selected);
+        });
+      });
+      tab.addEventListener("keydown", (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const current = literaryTabs.indexOf(tab);
+        const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? literaryTabs.length - 1 : (current + (event.key === "ArrowRight" ? 1 : -1) + literaryTabs.length) % literaryTabs.length;
+        literaryTabs[nextIndex].click();
+        literaryTabs[nextIndex].focus();
+      });
     });
-    literaryPanels.forEach((panel) => {
-      const selected = panel.dataset.literaryPanel === target;
-      panel.hidden = !selected;
-      panel.classList.toggle("active", selected);
-    });
+  };
+  const embedded = document.querySelector("#hymn-data");
+  const loadHymns = embedded?.textContent
+    ? Promise.resolve(JSON.parse(embedded.textContent))
+    : fetch("../data/hymns.json").then((response) => {
+        if (!response.ok) throw new Error("hymn data unavailable");
+        return response.json();
+      });
+  loadHymns.then(renderLiterary).catch(() => {
+    literaryPanelsRoot.innerHTML = '<p class="source-note">安妮颂暂时无法载入。<small lang="ja">賛歌を読み込めませんでした。</small></p>';
   });
-  tab.addEventListener("keydown", (event) => {
-    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
-    event.preventDefault();
-    const tabs = [...literaryTabs];
-    const direction = event.key === "ArrowRight" ? 1 : -1;
-    const next = tabs[(tabs.indexOf(tab) + direction + tabs.length) % tabs.length];
-    next.click();
-    next.focus();
-  });
-});
+}
 
 document.querySelectorAll(".copy-color").forEach((button) => {
   button.addEventListener("click", async () => {
@@ -189,11 +216,11 @@ document.querySelectorAll(".copy-color").forEach((button) => {
     if (!color || !label) return;
     try {
       await navigator.clipboard.writeText(color);
-      label.textContent = "已复制";
+      label.innerHTML = '已复制<small lang="ja">コピー済み</small>';
     } catch {
-      label.textContent = "请长按色值";
+      label.innerHTML = '请长按色值<small lang="ja">長押ししてください</small>';
     }
-    window.setTimeout(() => { label.textContent = "复制色值"; }, 1600);
+    window.setTimeout(() => { label.innerHTML = '复制色值<small lang="ja">色コードをコピー</small>'; }, 1600);
   });
 });
 
@@ -251,7 +278,7 @@ cheerButton?.addEventListener("click", () => {
   cheerButton.classList.remove("is-sent");
   void cheerButton.offsetWidth;
   cheerButton.classList.add("is-sent");
-  if (cheerLabel) cheerLabel.textContent = "应援已送达 ✦";
+  if (cheerLabel) cheerLabel.innerHTML = '应援已送达 ✦<small lang="ja">応援を届けました</small>';
 
   particles.forEach((symbol, index) => {
     const particle = document.createElement("i");
@@ -269,6 +296,6 @@ cheerButton?.addEventListener("click", () => {
   window.clearTimeout(cheerButton.resetTimer);
   cheerButton.resetTimer = window.setTimeout(() => {
     cheerButton.classList.remove("is-sent");
-    if (cheerLabel) cheerLabel.textContent = "为安妮应援";
+    if (cheerLabel) cheerLabel.innerHTML = '为安妮应援<small lang="ja">安妮を応援する</small>';
   }, 1400);
 });

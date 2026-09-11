@@ -144,27 +144,27 @@ if (canvas) {
     scoreText.textContent = String(score).padStart(4, "0");
     bestText.textContent = String(best).padStart(4, "0");
     livesText.textContent = Array.from({ length: Math.max(0, lives) }, () => "♥").join(" ") || "—";
-    livesText.setAttribute("aria-label", `剩余${Math.max(0, lives)}次机会`);
+    livesText.setAttribute("aria-label", `剩余${Math.max(0, lives)}次机会 / 残り${Math.max(0, lives)}回`);
   }
 
   function setPauseButton(paused = false) {
     pauseButton.disabled = state !== "playing" && state !== "paused";
     pauseButton.textContent = paused ? "▶" : "⏸";
-    pauseButton.setAttribute("aria-label", paused ? "继续游戏" : "暂停游戏");
-    pauseButton.title = paused ? "继续游戏" : "暂停游戏";
+    pauseButton.setAttribute("aria-label", paused ? "继续游戏 / 再開" : "暂停游戏 / 一時停止");
+    pauseButton.title = paused ? "继续游戏 / 再開" : "暂停游戏 / 一時停止";
   }
 
-  function showOverlay({ kicker, title, copy, action, showReset = false }) {
+  function showOverlay({ kicker, title, titleJa, copy, copyJa, action, actionJa, showReset = false }) {
     overlayKicker.textContent = kicker;
-    overlayTitle.textContent = title;
-    overlayCopy.textContent = copy;
-    startButton.firstChild.textContent = `${action} `;
+    overlayTitle.innerHTML = `${title}<small lang="ja">${titleJa}</small>`;
+    overlayCopy.innerHTML = `${copy}<small lang="ja">${copyJa}</small>`;
+    startButton.innerHTML = `<span>${action}<small lang="ja">${actionJa}</small></span><b aria-hidden="true">→</b>`;
     overlayResetButton.hidden = !showReset;
     overlay.hidden = false;
   }
 
   function hideOverlay() { overlay.hidden = true; }
-  function setStatus(message) { statusText.textContent = message; }
+  function setStatus(message, japanese) { statusText.innerHTML = `${message}<small lang="ja">${japanese}</small>`; }
 
   function startGame() {
     if (state === "paused") {
@@ -172,7 +172,7 @@ if (canvas) {
       lastTime = performance.now();
       setPauseButton();
       hideOverlay();
-      setStatus("继续游戏");
+      setStatus("继续游戏", "ゲーム再開");
       return;
     }
     if (state === "won" || state === "over") restartGame(true);
@@ -181,7 +181,7 @@ if (canvas) {
       lastTime = performance.now();
       setPauseButton();
       hideOverlay();
-      setStatus("红豆出发！");
+      setStatus("红豆出发！", "小豆、出発！");
     }
     updateHud();
   }
@@ -197,10 +197,10 @@ if (canvas) {
     if (startImmediately) {
       hideOverlay();
       lastTime = performance.now();
-      setStatus("新的一局开始了！");
+      setStatus("新的一局开始了！", "新しいゲーム開始！");
     } else {
-      showOverlay({ kicker: "READY?", title: "红豆打砖块", copy: "方向键、A / D 或手指拖动挡板", action: "开始游戏" });
-      setStatus("等待开始");
+      showOverlay({ kicker: "READY?", title: "红豆打砖块", copy: "方向键或手指拖动挡板", copyJa: "矢印キー、または指で操作", action: "开始游戏", actionJa: "スタート" });
+      setStatus("等待开始", "スタート待機");
     }
   }
 
@@ -210,8 +210,8 @@ if (canvas) {
     keys.right = false;
     state = "paused";
     setPauseButton(true);
-    showOverlay({ kicker: "PAUSED", title: "游戏暂停", copy: "当前位置与进度都会保留", action: "继续游戏", showReset: true });
-    setStatus("游戏暂停");
+    showOverlay({ kicker: "PAUSED", title: "游戏暂停", titleJa: "一時停止", copy: "当前位置与进度都会保留", copyJa: "位置と進行状況は保存されます", action: "继续游戏", actionJa: "再開", showReset: true });
+    setStatus("游戏暂停", "一時停止");
   }
 
   function togglePause() {
@@ -243,22 +243,22 @@ if (canvas) {
     if (lives <= 0) {
       state = "over";
       setPauseButton();
-      showOverlay({ kicker: "GAME OVER", title: "本轮结束", copy: `得分 ${score}，再陪红豆玩一局吧`, action: "再来一局" });
-      setStatus(`本轮得分 ${score}`);
+      showOverlay({ kicker: "GAME OVER", title: "本轮结束", titleJa: "ゲーム終了", copy: `得分 ${score}，再陪红豆玩一局吧`, copyJa: `スコア ${score}。もう一度遊ぼう`, action: "再来一局", actionJa: "もう一度" });
+      setStatus(`本轮得分 ${score}`, `今回のスコア ${score}`);
       return;
     }
     state = "ready";
     setPauseButton();
     resetBall();
-    showOverlay({ kicker: "ONE MORE!", title: "红豆回来了", copy: `还剩 ${lives} 次机会`, action: "继续游戏" });
-    setStatus(`还剩 ${lives} 次机会`);
+    showOverlay({ kicker: "ONE MORE!", title: "再来一把", titleJa: "もう一回", copy: `还剩 ${lives} 次机会`, copyJa: `残り ${lives} 回`, action: "继续游戏", actionJa: "再開" });
+    setStatus(`还剩 ${lives} 次机会`, `残り ${lives} 回`);
   }
 
   function completeGame() {
     state = "won";
     setPauseButton();
-    showOverlay({ kicker: "CLEAR!", title: "全部击破", copy: `得分 ${score}，红豆完成任务`, action: "再玩一次" });
-    setStatus("全部砖块已清空");
+    showOverlay({ kicker: "CLEAR!", title: "全部击破", titleJa: "全クリア", copy: `得分 ${score}，红豆完成任务`, copyJa: `スコア ${score} ミッション完了`, action: "再玩一次", actionJa: "もう一度" });
+    setStatus("全部砖块已清空", "全ブロッククリア");
   }
 
   function update(step) {
