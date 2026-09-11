@@ -1001,7 +1001,17 @@ html:has(body[data-page="home"]) { scroll-snap-type: y mandatory; scroll-padding
   transform: rotate(-1deg);
 }
 .entry-copy h3 { color: #241e1d; font-family: var(--serif); font-weight: 900; letter-spacing: .005em; }
-.entry-excerpt { color: #514642; font-size: .88rem; }
+.entry-excerpt {
+  color: #514642;
+  font-family: "Kaiti SC", "STKaiti", "KaiTi", "楷体", var(--serif);
+  font-size: 1.03rem;
+  line-height: 1.78;
+  letter-spacing: .035em;
+}
+.entry-excerpt::before,
+.entry-excerpt::after { color:#9a3f46; font-family:var(--serif); font-size:1.28em; line-height:0; opacity:.72; }
+.entry-excerpt::before { content:"“"; margin-right:.12em; }
+.entry-excerpt::after { content:"”"; margin-left:.08em; }
 .entry-copy .source-button { border-color: rgba(126,47,52,.45); color: #7c3035; }
 .entry-copy .source-button:hover { color: #f8eadd; }
 .diary-more {
@@ -1026,5 +1036,6 @@ html:has(body[data-page="home"]) { scroll-snap-type: y mandatory; scroll-padding
   .year-divider { letter-spacing: -.055em; }
   .entry-copy { padding: 17px 17px 18px 18px; }
   .entry-date time { font-size: .7rem; }
+  .entry-excerpt { font-size: .96rem; }
   .diary-more { width: calc(100% - 86px); margin: 28px 0 0 86px; }
 }
