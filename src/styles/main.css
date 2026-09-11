@@ -887,27 +887,43 @@ html:has(body[data-page="home"]) { scroll-snap-type: y mandatory; scroll-padding
 /* Diary journal finish */
 .filter-bar {
   display: block;
+  width: min(100%, 270px);
   margin-bottom: 26px;
   padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 2px;
+  border: 1px solid rgba(255,239,220,.14);
+  border-radius: 999px;
+  background: linear-gradient(105deg, rgba(255,248,239,.052), rgba(255,255,255,.012));
+  box-shadow: 0 8px 24px rgba(0,0,0,.12), inset 0 1px rgba(255,255,255,.035);
+  transition: width .24s ease, border-radius .2s ease, border-color .2s ease;
 }
+.filter-bar[open] { width: 100%; border-radius: 5px; border-color: rgba(201,83,90,.32); }
 .filter-bar > summary {
-  min-height: 46px;
-  padding: 0 15px;
+  min-height: 50px;
+  padding: 0 16px 0 14px;
   display: flex;
   align-items: center;
+  gap: 11px;
   color: var(--ink);
-  background: rgba(255,255,255,.025);
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(175,54,61,.1), transparent 62%);
   cursor: pointer;
   user-select: none;
+  transition: background .2s ease;
 }
+.filter-bar > summary:hover { background: linear-gradient(90deg, rgba(175,54,61,.17), rgba(255,255,255,.025)); }
 .filter-bar > summary::-webkit-details-marker { display:none; }
-.filter-bar > summary::after { content:"＋"; margin-left:auto; color:var(--active); font-size:1rem; transition:transform .2s ease; }
-.filter-bar[open] > summary::after { transform: rotate(45deg); }
-.filter-bar > summary span { color:var(--ink); font-size:.72rem; font-weight:700; letter-spacing:.14em; }
-.filter-bar > summary small { margin-left:12px; color:var(--faint); font-size:.58rem; letter-spacing:.08em; }
-.filter-panel { padding:16px 15px 18px; display:grid; gap:13px; border-top:1px solid var(--line); }
+.filter-bar > summary::after { content:""; width:7px; height:7px; margin-left:2px; border-right:1px solid var(--active-soft); border-bottom:1px solid var(--active-soft); transform:rotate(45deg) translateY(-2px); transition:transform .2s ease; }
+.filter-bar[open] > summary::after { transform:rotate(225deg) translate(-2px,-2px); }
+.filter-toggle-icon { width:30px; height:30px; flex:0 0 30px; display:grid; align-content:center; gap:4px; padding:0 7px; border:1px solid rgba(201,83,90,.36); border-radius:50%; background:rgba(157,43,50,.13); }
+.filter-toggle-icon i { position:relative; display:block; height:1px; background:#c87579; }
+.filter-toggle-icon i::after { content:""; position:absolute; top:-2px; width:5px; height:5px; border-radius:50%; background:var(--bg); border:1px solid #c87579; }
+.filter-toggle-icon i:nth-child(1)::after,.filter-toggle-icon i:nth-child(3)::after { right:1px; }
+.filter-toggle-icon i:nth-child(2)::after { left:1px; }
+.filter-toggle-title { display:flex; flex-direction:column; gap:3px; }
+.filter-toggle-title b { color:var(--ink); font:700 .68rem/1 var(--sans); letter-spacing:.09em; }
+.filter-toggle-title em { color:#b65c62; font:500 .44rem/1 var(--display); font-style:normal; letter-spacing:.2em; }
+.filter-bar > summary small { margin-left:auto; color:var(--faint); font-size:.53rem; letter-spacing:.05em; }
+.filter-panel { padding:17px 18px 19px; display:grid; gap:13px; border-top:1px solid rgba(255,239,220,.1); }
 .diary-year + .diary-year { margin-top: 78px; }
 .year-divider {
   position: relative;
