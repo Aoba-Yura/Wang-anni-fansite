@@ -8,6 +8,7 @@ if (canvas) {
   const overlayCopy = document.querySelector("[data-overlay-copy]");
   const startButton = document.querySelector("[data-game-start]");
   const overlayResetButton = document.querySelector("[data-game-overlay-reset]");
+  const hud = document.querySelector(".game-hud");
   const pauseButton = document.querySelector("[data-game-pause]");
   const resetButton = document.querySelector("[data-game-reset]");
   const scoreText = document.querySelector("[data-game-score]");
@@ -43,6 +44,8 @@ if (canvas) {
   const keys = { left: false, right: false };
   const paddle = { x: 0, y: 0, width: layout.paddleWidth, height: layout.paddleHeight, speed: 720 };
   const ball = { x: 0, y: 0, vx: 0, vy: 0, radius: layout.ballRadius, angle: 0 };
+  let playableBounds = { left: 14, right: width - 14, top: 14, bottom: height - 14 };
+  let viewportWidth = window.innerWidth;
 
   dogImage.src = canvas.dataset.dogSrc;
 
@@ -59,11 +62,25 @@ if (canvas) {
   }
 
   function clampPaddle() {
-    paddle.x = Math.max(20, Math.min(width - paddle.width - 20, paddle.x));
+    paddle.x = Math.max(playableBounds.left, Math.min(playableBounds.right - paddle.width, paddle.x));
+  }
+
+  function updatePlayableBounds() {
+    const canvasRect = canvas.getBoundingClientRect();
+    const hudRect = hud?.getBoundingClientRect();
+    const scaleY = canvasRect.height ? height / canvasRect.height : 1;
+    const hudBottom = hudRect ? (hudRect.bottom - canvasRect.top) * scaleY : 14;
+    playableBounds = {
+      left: 14,
+      right: width - 14,
+      top: Math.max(14, Math.min(height - 80, hudBottom)),
+      bottom: height - 14
+    };
   }
 
   function makeBricks(destroyedRatio = 0) {
-    const { brickRows: rows, brickColumns: columns, brickGap: gap, brickSide: side, brickHeight, brickTop: top } = layout;
+    const { brickRows: rows, brickColumns: columns, brickGap: gap, brickSide: side, brickHeight } = layout;
+    const top = Math.max(layout.brickTop, playableBounds.top + 18);
     const brickWidth = (width - side * 2 - gap * (columns - 1)) / columns;
     const destroyed = Math.round(Math.max(0, Math.min(1, destroyedRatio)) * rows * columns);
     bricks = [];
@@ -108,6 +125,7 @@ if (canvas) {
     height = layout.height;
     canvas.width = width;
     canvas.height = height;
+    updatePlayableBounds();
     paddle.width = layout.paddleWidth;
     paddle.height = layout.paddleHeight;
     paddle.y = height - layout.paddleBottom - paddle.height;
@@ -115,7 +133,7 @@ if (canvas) {
     clampPaddle();
     ball.radius = layout.ballRadius;
     ball.x = Math.max(ball.radius + 14, Math.min(width - ball.radius - 14, ballXRatio * width));
-    ball.y = Math.max(ball.radius + 14, Math.min(height - ball.radius - 14, ballYRatio * height));
+    ball.y = Math.max(playableBounds.top + ball.radius, Math.min(playableBounds.bottom - ball.radius, ballYRatio * height));
     ball.vx = Math.sign(ball.vx || 1) * layout.ballSpeedX;
     ball.vy = Math.sign(ball.vy || -1) * layout.ballSpeedY;
     makeBricks(preserveProgress ? brokenRatio : 0);
@@ -262,9 +280,9 @@ if (canvas) {
       ball.x += ball.vx * slice;
       ball.y += ball.vy * slice;
       if (!reducedMotion.matches) ball.angle += slice * 3.8;
-      if (ball.x - ball.radius <= 14) { ball.x = 14 + ball.radius; ball.vx = Math.abs(ball.vx); }
-      else if (ball.x + ball.radius >= width - 14) { ball.x = width - 14 - ball.radius; ball.vx = -Math.abs(ball.vx); }
-      if (ball.y - ball.radius <= 14) { ball.y = 14 + ball.radius; ball.vy = Math.abs(ball.vy); }
+      if (ball.x - ball.radius <= playableBounds.left) { ball.x = playableBounds.left + ball.radius; ball.vx = Math.abs(ball.vx); }
+      else if (ball.x + ball.radius >= playableBounds.right) { ball.x = playableBounds.right - ball.radius; ball.vx = -Math.abs(ball.vx); }
+      if (ball.y - ball.radius <= playableBounds.top) { ball.y = playableBounds.top + ball.radius; ball.vy = Math.abs(ball.vy); }
 
       if (ball.vy > 0 && circleHitsRect(paddle)) {
         ball.y = paddle.y - ball.radius - 1;
@@ -285,7 +303,7 @@ if (canvas) {
         if (bricks.every((item) => !item.alive)) completeGame();
         break;
       }
-      if (ball.y - ball.radius > height) { loseLife(); break; }
+      if (ball.y - ball.radius > playableBounds.bottom) { loseLife(); break; }
       if (state !== "playing") break;
     }
   }
@@ -369,7 +387,22 @@ if (canvas) {
   });
   window.addEventListener("blur", () => { if (state === "playing") pauseGame(); });
   document.addEventListener("visibilitychange", () => { if (document.hidden && state === "playing") pauseGame(); });
-  window.addEventListener("resize", () => applyLayout(true));
+  window.addEventListener("resize", () => {
+    // Mobile browser chrome changes innerHeight but not the stable svh-based stage.
+    // Recalculate only when the real width/layout mode changes (including rotation).
+    if (window.innerWidth === viewportWidth) return;
+    viewportWidth = window.innerWidth;
+    applyLayout(true);
+    updatePlayableBounds();
+  });
+  if (hud && "ResizeObserver" in window) {
+    const hudObserver = new ResizeObserver(() => {
+      const brokenRatio = bricks.length ? bricks.filter((brick) => !brick.alive).length / bricks.length : 0;
+      updatePlayableBounds();
+      makeBricks(brokenRatio);
+    });
+    hudObserver.observe(hud);
+  }
   startButton.addEventListener("click", startGame);
   overlayResetButton.addEventListener("click", () => restartGame(true));
   pauseButton.addEventListener("click", togglePause);
@@ -377,5 +410,6 @@ if (canvas) {
 
   canvas.width = width;
   canvas.height = height;
+  updatePlayableBounds();
   makeBricks(); resetBall(); updateHud(); setPauseButton(); requestAnimationFrame(frame);
 }

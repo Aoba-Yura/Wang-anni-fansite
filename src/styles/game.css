@@ -90,10 +90,11 @@
 .breakout-game .game-overlay .overlay-secondary { color: var(--ink); border: 1px solid var(--line); background: rgba(255,255,255,.08); }
 
 @media (max-width: 600px) and (orientation: portrait) {
-  .game-shell { width: min(100% - 28px, 1280px); padding: 18px 0 92px; }
-  .game-shell .games-back { margin-bottom: 16px; font-size: .78rem; }
-  .game-shell .game-heading { margin-bottom: 12px; }
-  .game-shell .game-board-wrap { width: min(100%, 44.6dvh, 424px); aspect-ratio: 39 / 70; }
+  body[data-page="redbean-breakout"] { height: 100svh; padding-bottom: 0; overflow: hidden; }
+  body[data-page="redbean-breakout"] .site-footer { display: none; }
+  .game-shell { width: 100%; min-height: calc(100svh - var(--header-h)); padding: 0 0 78px; display: grid; align-content: start; }
+  .game-shell .games-back, .game-shell .game-heading { display: none; }
+  .game-shell .game-board-wrap { width: min(100%, 44.6svh, 424px); aspect-ratio: 39 / 70; }
   .breakout-game .game-hud { min-height: 82px; padding: max(9px, env(safe-area-inset-top)) 12px 9px; grid-template-columns: 1fr auto; grid-template-areas: "title actions" "stats stats"; gap: 7px 12px; }
   .breakout-game .game-hud-title { grid-area: title; }
   .breakout-game .game-hud-title span { font-size: .95rem; }
@@ -113,7 +114,9 @@
 }
 
 @media (max-width: 600px) and (orientation: landscape) {
-  .game-shell { width: min(100% - 28px, 1280px); padding-top: 16px; }
-  .game-shell .games-back, .game-shell .game-heading { margin-bottom: 10px; }
-  .game-shell .game-board-wrap { width: min(90vw, 117dvh); }
+  body[data-page="redbean-breakout"] { height: 100svh; padding-bottom: 0; overflow: hidden; }
+  body[data-page="redbean-breakout"] .site-footer { display: none; }
+  .game-shell { width: 100%; min-height: calc(100svh - var(--header-h)); padding: 0 0 78px; display: grid; align-content: start; }
+  .game-shell .games-back, .game-shell .game-heading { display: none; }
+  .game-shell .game-board-wrap { width: min(100%, 117svh); }
 }

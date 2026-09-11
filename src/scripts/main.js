@@ -83,22 +83,41 @@ if (matchMedia("(pointer: fine)").matches) {
   }, { passive: true });
 }
 
-const filterButtons = document.querySelectorAll("[data-filter]");
-const diaryEntries = document.querySelectorAll("[data-entry]");
-
-filterButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const filter = button.dataset.filter;
-    filterButtons.forEach((item) => {
-      const selected = item === button;
-      item.classList.toggle("active", selected);
-      item.setAttribute("aria-pressed", String(selected));
+const diaryList = document.querySelector("[data-diary-list]");
+if (diaryList) {
+  const countLabel = document.querySelector("[data-diary-count]");
+  const platformNames = { weibo: "微博", bilibili: "哔哩哔哩", haokan: "好看视频", official: "官方记录" };
+  const escapeHtml = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
+  const renderDiary = (items) => {
+    countLabel.textContent = items.length;
+    diaryList.innerHTML = items.map((item, index) => {
+      const date = new Date(`${item.date}T00:00:00`);
+      const year = date.getFullYear();
+      const monthDay = `${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
+      return `<article class="diary-entry" data-entry data-source="${escapeHtml(item.platform)}">
+        <div class="entry-date"><time datetime="${escapeHtml(item.date)}">${year}<br><b>${monthDay}</b></time><span>${escapeHtml(platformNames[item.platform] || item.platform)}</span></div>
+        <div class="entry-copy"><p class="entry-tag">${escapeHtml(item.tag)} · ${escapeHtml(item.kind || "公开记录")}</p><h2>${escapeHtml(item.title)}</h2>${item.excerpt ? `<blockquote>“${escapeHtml(item.excerpt)}”</blockquote>` : ""}<a href="${escapeHtml(item.source)}" target="_blank" rel="noreferrer">查看原动态 ↗</a></div>
+      </article>`;
+    }).join("");
+  };
+  const loadDiary = () => {
+    const embedded = document.querySelector("#diary-data");
+    if (embedded?.textContent) return Promise.resolve(JSON.parse(embedded.textContent));
+    return fetch("../data/diary.json").then((response) => {
+      if (!response.ok) throw new Error("diary data unavailable");
+      return response.json();
     });
-    diaryEntries.forEach((entry) => {
-      entry.hidden = filter !== "all" && entry.dataset.source !== filter;
-    });
-  });
-});
+  };
+  loadDiary().then((items) => {
+    items.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    renderDiary(items);
+    document.querySelectorAll("[data-filter]").forEach((button) => button.addEventListener("click", () => {
+      const filter = button.dataset.filter;
+      document.querySelectorAll("[data-filter]").forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
+      document.querySelectorAll("[data-entry]").forEach((entry) => { entry.hidden = filter !== "all" && entry.dataset.source !== filter; });
+    }));
+  }).catch(() => { diaryList.innerHTML = '<p class="source-note">日志资料暂时无法载入，请稍后重试。</p>'; });
+}
 
 const noticeMonthButtons = document.querySelectorAll(".month-card[data-notice-month]");
 const noticeCards = document.querySelectorAll("[data-notice-card]");

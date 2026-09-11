@@ -12,6 +12,8 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 const header = await readFile(join(partials, "header.html"), "utf8");
 const footer = await readFile(join(partials, "footer.html"), "utf8");
+const diaryData = await readFile(join(source, "data/diary.json"), "utf8");
+const diaryDataScript = `<script id="diary-data" type="application/json">${diaryData.replaceAll("<", "\\u003c")}</script>`;
 
 const navigation = [
   ["index.html", "首页"],
@@ -46,8 +48,10 @@ for (const file of await readdir(pages)) {
     .replaceAll("../styles/game.css", "./game.css")
     .replaceAll("../scripts/main.js", "./script.js")
     .replaceAll("../scripts/game.js", "./game.js")
+    .replaceAll("./data/diary.json", "./data/diary.json")
     .replaceAll("<!-- SITE_HEADER -->", renderHeader(file))
-    .replaceAll("<!-- SITE_FOOTER -->", footer);
+    .replaceAll("<!-- SITE_FOOTER -->", footer)
+    .replaceAll("<!-- DIARY_DATA -->", file === "diary.html" ? diaryDataScript : "");
   await writeFile(join(dist, file), html);
 }
 
@@ -58,5 +62,6 @@ await cp(join(source, "scripts/main.js"), join(dist, "script.js"));
 await cp(join(source, "scripts/game.js"), join(dist, "game.js"));
 await cp(join(source, "assets/icons/favicon.svg"), join(dist, "favicon.svg"));
 await cp(join(source, "assets"), join(dist, "assets"), { recursive: true });
+await cp(join(source, "data"), join(dist, "data"), { recursive: true });
 
 console.log(`Built ${await readdir(dist).then(files => files.length)} files in dist/`);
