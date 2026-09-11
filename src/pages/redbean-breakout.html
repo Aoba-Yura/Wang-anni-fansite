@@ -23,20 +23,30 @@
       <p class="game-eyebrow" lang="ja">紅豆ブロック崩し</p>
     </header>
     <div class="game-layout">
-      <div class="game-board-wrap">
-        <canvas id="breakout-game" width="960" height="680" data-dog-src="../assets/images/pomeranian-ball.png" aria-label="红豆打砖块游戏区域">你的浏览器需要支持 Canvas 才能运行这个小游戏。</canvas>
+      <section class="game-board-wrap breakout-game" aria-label="红豆打砖块">
+        <div class="game-hud" aria-label="游戏状态">
+          <div class="game-hud-title"><span>红豆打砖块</span><small lang="ja">POME BREAKOUT</small></div>
+          <div class="game-hud-stats">
+            <span class="hud-life">LIFE <b data-game-lives aria-label="剩余三次机会">♥ ♥ ♥</b></span>
+            <span>SCORE <b data-game-score>0000</b></span>
+            <span class="hud-best">BEST <b data-game-best>0000</b></span>
+          </div>
+          <div class="game-hud-actions">
+            <button type="button" class="hud-icon-button" data-game-pause disabled aria-label="暂停游戏" title="暂停游戏">⏸</button>
+            <button type="button" class="hud-reset-button" data-game-reset>重新开始</button>
+          </div>
+        </div>
+        <canvas id="breakout-game" width="900" height="600" data-dog-src="../assets/images/pomeranian-ball.png" aria-label="红豆打砖块游戏区域">你的浏览器需要支持 Canvas 才能运行这个小游戏。</canvas>
         <div class="game-overlay" data-game-overlay>
           <p data-overlay-kicker>READY?</p>
           <h2 data-overlay-title>红豆打砖块</h2>
           <p data-overlay-copy>方向键、A / D 或手指拖动挡板</p>
-          <button type="button" data-game-start>开始游戏 <span>→</span></button>
+          <div class="game-overlay-actions">
+            <button type="button" data-game-start>开始游戏 <span>→</span></button>
+            <button type="button" class="overlay-secondary" data-game-overlay-reset hidden>重新开始</button>
+          </div>
         </div>
-      </div>
-      <aside class="game-console" aria-label="游戏信息与控制">
-        <div class="score-grid"><div><span>SCORE</span><strong data-game-score>0000</strong></div><div><span>BEST</span><strong data-game-best>0000</strong></div></div>
-        <div class="lives-row"><span>LIFE</span><strong data-game-lives aria-label="剩余三次机会">♥ ♥ ♥</strong></div>
-        <div class="game-buttons"><button type="button" data-game-pause disabled>暂停</button><button type="button" data-game-reset>重新开始</button></div>
-      </aside>
+      </section>
     </div>
     <p class="game-status" data-game-status aria-live="polite">等待开始</p>
   </main>

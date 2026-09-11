@@ -67,3 +67,53 @@
   .game-console { grid-template-columns: 1fr; }
   .score-grid { grid-column: auto; }
 }
+
+/* Redbean breakout: the canvas owns its own responsive layout and controls. */
+.game-shell .game-layout { display: block; }
+.game-shell .game-board-wrap { width: min(900px, 90vw); margin-inline: auto; aspect-ratio: 3 / 2; }
+.game-shell #breakout-game { width: 100%; height: 100%; aspect-ratio: auto; user-select: none; -webkit-user-select: none; }
+.breakout-game .game-hud { position: absolute; z-index: 2; inset: 0 0 auto; min-height: 64px; padding: 10px 14px; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 16px; border-bottom: 1px solid rgba(255,255,255,.12); color: var(--ink); background: linear-gradient(180deg, rgba(9,7,19,.94), rgba(9,7,19,.72)); pointer-events: none; }
+.breakout-game .game-hud-title { display: grid; gap: 2px; min-width: 0; }
+.breakout-game .game-hud-title span { font-size: 1rem; font-weight: 900; letter-spacing: -.03em; white-space: nowrap; }
+.breakout-game .game-hud-title small { color: var(--active-soft); font: 400 .55rem/1 var(--display); letter-spacing: .12em; }
+.breakout-game .game-hud-stats { display: flex; align-items: center; gap: 14px; color: var(--faint); font: 400 .6rem/1 var(--display); letter-spacing: .08em; white-space: nowrap; }
+.breakout-game .game-hud-stats b { margin-left: 4px; color: var(--ink); font-size: .84rem; letter-spacing: .05em; }
+.breakout-game .game-hud-stats .hud-life { color: var(--active-soft); font: 700 .8rem/1 var(--sans); letter-spacing: 0; }
+.breakout-game .game-hud-stats .hud-life b { color: var(--active-soft); font-size: .8rem; letter-spacing: .1em; }
+.breakout-game .game-hud-actions { display: flex; align-items: center; gap: 7px; pointer-events: auto; }
+.breakout-game .hud-icon-button, .breakout-game .hud-reset-button { min-height: 34px; border: 1px solid var(--line); color: var(--ink); background: rgba(255,255,255,.06); cursor: pointer; font-weight: 900; }
+.breakout-game .hud-icon-button { width: 36px; padding: 0; color: var(--on-active); border-color: var(--active); background: var(--active); font-size: 1.05rem; }
+.breakout-game .hud-reset-button { padding: 0 10px; font-size: .7rem; }
+.breakout-game .game-overlay { z-index: 4; }
+.breakout-game .game-overlay-actions { display: grid; gap: 10px; margin-top: 28px; }
+.breakout-game .game-overlay-actions button { margin-top: 0; }
+.breakout-game .game-overlay .overlay-secondary { color: var(--ink); border: 1px solid var(--line); background: rgba(255,255,255,.08); }
+
+@media (max-width: 600px) and (orientation: portrait) {
+  .game-shell { width: min(100% - 28px, 1280px); padding: 18px 0 92px; }
+  .game-shell .games-back { margin-bottom: 16px; font-size: .78rem; }
+  .game-shell .game-heading { margin-bottom: 12px; }
+  .game-shell .game-board-wrap { width: min(100%, 44.6dvh, 424px); aspect-ratio: 39 / 70; }
+  .breakout-game .game-hud { min-height: 82px; padding: max(9px, env(safe-area-inset-top)) 12px 9px; grid-template-columns: 1fr auto; grid-template-areas: "title actions" "stats stats"; gap: 7px 12px; }
+  .breakout-game .game-hud-title { grid-area: title; }
+  .breakout-game .game-hud-title span { font-size: .95rem; }
+  .breakout-game .game-hud-stats { grid-area: stats; justify-content: space-between; gap: 8px; }
+  .breakout-game .game-hud-actions { grid-area: actions; }
+  .breakout-game .hud-reset-button { display: none; }
+  .breakout-game .hud-best { display: none; }
+  .breakout-game .game-overlay { padding: 20px 16px calc(20px + env(safe-area-inset-bottom)); }
+  .breakout-game .game-overlay h2 { font-size: clamp(2rem, 10vw, 3rem); }
+  .breakout-game .game-overlay-actions { width: min(100%, 230px); }
+  .breakout-game .game-overlay-actions button { width: 100%; }
+}
+
+@media (max-width: 360px) and (orientation: portrait) {
+  .breakout-game .game-hud-stats { font-size: .54rem; }
+  .breakout-game .game-hud-stats b { font-size: .74rem; }
+}
+
+@media (max-width: 600px) and (orientation: landscape) {
+  .game-shell { width: min(100% - 28px, 1280px); padding-top: 16px; }
+  .game-shell .games-back, .game-shell .game-heading { margin-bottom: 10px; }
+  .game-shell .game-board-wrap { width: min(90vw, 117dvh); }
+}
