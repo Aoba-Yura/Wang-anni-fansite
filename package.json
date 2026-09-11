@@ -8,6 +8,7 @@
     "node": ">=24 <25"
   },
   "scripts": {
-    "build": "node tools/build.mjs"
+    "build": "node tools/build.mjs",
+    "audit:mobile": "node tools/mobile-audit.mjs"
   }
 }
