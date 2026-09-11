@@ -119,31 +119,39 @@ if (diaryList) {
   }).catch(() => { diaryList.innerHTML = '<p class="source-note">日志资料暂时无法载入，请稍后重试。</p>'; });
 }
 
-const noticeMonthButtons = document.querySelectorAll(".month-card[data-notice-month]");
-const noticeCards = document.querySelectorAll("[data-notice-card]");
+const noticeList = document.querySelector("[data-notice-list]");
+if (noticeList) {
+  const monthList = document.querySelector("[data-notice-months]");
+  const updated = document.querySelector("[data-notice-updated]");
+  const escapeNotice = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
+  const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+  const embedded = document.querySelector("#notice-data");
+  const loadNotices = embedded?.textContent
+    ? Promise.resolve(JSON.parse(embedded.textContent))
+    : fetch("../data/notices.json").then((response) => response.json());
 
-noticeCards.forEach((card) => {
-  card.addEventListener("click", (event) => {
-    if (!event.target.closest("a")) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  });
-});
+  loadNotices.then((data) => {
+    const items = [...data.items].sort((a, b) => b.date.localeCompare(a.date));
+    const months = [...new Set(items.map((item) => item.date.slice(0, 7)))];
+    monthList.innerHTML = `<button class="month-card active" type="button" data-notice-month="all" aria-pressed="true"><b>ALL</b><span>全部</span></button>${months.map((month) => {
+      const [year, number] = month.split("-");
+      return `<button class="month-card" type="button" data-notice-month="${month}" aria-pressed="false"><b>${number}</b><span>${year} · ${monthNames[Number(number) - 1]}</span></button>`;
+    }).join("")}`;
+    noticeList.innerHTML = items.map((item) => {
+      const classes = ["notice-card", `notice-card--${item.theme || "paper"}`, item.size ? `notice-card--${item.size}` : "", item.tilt ? `notice-card--tilt-${item.tilt}` : ""].filter(Boolean).join(" ");
+      return `<article class="${classes}" data-notice-card data-notice-month="${item.date.slice(0, 7)}"><i class="pushpin" aria-hidden="true"></i><div class="notice-card-top"><span class="notice-label">${escapeNotice(item.label)}</span><time datetime="${escapeNotice(item.date)}">${escapeNotice(item.displayDate || item.date.replaceAll("-", "."))}</time></div><h3>${escapeNotice(item.title)}</h3><p>${escapeNotice(item.body)}</p>${item.href ? `<a href="${escapeNotice(item.href)}">${escapeNotice(item.linkLabel || "查看详情 ↗")}</a>` : ""}${item.signature ? `<span class="notice-signature">${escapeNotice(item.signature)}</span>` : ""}${item.stamp ? `<span class="notice-stamp">${escapeNotice(item.stamp)}</span>` : ""}${item.doodle ? `<span class="notice-doodle" aria-hidden="true">${escapeNotice(item.doodle)}</span>` : ""}</article>`;
+    }).join("");
+    if (updated) updated.textContent = `最后更新：${String(data.updated || "").replaceAll("-", ".")}`;
 
-noticeMonthButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const month = button.dataset.noticeMonth;
-    noticeMonthButtons.forEach((item) => {
-      const selected = item === button;
-      item.classList.toggle("active", selected);
-      item.setAttribute("aria-pressed", String(selected));
-    });
-    noticeCards.forEach((card) => {
-      card.hidden = month !== "all" && card.dataset.noticeMonth !== month;
-    });
-  });
-});
+    const buttons = [...document.querySelectorAll(".month-card[data-notice-month]")];
+    const cards = [...document.querySelectorAll("[data-notice-card]")];
+    buttons.forEach((button) => button.addEventListener("click", () => {
+      const month = button.dataset.noticeMonth;
+      buttons.forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
+      cards.forEach((card) => { card.hidden = month !== "all" && card.dataset.noticeMonth !== month; });
+    }));
+  }).catch(() => { noticeList.innerHTML = '<p class="source-note">公告暂时无法载入。</p>'; });
+}
 
 const literaryTabs = document.querySelectorAll("[data-literary-tab]");
 const literaryPanels = document.querySelectorAll("[data-literary-panel]");

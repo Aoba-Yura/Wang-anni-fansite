@@ -14,6 +14,8 @@ const header = await readFile(join(partials, "header.html"), "utf8");
 const footer = await readFile(join(partials, "footer.html"), "utf8");
 const diaryData = await readFile(join(source, "data/diary.json"), "utf8");
 const diaryDataScript = `<script id="diary-data" type="application/json">${diaryData.replaceAll("<", "\\u003c")}</script>`;
+const noticeData = await readFile(join(source, "data/notices.json"), "utf8");
+const noticeDataScript = `<script id="notice-data" type="application/json">${noticeData.replaceAll("<", "\\u003c")}</script>`;
 
 const navigation = [
   ["index.html", "首页"],
@@ -51,7 +53,8 @@ for (const file of await readdir(pages)) {
     .replaceAll("./data/diary.json", "./data/diary.json")
     .replaceAll("<!-- SITE_HEADER -->", renderHeader(file))
     .replaceAll("<!-- SITE_FOOTER -->", footer)
-    .replaceAll("<!-- DIARY_DATA -->", file === "diary.html" ? diaryDataScript : "");
+    .replaceAll("<!-- DIARY_DATA -->", file === "diary.html" ? diaryDataScript : "")
+    .replaceAll("<!-- NOTICE_DATA -->", file === "notices.html" ? noticeDataScript : "");
   await writeFile(join(dist, file), html);
 }
 

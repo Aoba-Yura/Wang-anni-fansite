@@ -1,0 +1,56 @@
+{
+  "updated": "2026-09-09",
+  "items": [
+    {
+      "date": "2026-09-07",
+      "displayDate": "2026.09.07",
+      "label": "站内更新",
+      "title": "安妮颂，已经贴在四楼窗边",
+      "body": "新开一栏粉丝原创文学，收录赞美诗与赞颂骈文；欢迎在安静的课间读完，再把想说的话带去下一次相见",
+      "signature": "— 紅豆妮編集室",
+      "theme": "red",
+      "size": "wide"
+    },
+    {
+      "date": "2026-08-23",
+      "displayDate": "2026.08.23",
+      "label": "温馨提示",
+      "title": "最新消息，记得去官方渠道确认",
+      "body": "本站是非官方粉丝创作与公开资料整理站；成员动态、活动安排与原始内容，请以王安妮及 TSH48 官方渠道为准",
+      "stamp": "CHECK",
+      "theme": "cream",
+      "tilt": "left"
+    },
+    {
+      "date": "2026-07-19",
+      "displayDate": "毎日",
+      "label": "应援小抄",
+      "title": "红豆红 × 抹茶绿",
+      "body": "她的应援色已经收录在人物档案里",
+      "href": "./profile.html",
+      "linkLabel": "去看人物档案 ↗",
+      "theme": "matcha",
+      "tilt": "right"
+    },
+    {
+      "date": "2026-02-19",
+      "displayDate": "02.19",
+      "label": "给红豆妮",
+      "title": "生日快乐，安妮",
+      "body": "愿每一张举起的灯牌，都被她在舞台上看见",
+      "theme": "lilac",
+      "size": "small"
+    },
+    {
+      "date": "2026-09-09",
+      "displayDate": "09.09",
+      "label": "今日值日",
+      "title": "把喜欢好好收好",
+      "body": "看日志，读颂文，偶尔也在这里停一下",
+      "doodle": "♡",
+      "theme": "paper",
+      "size": "small",
+      "tilt": "left"
+    }
+  ]
+}
