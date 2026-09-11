@@ -885,6 +885,29 @@ html:has(body[data-page="home"]) { scroll-snap-type: y mandatory; scroll-padding
 }
 
 /* Diary journal finish */
+.filter-bar {
+  display: block;
+  margin-bottom: 26px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+.filter-bar > summary {
+  min-height: 46px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  color: var(--ink);
+  background: rgba(255,255,255,.025);
+  cursor: pointer;
+  user-select: none;
+}
+.filter-bar > summary::-webkit-details-marker { display:none; }
+.filter-bar > summary::after { content:"＋"; margin-left:auto; color:var(--active); font-size:1rem; transition:transform .2s ease; }
+.filter-bar[open] > summary::after { transform: rotate(45deg); }
+.filter-bar > summary span { color:var(--ink); font-size:.72rem; font-weight:700; letter-spacing:.14em; }
+.filter-bar > summary small { margin-left:12px; color:var(--faint); font-size:.58rem; letter-spacing:.08em; }
+.filter-panel { padding:16px 15px 18px; display:grid; gap:13px; border-top:1px solid var(--line); }
 .diary-year + .diary-year { margin-top: 78px; }
 .year-divider {
   position: relative;

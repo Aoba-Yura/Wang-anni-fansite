@@ -150,6 +150,10 @@ if (diaryList) {
       filterState[group] = button.dataset.filterValue;
       visibleLimit = 5;
       document.querySelectorAll(`[data-filter-group-name="${group}"]`).forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
+      const activeFilterCount = Object.values(filterState).filter((value) => value !== "all").length;
+      const filterSummary = document.querySelector("[data-filter-summary]");
+      if (filterSummary) filterSummary.textContent = activeFilterCount ? `已启用 ${activeFilterCount} 项` : "点击展开";
+      button.closest(".filter-bar")?.removeAttribute("open");
       applyFilters();
     }));
   }).catch(() => { diaryList.innerHTML = '<p class="source-note">日志资料暂时无法载入。<small lang="ja">日記データを読み込めませんでした。</small></p>'; });

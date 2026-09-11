@@ -22,20 +22,23 @@
       <div class="diary-total" aria-label="日志总数 / 日記の件数"><strong data-diary-count>—</strong><span>items</span></div>
     </header>
     <section class="diary-section content-width" aria-label="公开动态时间线 / 公開投稿タイムライン">
-      <div class="filter-bar" aria-label="筛选日志 / 日記を絞り込む">
-        <div class="filter-group" role="group" aria-label="按平台筛选">
-          <span class="filter-label">平台</span><div class="filter-options" data-filter-group="platform"></div>
+      <details class="filter-bar">
+        <summary><span>挑挑拣拣来筛选</span><small data-filter-summary>点击展开</small></summary>
+        <div class="filter-panel" aria-label="筛选日志 / 日記を絞り込む">
+          <div class="filter-group" role="group" aria-label="按平台筛选">
+            <span class="filter-label">平台</span><div class="filter-options" data-filter-group="platform"></div>
+          </div>
+          <div class="filter-group" role="group" aria-label="按年份筛选">
+            <span class="filter-label">年份</span><div class="filter-options" data-filter-group="year"></div>
+          </div>
+          <div class="filter-group" role="group" aria-label="按主题筛选">
+            <span class="filter-label">主题</span><div class="filter-options" data-filter-group="tag"></div>
+          </div>
+          <div class="filter-group" role="group" aria-label="按事件类型筛选">
+            <span class="filter-label">类型</span><div class="filter-options" data-filter-group="kind"></div>
+          </div>
         </div>
-        <div class="filter-group" role="group" aria-label="按年份筛选">
-          <span class="filter-label">年份</span><div class="filter-options" data-filter-group="year"></div>
-        </div>
-        <div class="filter-group" role="group" aria-label="按主题筛选">
-          <span class="filter-label">主题</span><div class="filter-options" data-filter-group="tag"></div>
-        </div>
-        <div class="filter-group" role="group" aria-label="按事件类型筛选">
-          <span class="filter-label">类型</span><div class="filter-options" data-filter-group="kind"></div>
-        </div>
-      </div>
+      </details>
       <div class="diary-list" data-diary-list aria-live="polite"></div>
     </section>
   </main>
