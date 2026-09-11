@@ -86,45 +86,71 @@ if (matchMedia("(pointer: fine)").matches) {
 const diaryList = document.querySelector("[data-diary-list]");
 if (diaryList) {
   const countLabel = document.querySelector("[data-diary-count]");
-  const filterOptions = document.querySelector("[data-diary-filters]");
   const platforms = [
-    { id: "all", label: "全部", labelJa: "すべて" },
-    { id: "weibo", label: "微博", labelJa: "Weibo" },
-    { id: "bilibili", label: "B 站", cardLabel: "哔哩哔哩", labelJa: "ビリビリ" },
-    { id: "haokan", label: "好看视频" },
-    { id: "official", label: "官方记录", labelJa: "公式記録" },
+    { id: "all", label: "全部" },
+    { id: "weibo", label: "微博" },
+    { id: "bilibili", label: "B 站" },
   ];
-  const platformById = Object.fromEntries(platforms.map((platform) => [platform.id, platform]));
-  const kindNamesJa = { "原创短引": "本人投稿・抜粋", "原创视频": "本人動画", "官方提及": "公式言及", "官方记录": "公式記録", "官方视频": "公式動画", "视频记录": "動画記録", "现场视频": "ライブ映像", "视频合集": "動画まとめ" };
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
-  if (filterOptions) filterOptions.innerHTML = platforms.map((platform, index) => `<button class="${index === 0 ? "active" : ""}" type="button" data-filter="${escapeHtml(platform.id)}" aria-pressed="${index === 0}"><span>${escapeHtml(platform.label)}</span><small lang="ja">${escapeHtml(platform.labelJa)}</small></button>`).join("");
+  const filterState = { platform: "all", year: "all", tag: "all", kind: "all" };
+  let visibleLimit = 5;
+  let filteredRecords = [];
+  const makeFilterButton = (group, value, label, active = false) => `<button class="${active ? "active" : ""}" type="button" data-filter-group-name="${group}" data-filter-value="${escapeHtml(value)}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
+  const fillFilters = (items) => {
+    const choices = {
+      platform: platforms.map(({ id, label }) => [id, label]),
+      year: [...new Set(items.map((item) => item.date.slice(0, 4)))].map((year) => [year, year]),
+      tag: [...new Set(items.map((item) => item.tag).filter(Boolean))].map((tag) => [tag, tag]),
+      kind: [...new Set(items.map((item) => item.kind).filter(Boolean))].map((kind) => [kind, kind]),
+    };
+    Object.entries(choices).forEach(([group, values]) => {
+      const container = document.querySelector(`[data-filter-group="${group}"]`);
+      if (container) container.innerHTML = makeFilterButton(group, "all", "全部", true) + values.filter(([value]) => value !== "all").map(([value, label]) => makeFilterButton(group, value, label)).join("");
+    });
+  };
   const renderDiary = (items) => {
     countLabel.textContent = items.length;
-    diaryList.innerHTML = items.map((item, index) => {
-      const date = new Date(`${item.date}T00:00:00`);
-      const year = date.getFullYear();
-      const monthDay = `${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
-      return `<article class="diary-entry" data-entry data-source="${escapeHtml(item.platform)}">
-        <div class="entry-date"><time datetime="${escapeHtml(item.date)}">${year}<br><b>${monthDay}</b></time><span>${escapeHtml(platformById[item.platform]?.cardLabel || platformById[item.platform]?.label || item.platform)}<small lang="ja">${escapeHtml(platformById[item.platform]?.labelJa || "")}</small></span></div>
-        <div class="entry-copy"><p class="entry-tag">${escapeHtml(item.tag)} · <span>${escapeHtml(item.kind || "公开记录")}<small lang="ja">${escapeHtml(kindNamesJa[item.kind] || "公開記録")}</small></span></p><h2>${escapeHtml(item.title)}</h2>${item.excerpt ? `<blockquote>“${escapeHtml(item.excerpt)}”</blockquote>` : ""}<a href="${escapeHtml(item.source)}" target="_blank" rel="noreferrer"><span>查看原动态</span><small lang="ja">元の投稿を見る</small> ↗</a></div>
-      </article>`;
-    }).join("");
+    if (!items.length) {
+      diaryList.innerHTML = '<p class="source-note">没有符合筛选条件的事件。</p>';
+      return;
+    }
+    const shownItems = items.slice(0, visibleLimit);
+    const years = [...new Set(shownItems.map((item) => item.date.slice(0, 4)))];
+    diaryList.innerHTML = years.map((year) => `<section class="diary-year" aria-labelledby="diary-year-${year}">
+      <h2 class="year-divider" id="diary-year-${year}"><span>${year}</span><small>YEAR</small></h2>
+      <div class="year-events">${shownItems.filter((item) => item.date.startsWith(year)).map((item) => {
+        const monthDay = item.date.slice(5).replace("-", ".");
+        return `<article class="diary-entry" data-platform="${escapeHtml(item.platform)}">
+          <div class="entry-date"><time datetime="${escapeHtml(item.date)}">${escapeHtml(monthDay)}</time></div>
+          <div class="entry-copy"><p class="entry-tag">${escapeHtml(item.tag)}</p><h3>${escapeHtml(item.title)}</h3>${item.excerpt ? `<p class="entry-excerpt">${escapeHtml(item.excerpt)}</p>` : ""}<a class="source-button" href="${escapeHtml(item.source)}" target="_blank" rel="noopener noreferrer">查看原微博 <span aria-hidden="true">↗</span></a></div>
+        </article>`;
+      }).join("")}</div>
+    </section>`).join("") + (shownItems.length < items.length ? `<button class="diary-more" type="button" data-diary-more><span>继续翻阅</span><small>还有 ${items.length - shownItems.length} 则记录</small></button>` : "");
   };
-  const loadDiary = () => {
-    const embedded = document.querySelector("#diary-data");
-    if (embedded?.textContent) return Promise.resolve(JSON.parse(embedded.textContent));
-    return fetch("../data/diary.json").then((response) => {
+  const loadDiary = () => fetch("../data/diary.json").then((response) => {
       if (!response.ok) throw new Error("diary data unavailable");
       return response.json();
     });
-  };
-  loadDiary().then((items) => {
-    items.sort((a, b) => String(b.date).localeCompare(String(a.date)));
-    renderDiary(items);
-    document.querySelectorAll("[data-filter]").forEach((button) => button.addEventListener("click", () => {
-      const filter = button.dataset.filter;
-      document.querySelectorAll("[data-filter]").forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
-      document.querySelectorAll("[data-entry]").forEach((entry) => { entry.hidden = filter !== "all" && entry.dataset.source !== filter; });
+  loadDiary().then((data) => {
+    const visibleRecords = data.records.filter(item => item.display).map(item => item.display);
+    visibleRecords.sort((a, b) => String(b.date).localeCompare(String(a.date)) || String(b.published_at).localeCompare(String(a.published_at)));
+    fillFilters(visibleRecords);
+    const applyFilters = () => {
+      filteredRecords = visibleRecords.filter((item) => Object.entries(filterState).every(([group, value]) => value === "all" || (group === "year" ? item.date.startsWith(value) : item[group] === value)));
+      renderDiary(filteredRecords);
+    };
+    applyFilters();
+    diaryList.addEventListener("click", (event) => {
+      if (!event.target.closest("[data-diary-more]")) return;
+      visibleLimit += 10;
+      renderDiary(filteredRecords);
+    });
+    document.querySelectorAll("[data-filter-group-name]").forEach((button) => button.addEventListener("click", () => {
+      const group = button.dataset.filterGroupName;
+      filterState[group] = button.dataset.filterValue;
+      visibleLimit = 5;
+      document.querySelectorAll(`[data-filter-group-name="${group}"]`).forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
+      applyFilters();
     }));
   }).catch(() => { diaryList.innerHTML = '<p class="source-note">日志资料暂时无法载入。<small lang="ja">日記データを読み込めませんでした。</small></p>'; });
 }

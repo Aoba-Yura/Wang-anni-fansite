@@ -27,6 +27,14 @@ npm run build
 
 构建脚本会把 `src/` 中的源码整理为可直接部署的 `dist/`。
 
+本地预览必须通过 HTTP 打开，不能直接双击 `dist/*.html`，否则浏览器会阻止页面读取 JSON：
+
+```bash
+npm run preview
+```
+
+然后访问 `http://127.0.0.1:4173/diary.html`。
+
 项目已经附带 GitHub Actions 自动发布配置。请在仓库的 **Settings → Pages** 中把发布来源设为 **GitHub Actions**。此后每次推送到 `main`，工作流会使用 Node.js 24 LTS 构建并检查脚本，然后自动发布 `dist/`；也可在 **Actions** 页面手动运行。
 
 ## 内容约定

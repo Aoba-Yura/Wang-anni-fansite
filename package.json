@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "node tools/build.mjs",
+    "preview": "node tools/preview.mjs",
     "audit:mobile": "node tools/mobile-audit.mjs"
   }
 }

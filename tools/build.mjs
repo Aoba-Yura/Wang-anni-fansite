@@ -12,8 +12,6 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 const header = await readFile(join(partials, "header.html"), "utf8");
 const footer = await readFile(join(partials, "footer.html"), "utf8");
-const diaryData = await readFile(join(source, "data/diary.json"), "utf8");
-const diaryDataScript = `<script id="diary-data" type="application/json">${diaryData.replaceAll("<", "\\u003c")}</script>`;
 const noticeData = await readFile(join(source, "data/notices.json"), "utf8");
 const noticeDataScript = `<script id="notice-data" type="application/json">${noticeData.replaceAll("<", "\\u003c")}</script>`;
 const hymnData = await readFile(join(source, "data/hymns.json"), "utf8");
@@ -60,7 +58,7 @@ for (const file of await readdir(pages)) {
     .replaceAll("./data/diary.json", "./data/diary.json")
     .replaceAll("<!-- SITE_HEADER -->", renderHeader(file))
     .replaceAll("<!-- SITE_FOOTER -->", footer)
-    .replaceAll("<!-- DIARY_DATA -->", file === "diary.html" ? diaryDataScript : "")
+    .replaceAll("<!-- DIARY_DATA -->", "")
     .replaceAll("<!-- NOTICE_DATA -->", file === "notices.html" ? noticeDataScript : "")
     .replaceAll("<!-- HYMN_DATA -->", file === "hymn.html" ? hymnDataScript : "");
   html = renderMobileLabels(html);
@@ -70,7 +68,8 @@ for (const file of await readdir(pages)) {
 const stylesheet = await readFile(join(source, "styles/main.css"), "utf8");
 await writeFile(join(dist, "styles.css"), stylesheet.replaceAll("../assets/", "./assets/"));
 await cp(join(source, "styles/game.css"), join(dist, "game.css"));
-await cp(join(source, "scripts/main.js"), join(dist, "script.js"));
+const mainScript = await readFile(join(source, "scripts/main.js"), "utf8");
+await writeFile(join(dist, "script.js"), mainScript.replaceAll("../data/diary.json", "./data/diary.json"));
 await cp(join(source, "scripts/game.js"), join(dist, "game.js"));
 await cp(join(source, "assets/icons/favicon.svg"), join(dist, "favicon.svg"));
 await cp(join(source, "assets"), join(dist, "assets"), { recursive: true });
