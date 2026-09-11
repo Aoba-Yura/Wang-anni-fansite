@@ -15,20 +15,22 @@
   <main class="inner-main">
     <header class="diary-hero content-width">
       <div class="diary-heading">
-        <p class="section-heading-line"><span class="section-heading__marker" aria-hidden="true"></span><span class="section-heading__title">公开动态 · <i lang="ja">公開投稿</i></span><b>2020—2026</b></p>
+        <p class="section-heading-line"><span class="section-heading__marker" aria-hidden="true"></span><span class="section-heading__title">公开动态 · <i lang="ja">公開投稿</i></span></p>
         <h1><span>安妮</span><em>日志</em></h1>
-        <small lang="ja">日記アーカイブ</small>
+        <div class="diary-period"><small lang="ja">日記アーカイブ</small><b>2020—2026</b></div>
       </div>
       <div class="diary-total" aria-label="日志总数 / 日記の件数"><strong data-diary-count>—</strong><span>条 · 件</span></div>
     </header>
     <section class="diary-section content-width" aria-label="公开动态时间线 / 公開投稿タイムライン">
       <div class="filter-bar" role="group" aria-label="筛选日志 / 日記を絞り込む">
-        <span>筛选 · <i lang="ja">絞り込み</i></span>
-        <button class="active" type="button" data-filter="all" aria-pressed="true">全部<small lang="ja">すべて</small></button>
-        <button type="button" data-filter="weibo" aria-pressed="false">微博<small lang="ja">Weibo</small></button>
-        <button type="button" data-filter="bilibili" aria-pressed="false">B 站<small lang="ja">ビリビリ</small></button>
-        <button type="button" data-filter="haokan" aria-pressed="false">好看视频<small lang="ja">動画</small></button>
-        <button type="button" data-filter="official" aria-pressed="false">官方记录<small lang="ja">公式記録</small></button>
+        <span class="filter-label">筛选 <i lang="ja">絞り込み</i></span>
+        <div class="filter-options">
+          <button class="active" type="button" data-filter="all" aria-pressed="true"><span>全部</span><small lang="ja">すべて</small></button>
+          <button type="button" data-filter="weibo" aria-pressed="false"><span>微博</span><small lang="ja">Weibo</small></button>
+          <button type="button" data-filter="bilibili" aria-pressed="false"><span>B 站</span><small lang="ja">ビリビリ</small></button>
+          <button type="button" data-filter="haokan" aria-pressed="false"><span>好看视频</span><small lang="ja">動画</small></button>
+          <button type="button" data-filter="official" aria-pressed="false"><span>官方记录</span><small lang="ja">公式記録</small></button>
+        </div>
       </div>
       <div class="diary-list" data-diary-list aria-live="polite"></div>
     </section>
