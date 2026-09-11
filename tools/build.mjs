@@ -75,4 +75,16 @@ await cp(join(source, "assets/icons/favicon.svg"), join(dist, "favicon.svg"));
 await cp(join(source, "assets"), join(dist, "assets"), { recursive: true });
 await cp(join(source, "data"), join(dist, "data"), { recursive: true });
 
+// Keep the complete Weibo archive in Git, but publish only fields the page may read.
+const diaryArchive = JSON.parse(await readFile(join(source, "data/diary.json"), "utf8"));
+const publicDiary = {
+  schema_version: diaryArchive.schema_version,
+  generated_at: diaryArchive.generated_at,
+  display_total: diaryArchive.records.filter((record) => record.display).length,
+  records: diaryArchive.records
+    .filter((record) => record.display)
+    .map((record) => ({ id: record.id, display: record.display })),
+};
+await writeFile(join(dist, "data/diary.json"), JSON.stringify(publicDiary));
+
 console.log(`Built ${await readdir(dist).then(files => files.length)} files in dist/`);
