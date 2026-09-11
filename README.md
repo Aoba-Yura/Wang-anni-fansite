@@ -11,7 +11,7 @@ src/
 ├─ styles/      样式源码
 ├─ scripts/     交互脚本
 ├─ assets/      图片、图标、字体等静态资源
-└─ data/        人物资料与日志数据
+└─ data/        人物资料与日常动态数据
 dist/           GitHub Pages / Sites 发布文件
 tools/          构建脚本
 .github/        GitHub Actions 自动发布配置
@@ -41,7 +41,7 @@ npm run preview
 
 - `src/pages/` 保持页面结构与可读文案。
 - `src/styles/` 维护全站视觉系统与响应式规则。
-- `src/scripts/` 维护主题切换、日志筛选、文学栏目切换、色值复制和应援按钮等交互。
+- `src/scripts/` 维护主题切换、日常筛选、文学栏目切换、色值复制和应援按钮等交互。
 - `src/assets/` 只放可复用的本地资源；外部官方图片和官方链接在页面中注明来源。
 - `src/data/` 保存资料整理的结构化底稿，后续可用于自动生成时间线与档案页。
 

@@ -156,7 +156,7 @@ if (diaryList) {
       button.closest(".filter-bar")?.removeAttribute("open");
       applyFilters();
     }));
-  }).catch(() => { diaryList.innerHTML = '<p class="source-note">日志资料暂时无法载入。<small lang="ja">日記データを読み込めませんでした。</small></p>'; });
+  }).catch(() => { diaryList.innerHTML = '<p class="source-note">日常记录暂时无法载入。<small lang="ja">投稿データを読み込めませんでした。</small></p>'; });
 }
 
 const noticeList = document.querySelector("[data-notice-list]");

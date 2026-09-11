@@ -20,7 +20,7 @@ const hymnDataScript = `<script id="hymn-data" type="application/json">${hymnDat
 const navigation = [
   ["index.html", "首页", "ホーム"],
   ["profile.html", "人物档案", "プロフィール"],
-  ["diary.html", "安妮日志", "日記"],
+  ["diary.html", "安妮日常", "日常"],
   ["notices.html", "公告栏", "お知らせ"],
   ["hymn.html", "安妮颂", "賛歌"],
   ["game.html", "小游戏", "ミニゲーム"],
@@ -41,7 +41,7 @@ function renderHeader(file) {
 }
 
 function renderMobileLabels(html) {
-  const labels = [["首页", "ホーム"], ["档案", "人物"], ["日志", "日記"], ["公告", "告知"], ["安妮颂", "賛歌"], ["游戏", "遊ぶ"]];
+  const labels = [["首页", "ホーム"], ["档案", "人物"], ["日常", "日常"], ["公告", "告知"], ["安妮颂", "賛歌"], ["游戏", "遊ぶ"]];
   return html.replace(/<nav class="mobile-nav"[\s\S]*?<\/nav>/g, (navigationHtml) => labels.reduce((output, [chinese, japanese]) => output.replaceAll(`<span>${chinese}</span>`, `<span>${chinese}<small lang="ja">${japanese}</small></span>`), navigationHtml).replace('aria-label="手机端主导航"', 'aria-label="手机端主导航 / モバイルナビゲーション"'));
 }
 
