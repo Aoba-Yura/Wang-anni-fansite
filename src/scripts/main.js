@@ -86,10 +86,18 @@ if (matchMedia("(pointer: fine)").matches) {
 const diaryList = document.querySelector("[data-diary-list]");
 if (diaryList) {
   const countLabel = document.querySelector("[data-diary-count]");
-  const platformNames = { weibo: "微博", bilibili: "哔哩哔哩", haokan: "好看视频", official: "官方记录" };
-  const platformNamesJa = { weibo: "Weibo", bilibili: "ビリビリ", haokan: "動画", official: "公式記録" };
+  const filterOptions = document.querySelector("[data-diary-filters]");
+  const platforms = [
+    { id: "all", label: "全部", labelJa: "すべて" },
+    { id: "weibo", label: "微博", labelJa: "Weibo" },
+    { id: "bilibili", label: "B 站", cardLabel: "哔哩哔哩", labelJa: "ビリビリ" },
+    { id: "haokan", label: "好看视频" },
+    { id: "official", label: "官方记录", labelJa: "公式記録" },
+  ];
+  const platformById = Object.fromEntries(platforms.map((platform) => [platform.id, platform]));
   const kindNamesJa = { "原创短引": "本人投稿・抜粋", "原创视频": "本人動画", "官方提及": "公式言及", "官方记录": "公式記録", "官方视频": "公式動画", "视频记录": "動画記録", "现场视频": "ライブ映像", "视频合集": "動画まとめ" };
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
+  if (filterOptions) filterOptions.innerHTML = platforms.map((platform, index) => `<button class="${index === 0 ? "active" : ""}" type="button" data-filter="${escapeHtml(platform.id)}" aria-pressed="${index === 0}"><span>${escapeHtml(platform.label)}</span><small lang="ja">${escapeHtml(platform.labelJa)}</small></button>`).join("");
   const renderDiary = (items) => {
     countLabel.textContent = items.length;
     diaryList.innerHTML = items.map((item, index) => {
@@ -97,7 +105,7 @@ if (diaryList) {
       const year = date.getFullYear();
       const monthDay = `${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
       return `<article class="diary-entry" data-entry data-source="${escapeHtml(item.platform)}">
-        <div class="entry-date"><time datetime="${escapeHtml(item.date)}">${year}<br><b>${monthDay}</b></time><span>${escapeHtml(platformNames[item.platform] || item.platform)}<small lang="ja">${escapeHtml(platformNamesJa[item.platform] || "")}</small></span></div>
+        <div class="entry-date"><time datetime="${escapeHtml(item.date)}">${year}<br><b>${monthDay}</b></time><span>${escapeHtml(platformById[item.platform]?.cardLabel || platformById[item.platform]?.label || item.platform)}<small lang="ja">${escapeHtml(platformById[item.platform]?.labelJa || "")}</small></span></div>
         <div class="entry-copy"><p class="entry-tag">${escapeHtml(item.tag)} · <span>${escapeHtml(item.kind || "公开记录")}<small lang="ja">${escapeHtml(kindNamesJa[item.kind] || "公開記録")}</small></span></p><h2>${escapeHtml(item.title)}</h2>${item.excerpt ? `<blockquote>“${escapeHtml(item.excerpt)}”</blockquote>` : ""}<a href="${escapeHtml(item.source)}" target="_blank" rel="noreferrer"><span>查看原动态</span><small lang="ja">元の投稿を見る</small> ↗</a></div>
       </article>`;
     }).join("");

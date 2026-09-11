@@ -19,18 +19,12 @@
         <h1><span>安妮</span><em>日志</em></h1>
         <div class="diary-period"><small lang="ja">日記アーカイブ</small><b>2020—2026</b></div>
       </div>
-      <div class="diary-total" aria-label="日志总数 / 日記の件数"><strong data-diary-count>—</strong><span>条 · 件</span></div>
+      <div class="diary-total" aria-label="日志总数 / 日記の件数"><strong data-diary-count>—</strong><span>items</span></div>
     </header>
     <section class="diary-section content-width" aria-label="公开动态时间线 / 公開投稿タイムライン">
       <div class="filter-bar" role="group" aria-label="筛选日志 / 日記を絞り込む">
         <span class="filter-label">筛选 <i lang="ja">絞り込み</i></span>
-        <div class="filter-options">
-          <button class="active" type="button" data-filter="all" aria-pressed="true"><span>全部</span><small lang="ja">すべて</small></button>
-          <button type="button" data-filter="weibo" aria-pressed="false"><span>微博</span><small lang="ja">Weibo</small></button>
-          <button type="button" data-filter="bilibili" aria-pressed="false"><span>B 站</span><small lang="ja">ビリビリ</small></button>
-          <button type="button" data-filter="haokan" aria-pressed="false"><span>好看视频</span><small lang="ja">動画</small></button>
-          <button type="button" data-filter="official" aria-pressed="false"><span>官方记录</span><small lang="ja">公式記録</small></button>
-        </div>
+        <div class="filter-options" data-diary-filters></div>
       </div>
       <div class="diary-list" data-diary-list aria-live="polite"></div>
     </section>
