@@ -16,8 +16,8 @@
 .game-cover-info > b { color: var(--active-soft); font-size: .78rem; white-space: nowrap; }
 .game-cover-info > b small,.games-back small { display:block; margin-top:3px; font-size:.56rem; font-weight:500; opacity:.72; }
 
-.game-shell { width: min(calc(100% - (var(--page-padding) * 2)), 1280px); min-height: calc(100svh - var(--header-h)); margin-inline: auto; padding: clamp(38px, 6vw, 78px) 0 70px; }
-.games-back { display: inline-block; margin-bottom: 28px; color: var(--muted); font-size: .82rem; }
+.game-shell { width: min(calc(100% - (var(--page-padding) * 2)), 1280px); min-height: calc(100svh - var(--header-h)); margin-inline: auto; padding: clamp(24px, 3vw, 38px) 0 70px; }
+.games-back { display: inline-block; margin-bottom: 16px; color: var(--muted); font-size: .82rem; }
 .games-back:hover { color: var(--ink); }
 .game-heading { margin-bottom: 22px; }
 .game-eyebrow { margin: 0; color: var(--active-soft); font-size: .8rem; font-weight: 700; line-height: 1; letter-spacing: .18em; }
