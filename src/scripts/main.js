@@ -76,6 +76,39 @@ document.querySelectorAll(".oshi-photo").forEach((photo) => {
   });
 });
 
+const motion = window.Motion;
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (motion && !reduceMotion) document.documentElement.classList.add("motion-enhanced");
+
+const revealElements = (elements, { distance = 10, step = .045 } = {}) => {
+  const targets = [...elements];
+  if (!motion || reduceMotion || !targets.length) return;
+  targets.forEach((element) => {
+    element.style.opacity = "0";
+    if (distance) element.style.translate = `0 ${distance}px`;
+  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      const index = targets.indexOf(entry.target);
+      const animation = motion.animate(entry.target, {
+        opacity: [0, 1],
+        ...(distance ? { translate: [`0 ${distance}px`, "0 0"] } : {}),
+      }, {
+        duration: .4,
+        delay: Math.min(index * step, .18),
+        ease: [.22, 1, .36, 1],
+      });
+      animation.finished.then(() => {
+        entry.target.style.removeProperty("opacity");
+        entry.target.style.removeProperty("translate");
+      });
+    });
+  }, { threshold: .12, rootMargin: "0px 0px -24px" });
+  targets.forEach((element) => observer.observe(element));
+};
+
 if (matchMedia("(pointer: fine)").matches) {
   window.addEventListener("pointermove", (event) => {
     document.documentElement.style.setProperty("--mouse-x", event.clientX + "px");
@@ -96,21 +129,6 @@ if (diaryList) {
   const diaryPageSize = 6;
   let visibleLimit = diaryPageSize;
   let filteredRecords = [];
-  const animateDiaryCards = () => {
-    const motion = window.Motion;
-    if (!motion || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    document.documentElement.classList.add("motion-enhanced");
-    const cards = diaryList.querySelectorAll(".diary-entry");
-    if (!cards.length) return;
-    motion.animate(cards, {
-      opacity: [0, 1],
-      transform: ["translateY(10px)", "translateY(0)"],
-    }, {
-      duration: .36,
-      delay: (index) => index * .045,
-      ease: [.22, 1, .36, 1],
-    });
-  };
   const makeFilterButton = (group, value, label, active = false) => `<button class="${active ? "active" : ""}" type="button" data-filter-group-name="${group}" data-filter-value="${escapeHtml(value)}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
   const fillFilters = (items) => {
     const choices = {
@@ -142,7 +160,7 @@ if (diaryList) {
         </article>`;
       }).join("")}</div>
     </section>`).join("") + (shownItems.length < items.length ? `<button class="diary-more" type="button" data-diary-more><span>继续翻阅</span><small>还有 ${items.length - shownItems.length} 则记录</small></button>` : "");
-    requestAnimationFrame(animateDiaryCards);
+    requestAnimationFrame(() => revealElements(diaryList.querySelectorAll(".diary-entry")));
   };
   const loadDiary = () => fetch("../data/diary.json").then((response) => {
       if (!response.ok) throw new Error("diary data unavailable");
@@ -199,6 +217,7 @@ if (noticeList) {
       return `<article class="${classes}" data-notice-card data-notice-month="${item.date.slice(0, 7)}"><i class="pushpin" aria-hidden="true"></i><div class="notice-card-top"><span class="notice-label">${escapeNotice(item.label)}${item.labelJa ? `<small lang="ja">${escapeNotice(item.labelJa)}</small>` : ""}</span><time datetime="${escapeNotice(item.date)}">${escapeNotice(item.displayDate || item.date.replaceAll("-", "."))}</time></div><h3>${escapeNotice(item.title)}</h3><p>${escapeNotice(item.body)}</p>${item.href ? `<a href="${escapeNotice(item.href)}"><span>${escapeNotice(item.linkLabel || "查看详情 ↗")}</span></a>` : ""}${item.signature ? `<span class="notice-signature">${escapeNotice(item.signature)}</span>` : ""}${item.stamp ? `<span class="notice-stamp">${escapeNotice(item.stamp)}</span>` : ""}${item.doodle ? `<span class="notice-doodle" aria-hidden="true">${escapeNotice(item.doodle)}</span>` : ""}</article>`;
     }).join("");
     if (updated) updated.innerHTML = `最后更新：${String(data.updated || "").replaceAll("-", ".")} <small lang="ja">最終更新</small>`;
+    requestAnimationFrame(() => revealElements(noticeList.querySelectorAll(".notice-card"), { distance: 0 }));
 
     const buttons = [...document.querySelectorAll(".month-card[data-notice-month]")];
     const cards = [...document.querySelectorAll("[data-notice-card]")];
@@ -263,6 +282,18 @@ if (literaryTabsRoot && literaryPanelsRoot) {
     literaryPanelsRoot.innerHTML = '<p class="source-note">安妮颂暂时无法载入。<small lang="ja">賛歌を読み込めませんでした。</small></p>';
   });
 }
+
+const pageRevealSelectors = {
+  home: ".love-hero h1, .home-bento",
+  profile: ".page-hero, .profile-visual, .profile-content, .social-section",
+  diary: ".diary-hero, .filter-bar",
+  notices: ".page-hero, .month-index, .board-frame",
+  hymn: ".page-hero, .literary-stage",
+  games: ".games-heading, .game-library",
+  "redbean-breakout": ".game-heading, .game-layout",
+};
+const pageRevealSelector = pageRevealSelectors[document.body.dataset.page];
+if (pageRevealSelector) revealElements(document.querySelectorAll(pageRevealSelector), { step: .06 });
 
 document.querySelectorAll(".copy-color").forEach((button) => {
   button.addEventListener("click", async () => {

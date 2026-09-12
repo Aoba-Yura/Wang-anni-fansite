@@ -55,10 +55,10 @@ for (const file of await readdir(pages)) {
     .replaceAll("../styles/game.css", "./game.css")
     .replaceAll("../scripts/main.js", "./script.js")
     .replaceAll("../scripts/game.js", "./game.js")
-    .replaceAll("../vendor/motion.js", "./motion.js")
     .replaceAll("./data/diary.json", "./data/diary.json")
     .replaceAll("<!-- SITE_HEADER -->", renderHeader(file))
     .replaceAll("<!-- SITE_FOOTER -->", footer)
+    .replaceAll("../vendor/motion.js", "./motion.js")
     .replaceAll("<!-- DIARY_DATA -->", "")
     .replaceAll("<!-- NOTICE_DATA -->", file === "notices.html" ? noticeDataScript : "")
     .replaceAll("<!-- HYMN_DATA -->", file === "hymn.html" ? hymnDataScript : "");
