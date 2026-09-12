@@ -197,29 +197,22 @@ if (diaryList) {
 const noticeList = document.querySelector("[data-notice-list]");
 if (noticeList) {
   const monthList = document.querySelector("[data-notice-months]");
-  const monthIndex = document.querySelector("[data-notice-month-index]");
   const mobileMonthIndex = window.matchMedia("(max-width: 768px)");
+  const boardFrame = noticeList.closest(".board-frame");
+  const chalkMonth = document.querySelector("[data-notice-chalk]");
   const updated = document.querySelector("[data-notice-updated]");
   const escapeNotice = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
-  const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
   const embedded = document.querySelector("#notice-data");
   const loadNotices = embedded?.textContent
     ? Promise.resolve(JSON.parse(embedded.textContent))
     : fetch("../data/notices.json").then((response) => response.json());
 
-  const syncMonthIndex = () => {
-    if (mobileMonthIndex.matches) monthIndex?.removeAttribute("open");
-    else monthIndex?.setAttribute("open", "");
-  };
-  syncMonthIndex();
-  mobileMonthIndex.addEventListener("change", syncMonthIndex);
-
   loadNotices.then((data) => {
     const items = [...data.items].sort((a, b) => b.date.localeCompare(a.date));
     const months = [...new Set(items.map((item) => item.date.slice(0, 7)))];
-    monthList.innerHTML = `<button class="month-card active" type="button" data-notice-month="all" aria-pressed="true"><b>ALL</b><span>全部<small lang="ja">すべて</small></span></button>${months.map((month) => {
+    monthList.innerHTML = `<button class="month-card active" type="button" data-notice-month="all" aria-label="全部月份" aria-pressed="true"><b>ALL</b></button>${months.map((month) => {
       const [year, number] = month.split("-");
-      return `<button class="month-card" type="button" data-notice-month="${month}" aria-pressed="false"><b>${number}</b><span>${year} · ${monthNames[Number(number) - 1]}<small lang="ja">${Number(number)}月</small></span></button>`;
+      return `<button class="month-card" type="button" data-notice-month="${month}" aria-label="${year} 年 ${Number(number)} 月" aria-pressed="false"><b>${number}</b></button>`;
     }).join("")}`;
     noticeList.innerHTML = items.map((item) => {
       const classes = ["notice-card", `notice-card--${item.theme || "paper"}`, item.size ? `notice-card--${item.size}` : "", item.tilt ? `notice-card--tilt-${item.tilt}` : ""].filter(Boolean).join(" ");
@@ -230,11 +223,68 @@ if (noticeList) {
 
     const buttons = [...document.querySelectorAll(".month-card[data-notice-month]")];
     const cards = [...document.querySelectorAll("[data-notice-card]")];
-    buttons.forEach((button) => button.addEventListener("click", () => {
-      const month = button.dataset.noticeMonth;
-      buttons.forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
+    let activeIndex = 0;
+    let noticeBoardAnimating = false;
+    let queuedIndex = null;
+
+    const applyNoticeMonth = (index) => {
+      const month = buttons[index].dataset.noticeMonth;
+      buttons.forEach((item, itemIndex) => { const selected = itemIndex === index; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
       cards.forEach((card) => { card.hidden = month !== "all" && card.dataset.noticeMonth !== month; });
-      if (mobileMonthIndex.matches) monthIndex?.removeAttribute("open");
+      const chalk = month === "all" ? "ALL" : month.slice(-2);
+      if (chalkMonth) {
+        chalkMonth.textContent = chalk;
+        chalkMonth.dataset.text = chalk;
+      }
+      activeIndex = index;
+      buttons[index].scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest", inline: "nearest" });
+    };
+
+    const switchNoticeMonth = async (targetIndex) => {
+      if (!boardFrame || targetIndex === activeIndex) return;
+      if (noticeBoardAnimating) { queuedIndex = targetIndex; return; }
+      noticeBoardAnimating = true;
+      const direction = targetIndex > activeIndex ? 1 : -1;
+      const axis = mobileMonthIndex.matches ? "X" : "Y";
+      const rotation = (degrees) => `rotate${axis}(${degrees}deg)`;
+      boardFrame.classList.add("is-flipping");
+
+      if (reduceMotion) {
+        const fadeOut = boardFrame.animate({ opacity: [1, .35] }, { duration: 80, easing: "ease-out", fill: "forwards" });
+        await fadeOut.finished.catch(() => {});
+        applyNoticeMonth(targetIndex);
+        fadeOut.cancel();
+        const fadeIn = boardFrame.animate({ opacity: [.35, 1] }, { duration: 100, easing: "ease-out" });
+        await fadeIn.finished.catch(() => {});
+      } else {
+        const turnAway = boardFrame.animate([
+          { transform: rotation(0), filter: "brightness(1)" },
+          { transform: rotation(90 * direction), filter: "brightness(.78)" }
+        ], { duration: 320, easing: "cubic-bezier(.55,.06,.68,.19)", fill: "forwards" });
+        await turnAway.finished.catch(() => {});
+        boardFrame.style.transform = rotation(-90 * direction);
+        turnAway.cancel();
+        applyNoticeMonth(targetIndex);
+        const turnBack = boardFrame.animate([
+          { transform: rotation(-90 * direction), filter: "brightness(.78)" },
+          { transform: rotation(0), filter: "brightness(1)" }
+        ], { duration: 340, easing: "cubic-bezier(.22,.61,.36,1)" });
+        await turnBack.finished.catch(() => {});
+        boardFrame.style.transform = "";
+      }
+
+      boardFrame.classList.remove("is-flipping");
+      noticeBoardAnimating = false;
+      if (queuedIndex !== null) {
+        const nextIndex = queuedIndex;
+        queuedIndex = null;
+        if (nextIndex !== activeIndex) switchNoticeMonth(nextIndex);
+      }
+    };
+
+    buttons.forEach((button, index) => button.addEventListener("click", () => {
+      if (index === activeIndex && !noticeBoardAnimating) return;
+      switchNoticeMonth(index);
     }));
   }).catch(() => { noticeList.innerHTML = '<p class="source-note">公告暂时无法载入。<small lang="ja">お知らせを読み込めませんでした。</small></p>'; });
 }

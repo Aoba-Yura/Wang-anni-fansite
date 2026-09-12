@@ -21,14 +21,15 @@
 
     <section class="notice-board content-width" aria-labelledby="notice-board-title">
       <nav aria-label="按月份浏览公告 / 月別のお知らせ">
-        <details class="month-index" data-notice-month-index open>
-          <summary class="month-index-heading"><span lang="ja">月ごとの掲示</span><strong>公告月份<small lang="ja">掲載月</small></strong></summary>
+        <div class="month-index" data-notice-month-index>
+          <h2 class="month-index-heading">按月份浏览公告</h2>
           <div class="month-index-items" data-notice-months></div>
-        </details>
+        </div>
       </nav>
       <div class="board-frame">
         <div class="board-header">
-          <div><span>ANNI SUKI · 1F</span><h2 id="notice-board-title">揭示板 <small lang="ja">掲示板</small></h2></div>
+          <h2 id="notice-board-title" class="visually-hidden">公告栏</h2>
+          <span class="board-month" data-notice-chalk data-text="ALL" aria-hidden="true">ALL</span>
         </div>
         <div class="board-grid" data-notice-list></div>
         <div class="board-footer"><span>别忘了带好随身物品 <small lang="ja">忘れ物はないかな</small></span><span data-notice-updated></span></div>
