@@ -20,10 +20,10 @@ const hymnDataScript = `<script id="hymn-data" type="application/json">${hymnDat
 const navigation = [
   { href: "index.html", label: "首页", japanese: "ホーム", mobileLabel: "首页", mobileJapanese: "ホーム", icon: "⌂" },
   { href: "profile.html", label: "人物档案", japanese: "プロフィール", mobileLabel: "档案", mobileJapanese: "プロフィール", icon: "✦" },
-  { href: "diary.html", label: "安妮日常", japanese: "日常", mobileLabel: "日常", mobileJapanese: "DIARY", icon: "✎" },
+  { href: "diary.html", label: "安妮日常", japanese: "ダイアリー", mobileLabel: "日常", mobileJapanese: "ダイアリー", icon: "✎" },
   { href: "notices.html", label: "公告栏", japanese: "お知らせ", mobileLabel: "公告", mobileJapanese: "お知らせ", icon: "♡" },
-  { href: "hymn.html", label: "安妮颂", japanese: "賛歌", mobileLabel: "安妮颂", mobileJapanese: "賛歌", icon: "✿" },
-  { href: "game.html", label: "小游戏", japanese: "ミニゲーム", mobileLabel: "游戏", mobileJapanese: "GAME", icon: "▦" },
+  { href: "hymn.html", label: "安妮颂", japanese: "アニー賛歌", mobileLabel: "安妮颂", mobileJapanese: "アニー賛歌", icon: "✿" },
+  { href: "game.html", label: "小游戏", japanese: "ミニゲーム", mobileLabel: "游戏", mobileJapanese: "ミニゲーム", icon: "▦" },
 ];
 
 function renderHeader(file) {

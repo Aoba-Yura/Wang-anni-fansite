@@ -596,7 +596,7 @@ img { display: block; max-width: 100%; }
   .mobile-nav a.active { color: var(--ink); background: color-mix(in srgb,var(--active) 22%,transparent); }
   .mobile-nav b { min-height: 15px; color: var(--active-soft); font: 400 .95rem/1 var(--sans); }
   .mobile-nav a.active b { color: var(--cream); }
-  .mobile-nav span { font-size: clamp(.58rem, 2.4vw, .7rem); white-space: nowrap; }
+  .mobile-nav a > span { width: 100%; font-size: clamp(.58rem, 2.4vw, .7rem); line-height: 1.05; text-align: center; white-space: nowrap; }
   .mobile-nav a span small { margin-top:1px; font-size:.44rem; }
   body { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
   .home-hero { grid-template-columns: .85fr 1.15fr; }
