@@ -48,6 +48,13 @@ function renderMobileNav(file) {
   }).join("")}</nav>`;
 }
 
+function renderHomeNav() {
+  return navigation.slice(1).map(({ href, label, japanese }, index) => {
+    const cardClass = href.replace(".html", "");
+    return `<a class="bento-card bento-${cardClass}" href="./${href}"><span>${String(index + 1).padStart(2, "0")}</span><div><small lang="ja">${japanese}</small><strong>${label}</strong></div><b>↗</b></a>`;
+  }).join("\n      ");
+}
+
 for (const file of await readdir(pages)) {
   if (!file.endsWith(".html")) continue;
   let html = await readFile(join(pages, file), "utf8");
@@ -62,6 +69,7 @@ for (const file of await readdir(pages)) {
     .replaceAll("<!-- SITE_HEADER -->", renderHeader(file))
     .replaceAll("<!-- SITE_FOOTER -->", footer)
     .replaceAll("<!-- MOBILE_NAV -->", file === "index.html" ? "" : renderMobileNav(file))
+    .replaceAll("<!-- HOME_NAV -->", file === "index.html" ? renderHomeNav() : "")
     .replaceAll("../vendor/motion.js", "./motion.js")
     .replaceAll("<!-- DIARY_DATA -->", "")
     .replaceAll("<!-- NOTICE_DATA -->", file === "notices.html" ? noticeDataScript : "")
