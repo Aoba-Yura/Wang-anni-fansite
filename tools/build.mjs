@@ -15,6 +15,20 @@ const footer = await readFile(join(partials, "footer.html"), "utf8");
 const noticeData = await readFile(join(source, "data/notices.json"), "utf8");
 const noticeDataScript = `<script id="notice-data" type="application/json">${noticeData.replaceAll("<", "\\u003c")}</script>`;
 const hymnData = await readFile(join(source, "data/hymns.json"), "utf8");
+const redbeanLevelData = await readFile(join(source, "data/redbean-levels.json"), "utf8");
+const redbeanLevelDocument = JSON.parse(redbeanLevelData);
+const redbeanPatterns = new Set(["full", "stripes", "steps", "gates", "diamond", "ring", "tunnel", "checker", "fortress", "heart", "zigzag", "shield", "pinwheel", "core", "final"]);
+if (redbeanLevelDocument.schemaVersion !== 1 || !Array.isArray(redbeanLevelDocument.levels) || redbeanLevelDocument.levels.length !== 18) {
+  throw new Error("redbean-levels.json must contain schemaVersion 1 and exactly 18 levels.");
+}
+redbeanLevelDocument.levels.forEach((level, index) => {
+  const validNumbers = ["rows", "cols", "mobileCols", "speed", "powerEvery"]
+    .every((key) => Number.isFinite(level[key]) && level[key] > 0);
+  if (!level.name || !validNumbers || !redbeanPatterns.has(level.pattern)) {
+    throw new Error("Invalid redbean level at index " + index + ".");
+  }
+});
+const redbeanLevelDataScript = '<script id="redbean-level-data" type="application/json">' + redbeanLevelData.replaceAll("<", "\\u003c") + "</script>";
 const hymnDataScript = `<script id="hymn-data" type="application/json">${hymnData.replaceAll("<", "\\u003c")}</script>`;
 
 const navigation = [
@@ -73,7 +87,8 @@ for (const file of await readdir(pages)) {
     .replaceAll("../vendor/motion.js", "./motion.js")
     .replaceAll("<!-- DIARY_DATA -->", "")
     .replaceAll("<!-- NOTICE_DATA -->", file === "notices.html" ? noticeDataScript : "")
-    .replaceAll("<!-- HYMN_DATA -->", file === "hymn.html" ? hymnDataScript : "");
+    .replaceAll("<!-- HYMN_DATA -->", file === "hymn.html" ? hymnDataScript : "")
+    .replaceAll("<!-- REDBEAN_LEVEL_DATA -->", file === "redbean-breakout.html" ? redbeanLevelDataScript : "");
   await writeFile(join(dist, file), html);
 }
 

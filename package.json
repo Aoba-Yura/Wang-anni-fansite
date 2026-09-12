@@ -10,7 +10,8 @@
   "scripts": {
     "build": "node tools/build.mjs",
     "preview": "node tools/preview.mjs",
-    "audit:mobile": "node tools/mobile-audit.mjs"
+    "audit:mobile": "node tools/mobile-audit.mjs",
+    "test:game": "node tools/game-smoke.mjs desktop && node tools/game-smoke.mjs mobile"
   },
   "dependencies": {
     "motion": "^13.2.0"

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#110e0d">
-  <meta name="description" content="红豆打砖块小游戏。">
+  <meta name="description" content="移动挡板，接住红豆，挑战 18 个纯街机式打砖块关卡。">
   <title>红豆打砖块 | Anni Suki</title>
   <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,25 +22,33 @@
     <div class="game-layout">
       <section class="game-board-wrap breakout-game" aria-label="红豆打砖块">
         <div class="game-hud" aria-label="游戏状态 / ゲーム状況">
-          <div class="game-hud-title"><span>红豆打砖块</span></div>
+          <div class="game-hud-title"><span>红豆打砖块</span><small data-game-level>LEVEL 01</small></div>
           <div class="game-hud-stats">
             <span class="hud-life">机会<small lang="ja">ライフ</small> <b data-game-lives aria-label="剩余三次机会 / 残り3回">♥ ♥ ♥</b></span>
             <span>得分<small lang="ja">スコア</small> <b data-game-score>0000</b></span>
             <span class="hud-best">最高<small lang="ja">ベスト</small> <b data-game-best>0000</b></span>
           </div>
           <div class="game-hud-actions">
+            <button type="button" class="hud-icon-button hud-sound" data-game-sound aria-label="关闭音效" title="关闭音效">♪</button>
             <button type="button" class="hud-icon-button" data-game-pause disabled aria-label="暂停游戏 / 一時停止" title="暂停游戏 / 一時停止">⏸</button>
-            <button type="button" class="hud-reset-button" data-game-reset><span>重新开始</span><small lang="ja">リセット</small></button>
           </div>
         </div>
         <canvas id="breakout-game" width="900" height="600" data-dog-src="../assets/images/pomeranian-ball.png" aria-label="红豆打砖块游戏区域 / ゲーム画面">你的浏览器需要支持 Canvas 才能运行这个小游戏。Canvas 対応ブラウザーをご利用ください。</canvas>
+        <div class="game-float-message" data-game-message aria-live="polite" hidden></div>
         <div class="game-overlay" data-game-overlay>
           <p data-overlay-kicker>READY?</p>
           <h2 data-overlay-title>红豆打砖块</h2>
-          <p data-overlay-copy>方向键或手指拖动挡板<br><small lang="ja">矢印キー、または指でバーを動かします</small></p>
+          <p data-overlay-copy>移动挡板，接住红豆，把砖块全部打掉。</p>
+          <div class="game-summary" data-game-summary hidden></div>
+          <div class="level-select" data-level-select hidden aria-label="选择关卡"></div>
           <div class="game-overlay-actions">
-            <button type="button" data-game-start><span>开始游戏<small lang="ja">スタート</small></span><b aria-hidden="true">→</b></button>
-            <button type="button" class="overlay-secondary" data-game-overlay-reset hidden><span>重新开始<small lang="ja">リセット</small></span></button>
+            <button type="button" data-game-primary><span>开始游戏<small lang="ja">スタート</small></span><b aria-hidden="true">→</b></button>
+            <button type="button" class="overlay-secondary" data-game-secondary><span>选择关卡<small lang="ja">レベル選択</small></span></button>
+            <button type="button" class="overlay-tertiary" data-game-tertiary hidden></button>
+          </div>
+          <div class="game-volume" data-game-volume-panel>
+            <label for="game-volume">音量 <small lang="ja">ボリューム</small></label>
+            <input id="game-volume" data-game-volume type="range" min="0" max="1" step="0.05" value="0.7">
           </div>
         </div>
       </section>
@@ -50,6 +58,7 @@
 
   <!-- SITE_FOOTER -->
   <!-- MOBILE_NAV -->
+  <!-- REDBEAN_LEVEL_DATA -->
   <script src="../scripts/main.js"></script>
   <script src="../scripts/game.js"></script>
 </body>

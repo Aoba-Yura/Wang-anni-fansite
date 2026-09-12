@@ -142,7 +142,7 @@ if (diaryList) {
     { id: "bilibili", label: "B 站" },
   ];
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
-  const filterState = { platform: "all", year: "all", tag: "all", kind: "all" };
+  const filterState = { platform: "all", year: "all", kind: "all" };
   const diaryPageSize = 6;
   let visibleLimit = diaryPageSize;
   let filteredRecords = [];
@@ -151,7 +151,6 @@ if (diaryList) {
     const choices = {
       platform: platforms.map(({ id, label }) => [id, label]),
       year: [...new Set(items.map((item) => item.date.slice(0, 4)))].map((year) => [year, year]),
-      tag: [...new Set(items.map((item) => item.tag).filter(Boolean))].map((tag) => [tag, tag]),
       kind: [...new Set(items.map((item) => item.kind).filter(Boolean))].map((kind) => [kind, kind]),
     };
     Object.entries(choices).forEach(([group, values]) => {
