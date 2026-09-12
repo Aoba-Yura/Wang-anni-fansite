@@ -408,17 +408,21 @@ img { display: block; max-width: 100%; }
 .year-divider small { color: var(--active-soft); font: 700 .58rem/1 var(--sans); letter-spacing: .22em; }
 .year-events { position: relative; }
 .year-events::before { content: ""; position: absolute; top: 0; bottom: 0; left: 92px; width: 1px; background: color-mix(in srgb, var(--active-soft) 30%, var(--line)); }
-.diary-entry { min-height: 0; display: grid; grid-template-columns: 92px minmax(0, 1fr); overflow: visible; border: 0; background: transparent; box-shadow: none; animation: entry-in .35s ease both; }
+.diary-entry { --entry-accent: var(--redbean); min-height: 0; display: grid; grid-template-columns: 92px minmax(0, 1fr); overflow: visible; border: 0; background: transparent; box-shadow: none; animation: none; }
+.diary-entry[data-platform="bilibili"] { --entry-accent: var(--matcha); }
 .diary-entry + .diary-entry { margin-top: 12px; }
-.diary-entry::before { top: 25px; left: 88px; width: 9px; height: 9px; border: 2px solid var(--bg); border-radius: 50%; background: var(--active); box-shadow: 0 0 0 1px var(--active-soft); transform: none; }
+.diary-entry::before { top: 25px; left: 88px; width: 9px; height: 9px; border: 2px solid var(--bg); border-radius: 50%; background: var(--entry-accent); box-shadow: 0 0 0 1px color-mix(in srgb,var(--entry-accent) 70%,white); transform: none; }
 .diary-entry:hover { z-index: auto; border-color: transparent; box-shadow: none; transform: none; }
 .entry-date { padding: 22px 20px 0 0; border: 0; background: transparent; text-align: right; }
 .entry-date::after { display: none; }
-.entry-date time { color: var(--active-soft); font: 700 .78rem/1 var(--display); letter-spacing: .04em; }
-.entry-copy { min-height: 0; margin-left: 28px; padding: 20px 24px 21px; display: block; border-radius: 2px; background: linear-gradient(110deg, rgba(255,248,239,.055), rgba(255,255,255,.014)); transition: background .2s ease, transform .2s ease; }
+.entry-date time { color: color-mix(in srgb,var(--entry-accent) 72%,white); font: 700 .78rem/1 var(--display); letter-spacing: .04em; }
+.entry-copy { min-height: 0; margin-left: 28px; padding: 20px 24px 21px; display: block; border-left: 2px solid color-mix(in srgb,var(--entry-accent) 55%,transparent); border-radius: 2px; background: linear-gradient(110deg, color-mix(in srgb,var(--entry-accent) 5%,rgba(255,248,239,.05)), rgba(255,255,255,.014)); transition: background .2s ease, transform .2s ease; }
 .diary-entry:hover .entry-copy { background: linear-gradient(110deg, color-mix(in srgb, var(--active) 9%, rgba(255,248,239,.05)), rgba(255,255,255,.018)); transform: translateX(3px); }
 .entry-copy::after { display: none; }
-.entry-tag { margin: 0 0 7px; color: var(--active-soft); font-size: .62rem; letter-spacing: .1em; }
+.entry-tag { margin: 0 0 9px; display: flex; align-items: center; gap: 9px; color: color-mix(in srgb,var(--entry-accent) 72%,#5a4540); font-size: .62rem; font-weight: 800; letter-spacing: .1em; }
+.entry-tag > .entry-platform { position: relative; width: 31px; height: 29px; padding: 0; display: inline-grid; place-items: center; flex: 0 0 31px; border: 2px solid currentColor; border-radius: 2px; color: #a92f35; font-family: "KaiTi","Kaiti SC",var(--serif); font-size: .64rem; font-weight: 900; letter-spacing: 0; line-height: 1; opacity: .86; transform: rotate(-3deg); }
+.entry-platform::after { content: ""; position: absolute; inset: 2px; border: 1px solid currentColor; opacity: .38; clip-path: polygon(2% 0,100% 3%,97% 96%,6% 100%,0 72%); }
+.diary-entry[data-platform="bilibili"] .entry-platform { color: #7e8b32; transform: rotate(2deg); }
 .entry-copy h3 { margin: 0; color: var(--ink); font-size: clamp(1rem, 1.5vw, 1.24rem); line-height: 1.45; letter-spacing: -.015em; }
 .entry-excerpt { margin: 8px 0 0; color: #d5cdcf; font-family: var(--serif); font-size: .84rem; line-height: 1.7; }
 .entry-copy .source-button { display: inline-flex; align-items: center; gap: 7px; width: max-content; margin-top: 13px; padding: 8px 12px; border: 1px solid color-mix(in srgb, var(--active-soft) 45%, transparent); border-radius: 999px; color: var(--active-soft); font-size: .68rem; text-decoration: none; }
@@ -1008,17 +1012,19 @@ html:has(body[data-page="home"]) { scroll-snap-type: y mandatory; scroll-padding
   box-shadow: 0 17px 38px rgba(0,0,0,.26), inset 0 1px rgba(255,255,255,.36);
 }
 .entry-tag {
-  display: inline-block;
+  display: flex;
+  width: max-content;
+  max-width: 100%;
   margin-bottom: 8px;
-  padding: 3px 7px 2px;
-  border: 1px solid rgba(136,42,48,.58);
-  border-radius: 2px;
+  padding: 0;
+  border: 0;
   color: #872e35;
   font-family: var(--serif);
   font-size: .6rem;
   letter-spacing: .12em;
-  transform: rotate(-1deg);
+  transform: none;
 }
+.diary-entry[data-platform="bilibili"] .entry-tag { color: #667326; }
 .entry-copy h3 { color: #241e1d; font-family: var(--serif); font-weight: 900; letter-spacing: .005em; }
 .entry-excerpt {
   color: #514642;

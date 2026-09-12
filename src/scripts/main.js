@@ -171,20 +171,25 @@ if (diaryList) {
       <h2 class="year-divider" id="diary-year-${year}"><span>${year}</span><small>YEAR</small></h2>
       <div class="year-events">${shownItems.filter((item) => item.date.startsWith(year)).map((item) => {
         const monthDay = item.date.slice(5).replace("-", ".");
+        const isBilibili = item.platform === "bilibili";
+        const platformLabel = isBilibili ? "B站" : "微博";
+        const sourceLabel = isBilibili ? "查看原视频" : "查看原微博";
         return `<article class="diary-entry" data-platform="${escapeHtml(item.platform)}">
           <div class="entry-date"><time datetime="${escapeHtml(item.date)}">${escapeHtml(monthDay)}</time></div>
-          <div class="entry-copy"><p class="entry-tag">${escapeHtml(item.tag)}</p><h3>${escapeHtml(item.title)}</h3>${item.excerpt ? `<p class="entry-excerpt">${escapeHtml(item.excerpt)}</p>` : ""}<a class="source-button" href="${escapeHtml(item.source)}" target="_blank" rel="noopener noreferrer">查看原微博 <span aria-hidden="true">↗</span></a></div>
+          <div class="entry-copy"><p class="entry-tag"><span class="entry-platform">${platformLabel}</span><span>${escapeHtml(item.tag)}</span></p><h3>${escapeHtml(item.title)}</h3>${item.excerpt ? `<p class="entry-excerpt">${escapeHtml(item.excerpt)}</p>` : ""}<a class="source-button" href="${escapeHtml(item.source)}" target="_blank" rel="noopener noreferrer">${sourceLabel} <span aria-hidden="true">↗</span></a></div>
         </article>`;
       }).join("")}</div>
     </section>`).join("") + (shownItems.length < items.length ? `<button class="diary-more" type="button" data-diary-more><span>继续翻阅</span><small>还有 ${items.length - shownItems.length} 则记录</small></button>` : "");
-    requestAnimationFrame(() => revealElements(diaryList.querySelectorAll(".diary-entry")));
   };
-  const loadDiary = () => fetch("../data/diary.json").then((response) => {
-      if (!response.ok) throw new Error("diary data unavailable");
-      return response.json();
-    });
-  loadDiary().then((data) => {
-    const visibleRecords = data.records.filter(item => item.display).map(item => item.display);
+  const loadArchive = (path) => fetch(path).then((response) => {
+    if (!response.ok) throw new Error(`archive unavailable: ${path}`);
+    return response.json();
+  });
+  Promise.all([
+    loadArchive("../data/weibo.json"),
+    loadArchive("../data/bilibili.json"),
+  ]).then((archives) => {
+    const visibleRecords = archives.flatMap((archive) => archive.records).filter(item => item.display).map(item => item.display);
     visibleRecords.sort((a, b) => String(b.date).localeCompare(String(a.date)) || String(b.published_at).localeCompare(String(a.published_at)));
     fillFilters(visibleRecords);
     const applyFilters = () => {

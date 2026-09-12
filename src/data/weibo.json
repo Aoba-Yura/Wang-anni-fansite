@@ -1,15 +1,5 @@
 {
-  "schema_version": 1,
-  "account": {
-    "name": "王安妮-TSH48",
-    "uid": "7503497770",
-    "platform": "weibo"
-  },
-  "generated_at": "2026-09-11T16:06:56.795Z",
-  "source_total": 1169,
-  "collected_total": 1164,
-  "display_total": 1083,
-  "hidden_total": 81,
+  "schema_version": 2,
   "records": [
     {
       "id": "5338989692977981",

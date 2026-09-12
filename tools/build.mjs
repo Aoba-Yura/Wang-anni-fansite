@@ -65,7 +65,7 @@ for (const file of await readdir(pages)) {
     .replaceAll("../styles/game.css", "./game.css")
     .replaceAll("../scripts/main.js", "./script.js")
     .replaceAll("../scripts/game.js", "./game.js")
-    .replaceAll("./data/diary.json", "./data/diary.json")
+    .replaceAll("./data/weibo.json", "./data/weibo.json")
     .replaceAll("<!-- SITE_HEADER -->", renderHeader(file))
     .replaceAll("<!-- SITE_FOOTER -->", footer)
     .replaceAll("<!-- MOBILE_NAV -->", file === "index.html" ? "" : renderMobileNav(file))
@@ -81,7 +81,9 @@ const stylesheet = await readFile(join(source, "styles/main.css"), "utf8");
 await writeFile(join(dist, "styles.css"), stylesheet.replaceAll("../assets/", "./assets/"));
 await cp(join(source, "styles/game.css"), join(dist, "game.css"));
 const mainScript = await readFile(join(source, "scripts/main.js"), "utf8");
-await writeFile(join(dist, "script.js"), mainScript.replaceAll("../data/diary.json", "./data/diary.json"));
+await writeFile(join(dist, "script.js"), mainScript
+  .replaceAll("../data/weibo.json", "./data/weibo.json")
+  .replaceAll("../data/bilibili.json", "./data/bilibili.json"));
 await cp(join(source, "scripts/game.js"), join(dist, "game.js"));
 await cp(join(root, "node_modules/framer-motion/dist/dom-mini.js"), join(dist, "motion.js"));
 await cp(join(source, "assets/icons/favicon.svg"), join(dist, "favicon.svg"));
@@ -89,15 +91,33 @@ await cp(join(source, "assets"), join(dist, "assets"), { recursive: true });
 await cp(join(source, "data"), join(dist, "data"), { recursive: true });
 
 // Keep the complete Weibo archive in Git, but publish only fields the page may read.
-const diaryArchive = JSON.parse(await readFile(join(source, "data/diary.json"), "utf8"));
-const publicDiary = {
-  schema_version: diaryArchive.schema_version,
-  generated_at: diaryArchive.generated_at,
-  display_total: diaryArchive.records.filter((record) => record.display).length,
-  records: diaryArchive.records
-    .filter((record) => record.display)
+const weiboArchive = JSON.parse(await readFile(join(source, "data/weibo.json"), "utf8"));
+const visibleWeiboRecords = weiboArchive.records.filter((record) => record.display);
+const weiboStats = {
+  total: weiboArchive.records.length,
+  visible: visibleWeiboRecords.length,
+  hidden: weiboArchive.records.length - visibleWeiboRecords.length,
+};
+const publicWeibo = {
+  schema_version: weiboArchive.schema_version,
+  records: visibleWeiboRecords
     .map((record) => ({ id: record.id, display: record.display })),
 };
-await writeFile(join(dist, "data/diary.json"), JSON.stringify(publicDiary));
+await writeFile(join(dist, "data/weibo.json"), JSON.stringify(publicWeibo));
+console.log(`Weibo archive: ${weiboStats.total} total, ${weiboStats.visible} visible, ${weiboStats.hidden} hidden`);
+
+const bilibiliArchive = JSON.parse(await readFile(join(source, "data/bilibili.json"), "utf8"));
+const visibleBilibiliRecords = bilibiliArchive.records.filter((record) => record.display);
+const bilibiliStats = {
+  total: bilibiliArchive.records.length,
+  visible: visibleBilibiliRecords.length,
+  hidden: bilibiliArchive.records.length - visibleBilibiliRecords.length,
+};
+const publicBilibili = {
+  schema_version: bilibiliArchive.schema_version,
+  records: visibleBilibiliRecords.map((record) => ({ id: record.id, display: record.display })),
+};
+await writeFile(join(dist, "data/bilibili.json"), JSON.stringify(publicBilibili));
+console.log(`Bilibili archive: ${bilibiliStats.total} total, ${bilibiliStats.visible} visible, ${bilibiliStats.hidden} hidden`);
 
 console.log(`Built ${await readdir(dist).then(files => files.length)} files in dist/`);
