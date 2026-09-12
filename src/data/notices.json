@@ -4,29 +4,24 @@
     {
       "date": "2026-09-07",
       "displayDate": "2026.09.07",
-      "label": "站内更新",
       "labelJa": "サイト更新",
       "title": "安妮颂，已经贴在四楼窗边",
       "body": "新开一栏粉丝原创文学，收录赞美诗与赞颂骈文；欢迎在安静的课间读完，再把想说的话带去下一次相见",
       "signature": "— 紅豆妮編集室",
-      "theme": "red",
-      "size": "wide"
+      "theme": "red"
     },
     {
       "date": "2026-08-23",
       "displayDate": "2026.08.23",
-      "label": "温馨提示",
       "labelJa": "ご案内",
       "title": "最新消息，记得去官方渠道确认",
       "body": "本站是非官方粉丝创作与公开资料整理站；成员动态、活动安排与原始内容，请以王安妮及 TSH48 官方渠道为准",
-      "stamp": "CHECK",
       "theme": "cream",
       "tilt": "left"
     },
     {
       "date": "2026-07-19",
       "displayDate": "毎日",
-      "label": "应援小抄",
       "labelJa": "応援メモ",
       "title": "红豆红 × 抹茶绿",
       "body": "她的应援色已经收录在人物档案里",
@@ -38,23 +33,78 @@
     {
       "date": "2026-02-19",
       "displayDate": "02.19",
-      "label": "给红豆妮",
-      "labelJa": "ファンのみなさんへ",
+      "labelJa": "ファンのみなさんから",
       "title": "生日快乐，安妮",
       "body": "愿举起的应援棒，都被她在舞台上看见",
-      "theme": "lilac",
-      "size": "small"
+      "theme": "lilac"
     },
     {
-      "date": "2026-09-09",
-      "displayDate": "09.09",
-      "label": "今日值日",
-      "labelJa": "今日の当番",
-      "title": "把喜欢好好收好",
-      "body": "看日常，读颂文，偶尔也在这里停一下",
-      "doodle": "♡",
+      "date": "2026-09-12",
+      "displayDate": "放学后",
+      "label": "失物招领",
+      "labelJa": "落とし物",
+      "title": "谁把假刘海落在三楼了",
+      "body": "目前正在传达室里享受单间待遇",
+      "theme": "cream",
+      "tilt": "right"
+    },
+    {
+      "date": "2026-09-11",
+      "displayDate": "午休",
+      "labelJa": "校内放送",
+      "title": "今天的下课铃换成了虔诚心愿",
+      "body": "属于正常现象",
+      "theme": "matcha",
+      "tilt": "left"
+    },
+    {
+      "date": "2026-08-30",
+      "displayDate": "08.30",
+      "labelJa": "部員募集",
+      "title": "红豆观察社诚招会数到四十八的人",
+      "body": "活动内容包括找狗，想狗，以及讨论为什么抹茶和红豆无论如何都很配",
+      "signature": "—— 临时社长（尚未当选）",
+      "theme": "red"
+    },
+    {
+      "date": "2026-07-27",
+      "displayDate": "不限日期",
+      "label": "食堂告示",
+      "title": "本周红豆浓度已经严重超标",
+      "body": "红豆面包、红豆刨冰和红豆妮同时出现时，请保持镇定并优先拍照留念",
+      "stamp": "甜度注意",
+      "theme": "cream",
+      "tilt": "left"
+    },
+    {
+      "date": "2026-07-07",
+      "displayDate": "七夕",
+      "label": "愿望公示",
+      "labelJa": "願いごと",
+      "title": "天台上那张最长的愿望信笺",
+      "body": "内容从见到安妮写到世界和平，字迹工整，愿望很多，原则上全部批准",
+      "signature": "——路过的假面骑士",
       "theme": "paper",
-      "size": "small",
+      "tilt": "right"
+    },
+    {
+      "date": "2026-06-21",
+      "displayDate": "夏至",
+      "label": "节能提示",
+      "labelJa": "省エネ",
+      "title": "离开教室请关灯，应援棒除外",
+      "body": "应援棒需由本人妥善保管",
+      "doodle": "✦",
+      "theme": "matcha"
+    },
+    {
+      "date": "2026-05-04",
+      "displayDate": "随时有效",
+      "label": "走廊纪律",
+      "labelJa": "廊下のルール",
+      "title": "走廊里禁止奔跑，但允许小步雀跃",
+      "body": "尤其是在看到新照片、新舞台或新消息以后。雀跃时请注意前后左右的同学",
+      "theme": "lilac",
       "tilt": "left"
     }
   ]

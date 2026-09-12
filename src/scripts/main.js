@@ -32,6 +32,8 @@ const disclaimerTitle = document.querySelector("[data-disclaimer-title]");
 const disclaimerTabs = [...document.querySelectorAll("[data-disclaimer-tab]")];
 const disclaimerPanels = [...document.querySelectorAll("[data-disclaimer-panel]")];
 const disclaimerTitles = { zh: "免责声明", ja: "免責事項", en: "Disclaimer" };
+let disclaimerReturnFocus = null;
+let disclaimerPageScroll = 0;
 
 const selectDisclaimerLanguage = (language, focus = false) => {
   if (disclaimerTitle) disclaimerTitle.textContent = disclaimerTitles[language] ?? disclaimerTitles.zh;
@@ -48,10 +50,25 @@ const selectDisclaimerLanguage = (language, focus = false) => {
 };
 
 disclaimerOpen?.addEventListener("click", () => {
-  if (typeof disclaimerDialog?.showModal === "function") disclaimerDialog.showModal();
+  if (typeof disclaimerDialog?.showModal !== "function") return;
+  disclaimerReturnFocus = document.activeElement;
+  const documentLanguage = document.documentElement.lang.toLowerCase();
+  selectDisclaimerLanguage(documentLanguage.startsWith("ja") ? "ja" : documentLanguage.startsWith("en") ? "en" : "zh");
+  disclaimerDialog.showModal();
+  disclaimerPageScroll = window.scrollY;
+  body.style.top = `-${disclaimerPageScroll}px`;
+  body.classList.add("disclaimer-open");
+  disclaimerClose?.focus();
 });
 
 disclaimerClose?.addEventListener("click", () => disclaimerDialog?.close());
+disclaimerDialog?.addEventListener("close", () => {
+  body.classList.remove("disclaimer-open");
+  body.style.top = "";
+  window.scrollTo(0, disclaimerPageScroll);
+  if (disclaimerReturnFocus instanceof HTMLElement) disclaimerReturnFocus.focus();
+  disclaimerReturnFocus = null;
+});
 disclaimerDialog?.addEventListener("click", (event) => {
   if (event.target === disclaimerDialog) disclaimerDialog.close();
 });
@@ -212,13 +229,13 @@ if (noticeList) {
     const months = [...new Set(items.map((item) => item.date.slice(0, 7)))];
     monthList.innerHTML = `<button class="month-card active" type="button" data-notice-month="all" aria-label="全部月份" aria-pressed="true"><b>ALL</b></button>${months.map((month) => {
       const [year, number] = month.split("-");
-      return `<button class="month-card" type="button" data-notice-month="${month}" aria-label="${year} 年 ${Number(number)} 月" aria-pressed="false"><b>${number}</b></button>`;
+      return `<button class="month-card" type="button" data-notice-month="${month}" aria-label="${year} 年 ${Number(number)} 月" aria-pressed="false"><b>${number}</b><small>${year}</small></button>`;
     }).join("")}`;
     noticeList.innerHTML = items.map((item) => {
-      const classes = ["notice-card", `notice-card--${item.theme || "paper"}`, item.size ? `notice-card--${item.size}` : "", item.tilt ? `notice-card--tilt-${item.tilt}` : ""].filter(Boolean).join(" ");
+      const classes = ["notice-card", `notice-card--${item.theme || "paper"}`, item.tilt ? `notice-card--tilt-${item.tilt}` : ""].filter(Boolean).join(" ");
       return `<article class="${classes}" data-notice-card data-notice-month="${item.date.slice(0, 7)}"><i class="pushpin" aria-hidden="true"></i><div class="notice-card-top"><span class="notice-label">${escapeNotice(item.label)}${item.labelJa ? `<small lang="ja">${escapeNotice(item.labelJa)}</small>` : ""}</span><time datetime="${escapeNotice(item.date)}">${escapeNotice(item.displayDate || item.date.replaceAll("-", "."))}</time></div><h3>${escapeNotice(item.title)}</h3><p>${escapeNotice(item.body)}</p>${item.href ? `<a href="${escapeNotice(item.href)}"><span>${escapeNotice(item.linkLabel || "查看详情 ↗")}</span></a>` : ""}${item.signature ? `<span class="notice-signature">${escapeNotice(item.signature)}</span>` : ""}${item.stamp ? `<span class="notice-stamp">${escapeNotice(item.stamp)}</span>` : ""}${item.doodle ? `<span class="notice-doodle" aria-hidden="true">${escapeNotice(item.doodle)}</span>` : ""}</article>`;
     }).join("");
-    if (updated) updated.innerHTML = `最后更新：${String(data.updated || "").replaceAll("-", ".")} <small lang="ja">最終更新</small>`;
+    if (updated) updated.innerHTML = `最終更新：${String(data.updated || "").replaceAll("-", ".")}`;
     requestAnimationFrame(() => revealElements(noticeList.querySelectorAll(".notice-card"), { distance: 0 }));
 
     const buttons = [...document.querySelectorAll(".month-card[data-notice-month]")];

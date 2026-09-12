@@ -1,39 +1,73 @@
 <footer class="site-footer">
   <div><strong>Anni Suki</strong><span>王安妮非官方应援站 <small lang="ja">非公式応援サイト</small></span></div>
   <div class="footer-meta">
-    <button class="disclaimer-trigger" type="button" data-disclaimer-open aria-haspopup="dialog"><span>免责声明</span><small lang="ja">免責事項</small> <b aria-hidden="true">↗</b></button>
+    <button class="disclaimer-trigger" type="button" data-disclaimer-open aria-haspopup="dialog"><span>免责声明 / 免責事項 / Disclaimer</span> <b aria-hidden="true">↗</b></button>
     <span class="footer-credit">技術協力：曾经跟鲑鱼一起看蒋公逆流而上</span>
   </div>
 </footer>
 
-<dialog class="disclaimer-dialog" data-disclaimer-dialog aria-labelledby="disclaimer-title">
+<dialog class="disclaimer-dialog" data-disclaimer-dialog aria-labelledby="disclaimer-title" aria-modal="true">
   <div class="disclaimer-dialog-inner">
-    <button class="disclaimer-close" type="button" data-disclaimer-close aria-label="关闭 / 閉じる / Close">×</button>
-    <p class="disclaimer-kicker">请阅读 · <span lang="ja">お読みください</span></p>
-    <h2 id="disclaimer-title" data-disclaimer-title>免责声明</h2>
-    <div class="disclaimer-tabs" role="tablist" aria-label="免责声明语言 / 免責事項の言語">
-      <button class="active" type="button" role="tab" aria-selected="true" aria-controls="disclaimer-zh" id="disclaimer-tab-zh" data-disclaimer-tab="zh">中文</button>
-      <button type="button" role="tab" aria-selected="false" aria-controls="disclaimer-ja" id="disclaimer-tab-ja" data-disclaimer-tab="ja" tabindex="-1">日本語</button>
-      <button type="button" role="tab" aria-selected="false" aria-controls="disclaimer-en" id="disclaimer-tab-en" data-disclaimer-tab="en" tabindex="-1">English</button>
+    <header class="disclaimer-dialog-head">
+      <button class="disclaimer-close" type="button" data-disclaimer-close aria-label="关闭 / 閉じる / Close">×</button>
+      <p class="disclaimer-kicker">免责声明 · 免責事項 · Disclaimer</p>
+      <h2 id="disclaimer-title" data-disclaimer-title>免责声明</h2>
+      <div class="disclaimer-tabs" role="tablist" aria-label="免责声明语言 / 免責事項の言語 / Disclaimer language">
+        <button class="active" type="button" role="tab" aria-selected="true" aria-controls="disclaimer-zh" id="disclaimer-tab-zh" data-disclaimer-tab="zh">中文</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="disclaimer-ja" id="disclaimer-tab-ja" data-disclaimer-tab="ja" tabindex="-1">日本語</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="disclaimer-en" id="disclaimer-tab-en" data-disclaimer-tab="en" tabindex="-1">English</button>
+      </div>
+    </header>
+    <div class="disclaimer-content">
+      <section class="disclaimer-panel" id="disclaimer-zh" role="tabpanel" aria-labelledby="disclaimer-tab-zh" data-disclaimer-panel="zh" lang="zh-CN" tabindex="0">
+        <h3>关于本站</h3>
+        <p>Anni Suki 是由粉丝个人制作并维护的非官方、非商业应援网站，仅用于资料整理、粉丝创作与交流。</p>
+        <p>本站与王安妮本人、TSH48（原 AKB48 Team SH）、其所属及运营机构，以及其他相关权利主体之间不存在官方隶属、授权、代理、赞助或合作关系。本站所刊载的内容亦不代表上述个人或机构的立场。</p>
+        <h3>内容与相关权利</h3>
+        <p>本站自行创作的文字、设计及其他原创内容，其相应权利归创作者所有。</p>
+        <p>本站涉及的姓名、艺名、肖像、商标，以及来自第三方的文字、图片、影音、社交媒体内容和其他材料，其相关权利仍归各自权利人所有。本站不对第三方内容主张所有权。</p>
+        <p>“安妮日常”等栏目可能根据公开发布的信息进行整理、摘要、引用或评论。由本站撰写的标题、摘要、感想、说明及其他编辑性内容属于粉丝整理与表达，不代表原发布者的原意、观点或正式表述。</p>
+        <p>如需确认活动安排、成员信息、作品信息及其他正式资料，请以 TSH48 官方渠道、王安妮本人公开渠道以及相应原始来源为准。</p>
+        <h3>信息与外部链接</h3>
+        <p>本站会尽力维护资料的准确性和时效性，但无法保证所有内容始终完整、准确或保持最新状态。</p>
+        <p>本站可能提供前往官方社交媒体、影音平台及其他第三方网站的链接。相关网站和服务由相应第三方独立运营，其内容及服务不受本站控制。</p>
+        <h3>权利与内容调整</h3>
+        <p>本站尊重著作权、肖像权、姓名相关权益及其他合法权益。</p>
+        <p>如发现本站内容存在来源标注、权利归属、事实准确性或展示方式方面的问题，本站可能根据具体情况进行核查、修正、补充来源、调整展示方式或停止展示相关内容。</p>
+      </section>
+      <section class="disclaimer-panel" id="disclaimer-ja" role="tabpanel" aria-labelledby="disclaimer-tab-ja" data-disclaimer-panel="ja" lang="ja" tabindex="0" hidden>
+        <h3>当サイトについて</h3>
+        <p>Anni Suki は、ファン個人が制作・運営する非公式・非営利の応援ファンサイトです。資料の整理、ファンによる創作および交流を目的としています。</p>
+        <p>王安妮さんご本人、TSH48（旧称：AKB48 Team SH）、所属・運営関係者、その他の関係各所とは一切の公式な関係はなく、承認・提携・代理・協賛等を受けたものではありません。当サイトに掲載される内容は、ご本人または関係各所の見解を示すものでもありません。</p>
+        <h3>著作権・肖像権等について</h3>
+        <p>当サイトが独自に制作した文章・デザインその他のコンテンツに関する権利は、それぞれの制作者に帰属します。</p>
+        <p>当サイトで言及または掲載する氏名、芸名、肖像、商標、文章、画像、映像、SNS投稿その他の第三者コンテンツに関する権利は、それぞれの権利者に帰属します。当サイトが第三者コンテンツの権利を主張するものではありません。</p>
+        <p>「安妮日常」等では、公開された情報をもとに整理・要約・引用・感想等を掲載する場合があります。当サイト独自のタイトル、要約、感想、説明その他の編集表現はファンによる整理・表現であり、元の投稿者による正式な発言や見解を示すものではありません。</p>
+        <p>活動予定、メンバー情報、作品情報その他の正式な情報については、TSH48公式情報、王安妮さんご本人の公開情報および各出典をご確認ください。</p>
+        <h3>掲載情報・外部リンクについて</h3>
+        <p>掲載内容については可能な限り正確かつ新しい情報を提供するよう努めていますが、その完全性・正確性・最新性を保証するものではありません。</p>
+        <p>当サイトからリンクしている外部サイト、SNS、動画サービス等は、それぞれの運営者によって管理されています。当サイトがリンク先の内容やサービスを管理するものではありません。</p>
+        <h3>権利への配慮</h3>
+        <p>当サイトでは、著作権、肖像権、氏名に関する権利その他の正当な権利を尊重しています。</p>
+        <p>掲載内容について、出典表記、権利関係、事実関係または表示方法に問題があることを確認した場合、必要に応じて内容の確認、修正、出典の追記、表示方法の変更または掲載停止等を行う場合があります。</p>
+      </section>
+      <section class="disclaimer-panel" id="disclaimer-en" role="tabpanel" aria-labelledby="disclaimer-tab-en" data-disclaimer-panel="en" lang="en" tabindex="0" hidden>
+        <h3>About This Site</h3>
+        <p>Anni Suki is an independent, unofficial, non-commercial fan site created and maintained by a fan for archival, creative, and fan-community purposes.</p>
+        <p>This site is not affiliated with, endorsed by, sponsored by, authorized by, or officially connected with Wang Anni, TSH48 (formerly AKB48 Team SH), its management or operating organizations, or any other related rights holder. Content published on this site does not represent the views of those individuals or organizations.</p>
+        <h3>Content and Third-Party Rights</h3>
+        <p>Original writing, design, and other material created specifically for this site remain the work of their respective creators.</p>
+        <p>Names, stage names, likenesses, trademarks, text, photographs, videos, social-media posts, and other third-party materials referenced or displayed on this site remain subject to the rights of their respective owners. Anni Suki does not claim ownership of third-party material.</p>
+        <p>Sections may organize, summarize, quote, or comment on publicly available information. Titles, summaries, commentary, notes, and other editorial material written for this site are fan-created expressions and should not be understood as official statements or views of the original publisher.</p>
+        <p>For authoritative information about schedules, members, releases, and other official matters, please refer to official TSH48 channels, Wang Anni’s public channels, and the original source.</p>
+        <h3>Accuracy and External Links</h3>
+        <p>Reasonable efforts are made to keep information accurate and current, but no guarantee is made regarding its completeness, accuracy, or currency.</p>
+        <p>This site may contain links to official social-media accounts, media platforms, and other third-party websites. Those services are independently operated, and Anni Suki does not control their content or services.</p>
+        <h3>Rights and Content Review</h3>
+        <p>Anni Suki respects copyright, likeness and publicity rights, naming rights, trademarks, and other legitimate rights.</p>
+        <p>If an issue concerning attribution, rights ownership, factual accuracy, or the presentation of material becomes known, the site may review the relevant material and, where appropriate, correct it, add source information, change how it is displayed, or discontinue its display.</p>
+      </section>
     </div>
-    <section class="disclaimer-panel" id="disclaimer-zh" role="tabpanel" aria-labelledby="disclaimer-tab-zh" data-disclaimer-panel="zh" lang="zh-CN">
-      <p>本站为粉丝自发制作的非官方、非商业项目，与王安妮、TSH48 及其成员、经纪公司、运营方或其他相关机构均无隶属、授权、合作或背书关系，亦不代表任何当事方立场。</p>
-      <p>站内资料整理自公开信息，可能存在遗漏、误差或更新延迟，仅供同好交流与纪念，不构成官方公告、新闻来源或任何形式的承诺；涉及活动、行程及成员信息时，请始终以官方渠道发布为准。</p>
-      <p>人物姓名、团体名称、商标以及所引用的图片、音视频与其他素材，其权利归原作者或相应权利人所有。本站无意主张相关权利，也不将其用于商业用途；如有不当使用、事实错误或权利人要求处理，请通过项目维护渠道联系，我们会尽快核实、更正或移除。</p>
-      <p>小游戏、文案和视觉设计均属粉丝向创作表达，不应被理解为对真实人物经历、性格、观点或关系的事实陈述。本站不会主动收集或上传个人信息；主题偏好与游戏最高分仅保存在访客浏览器本地，托管平台可能依其自身政策处理必要的访问数据。</p>
-    </section>
-    <section class="disclaimer-panel" id="disclaimer-ja" role="tabpanel" aria-labelledby="disclaimer-tab-ja" data-disclaimer-panel="ja" lang="ja" hidden>
-      <p>当サイトはファン有志による非公式・非営利のプロジェクトです。王安妮、TSH48、そのメンバー、所属事務所、運営会社およびその他の関係組織との間に、所属・許諾・提携・推薦等の関係はなく、いずれの当事者の見解も代表しません。</p>
-      <p>掲載内容は公開情報をもとに整理しており、欠落、誤記、更新の遅れが生じる場合があります。ファン同士の交流と記録のみを目的とし、公式発表、報道、保証ではありません。活動、日程、メンバーに関する情報は、必ず公式発表をご確認ください。</p>
-      <p>氏名、団体名、商標、画像、音声、映像その他の素材に関する権利は、それぞれの作者または権利者に帰属します。当サイトはこれらの権利を主張せず、商業利用を目的としません。不適切な使用、事実誤認、または権利者からの申し出がある場合は、プロジェクトの管理窓口までご連絡ください。確認のうえ、速やかに訂正または削除します。</p>
-      <p>ミニゲーム、文章、ビジュアルデザインはファンによる創作表現であり、実在する人物の経歴、性格、意見、関係性についての事実を示すものではありません。当サイト自体は個人情報を能動的に収集・送信しません。テーマ設定とゲームの最高得点は閲覧者のブラウザ内にのみ保存されますが、ホスティング事業者が独自の方針に基づき必要なアクセスデータを処理する場合があります。</p>
-    </section>
-    <section class="disclaimer-panel" id="disclaimer-en" role="tabpanel" aria-labelledby="disclaimer-tab-en" data-disclaimer-panel="en" lang="en" hidden>
-      <p>This is an unofficial, non-commercial fan project. It is not affiliated with, authorized by, partnered with, or endorsed by Wang Anni, TSH48, their members, management, operators, or any related organization, and it does not represent the views of any such party.</p>
-      <p>Information on this site is compiled from public sources and may contain omissions, errors, or delays. It is provided solely for fan discussion and archival purposes and is not an official announcement, news source, or guarantee. Always refer to official channels for current event, schedule, and member information.</p>
-      <p>Names, group names, trademarks, images, audio, video, and other referenced materials remain the property of their respective creators or rights holders. This site claims no ownership and does not use them commercially. If any material is used improperly, contains a factual error, or requires action at a rights holder’s request, please contact the project maintainers so it can be reviewed, corrected, or removed promptly.</p>
-      <p>The mini-games, writing, and visual design are fan-made creative expressions and should not be treated as factual statements about any real person’s experiences, personality, opinions, or relationships. The site itself does not actively collect or upload personal information. Theme preferences and game high scores are stored only in the visitor’s browser; the hosting provider may process necessary access data under its own policies.</p>
-    </section>
   </div>
 </dialog>
 <script src="../vendor/motion.js"></script>
