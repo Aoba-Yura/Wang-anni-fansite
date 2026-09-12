@@ -20,9 +20,11 @@
     </header>
 
     <section class="notice-board content-width" aria-labelledby="notice-board-title">
-      <nav class="month-index" aria-label="按月份浏览公告 / 月別のお知らせ">
-        <div class="month-index-heading"><span lang="ja">月ごとの掲示</span><strong>公告月份<small lang="ja">掲載月</small></strong></div>
-        <div class="month-index-items" data-notice-months></div>
+      <nav aria-label="按月份浏览公告 / 月別のお知らせ">
+        <details class="month-index" data-notice-month-index open>
+          <summary class="month-index-heading"><span lang="ja">月ごとの掲示</span><strong>公告月份<small lang="ja">掲載月</small></strong></summary>
+          <div class="month-index-items" data-notice-months></div>
+        </details>
       </nav>
       <div class="board-frame">
         <div class="board-header">

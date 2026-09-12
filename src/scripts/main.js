@@ -197,6 +197,8 @@ if (diaryList) {
 const noticeList = document.querySelector("[data-notice-list]");
 if (noticeList) {
   const monthList = document.querySelector("[data-notice-months]");
+  const monthIndex = document.querySelector("[data-notice-month-index]");
+  const mobileMonthIndex = window.matchMedia("(max-width: 768px)");
   const updated = document.querySelector("[data-notice-updated]");
   const escapeNotice = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
   const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
@@ -204,6 +206,13 @@ if (noticeList) {
   const loadNotices = embedded?.textContent
     ? Promise.resolve(JSON.parse(embedded.textContent))
     : fetch("../data/notices.json").then((response) => response.json());
+
+  const syncMonthIndex = () => {
+    if (mobileMonthIndex.matches) monthIndex?.removeAttribute("open");
+    else monthIndex?.setAttribute("open", "");
+  };
+  syncMonthIndex();
+  mobileMonthIndex.addEventListener("change", syncMonthIndex);
 
   loadNotices.then((data) => {
     const items = [...data.items].sort((a, b) => b.date.localeCompare(a.date));
@@ -225,6 +234,7 @@ if (noticeList) {
       const month = button.dataset.noticeMonth;
       buttons.forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
       cards.forEach((card) => { card.hidden = month !== "all" && card.dataset.noticeMonth !== month; });
+      if (mobileMonthIndex.matches) monthIndex?.removeAttribute("open");
     }));
   }).catch(() => { noticeList.innerHTML = '<p class="source-note">公告暂时无法载入。<small lang="ja">お知らせを読み込めませんでした。</small></p>'; });
 }
