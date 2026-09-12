@@ -11,5 +11,8 @@
     "build": "node tools/build.mjs",
     "preview": "node tools/preview.mjs",
     "audit:mobile": "node tools/mobile-audit.mjs"
+  },
+  "dependencies": {
+    "motion": "^13.2.0"
   }
 }

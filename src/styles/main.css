@@ -867,7 +867,8 @@ html:has(body[data-page="home"]) { scroll-snap-type: y mandatory; scroll-padding
   .diary-hero { min-height: 0; padding: 24px var(--page-padding) 22px; }
   .diary-section { padding-top: 14px; }
   .filter-bar { margin-bottom: 28px; padding: 10px 0 16px; }
-  .filter-group { grid-template-columns: 44px minmax(0, 1fr); gap: 8px; }
+  .filter-group { grid-template-columns: 44px minmax(0, 1fr); align-items: start; gap: 8px; }
+  .filter-label { padding-top: 10px; }
   .filter-options { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
   .filter-options::-webkit-scrollbar { display: none; }
   .filter-bar button { min-width: max-content; min-height: 38px; padding: 7px 13px; }
@@ -1039,3 +1040,27 @@ html:has(body[data-page="home"]) { scroll-snap-type: y mandatory; scroll-padding
   .entry-excerpt { font-size: .96rem; }
   .diary-more { width: calc(100% - 86px); margin: 28px 0 0 86px; }
 }
+
+/* A restrained two-column diary for wide screens. */
+@media (min-width: 1051px) {
+  .year-events {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 22px;
+  }
+  .year-events::before { display: none; }
+  .diary-entry + .diary-entry { margin-top: 0; }
+  .diary-entry::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: -18px;
+    left: 92px;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, rgba(184,92,94,.38) 0 8px, transparent 8px 15px);
+  }
+  .diary-entry:nth-last-child(-n+2)::after { bottom: 0; }
+  .entry-copy { height: 100%; }
+}
+
+.motion-enhanced .diary-entry { animation: none; }

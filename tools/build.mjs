@@ -55,6 +55,7 @@ for (const file of await readdir(pages)) {
     .replaceAll("../styles/game.css", "./game.css")
     .replaceAll("../scripts/main.js", "./script.js")
     .replaceAll("../scripts/game.js", "./game.js")
+    .replaceAll("../vendor/motion.js", "./motion.js")
     .replaceAll("./data/diary.json", "./data/diary.json")
     .replaceAll("<!-- SITE_HEADER -->", renderHeader(file))
     .replaceAll("<!-- SITE_FOOTER -->", footer)
@@ -71,6 +72,7 @@ await cp(join(source, "styles/game.css"), join(dist, "game.css"));
 const mainScript = await readFile(join(source, "scripts/main.js"), "utf8");
 await writeFile(join(dist, "script.js"), mainScript.replaceAll("../data/diary.json", "./data/diary.json"));
 await cp(join(source, "scripts/game.js"), join(dist, "game.js"));
+await cp(join(root, "node_modules/framer-motion/dist/dom-mini.js"), join(dist, "motion.js"));
 await cp(join(source, "assets/icons/favicon.svg"), join(dist, "favicon.svg"));
 await cp(join(source, "assets"), join(dist, "assets"), { recursive: true });
 await cp(join(source, "data"), join(dist, "data"), { recursive: true });

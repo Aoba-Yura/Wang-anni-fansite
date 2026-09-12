@@ -93,8 +93,24 @@ if (diaryList) {
   ];
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
   const filterState = { platform: "all", year: "all", tag: "all", kind: "all" };
-  let visibleLimit = 5;
+  const diaryPageSize = 6;
+  let visibleLimit = diaryPageSize;
   let filteredRecords = [];
+  const animateDiaryCards = () => {
+    const motion = window.Motion;
+    if (!motion || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    document.documentElement.classList.add("motion-enhanced");
+    const cards = diaryList.querySelectorAll(".diary-entry");
+    if (!cards.length) return;
+    motion.animate(cards, {
+      opacity: [0, 1],
+      transform: ["translateY(10px)", "translateY(0)"],
+    }, {
+      duration: .36,
+      delay: (index) => index * .045,
+      ease: [.22, 1, .36, 1],
+    });
+  };
   const makeFilterButton = (group, value, label, active = false) => `<button class="${active ? "active" : ""}" type="button" data-filter-group-name="${group}" data-filter-value="${escapeHtml(value)}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
   const fillFilters = (items) => {
     const choices = {
@@ -126,6 +142,7 @@ if (diaryList) {
         </article>`;
       }).join("")}</div>
     </section>`).join("") + (shownItems.length < items.length ? `<button class="diary-more" type="button" data-diary-more><span>继续翻阅</span><small>还有 ${items.length - shownItems.length} 则记录</small></button>` : "");
+    requestAnimationFrame(animateDiaryCards);
   };
   const loadDiary = () => fetch("../data/diary.json").then((response) => {
       if (!response.ok) throw new Error("diary data unavailable");
@@ -142,13 +159,13 @@ if (diaryList) {
     applyFilters();
     diaryList.addEventListener("click", (event) => {
       if (!event.target.closest("[data-diary-more]")) return;
-      visibleLimit += 10;
+      visibleLimit += diaryPageSize;
       renderDiary(filteredRecords);
     });
     document.querySelectorAll("[data-filter-group-name]").forEach((button) => button.addEventListener("click", () => {
       const group = button.dataset.filterGroupName;
       filterState[group] = button.dataset.filterValue;
-      visibleLimit = 5;
+      visibleLimit = diaryPageSize;
       document.querySelectorAll(`[data-filter-group-name="${group}"]`).forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
       const activeFilterCount = Object.values(filterState).filter((value) => value !== "all").length;
       const filterSummary = document.querySelector("[data-filter-summary]");
