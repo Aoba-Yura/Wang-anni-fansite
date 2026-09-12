@@ -692,7 +692,21 @@ img { display: block; max-width: 100%; }
   .official-reference { grid-template-columns: 1fr auto; }
   .official-reference span { grid-column: 1 / -1; }
   .literary-stage { padding: 32px 0 64px; }
-  .literary-tabs button { min-width: 0; flex: 1; padding: 16px 12px; }
+  .literary-tabs {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+  .literary-tabs::-webkit-scrollbar { display: none; }
+  .literary-tabs button {
+    min-width: clamp(150px, 42vw, 190px);
+    flex: 0 0 auto;
+    padding: 16px 12px;
+    scroll-snap-align: start;
+  }
+  .literary-tabs button b,
+  .literary-tabs button small { white-space: nowrap; }
   .literary-panel { min-height: 0; padding: 32px 20px; }
   .literary-panel h2 { margin: 32px 0; font-size: clamp(1.8rem, 8vw, 2.7rem); }
   .poem-layout { grid-template-columns: 1fr; gap: 12px; }
@@ -852,8 +866,6 @@ html:has(body[data-page="home"]) { scroll-snap-type: y mandatory; scroll-padding
 }
 
 @media (max-width: 480px) {
-  .literary-tabs { overflow-x: auto; scrollbar-width: none; }
-  .literary-tabs button { flex: 0 0 32%; padding-inline: 8px; }
   .month-index { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .social-grid { grid-template-columns: 1fr; }
   .social-grid a { min-height: 112px; }
