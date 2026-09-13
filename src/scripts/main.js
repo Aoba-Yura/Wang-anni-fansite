@@ -383,7 +383,7 @@ if (literaryTabsRoot && literaryPanelsRoot) {
         return `<article class="literary-panel short-form-panel ${index === 0 ? "active" : ""}" id="${escapeLiterary(item.id)}-panel" role="tabpanel" aria-labelledby="${escapeLiterary(item.id)}-tab" data-literary-panel="${escapeLiterary(item.id)}" ${index === 0 ? "" : "hidden"}>
           <div class="work-meta"><span>TANZAKU GALLERY</span><time datetime="${escapeLiterary(item.date)}">${escapeLiterary(item.date.replaceAll("-", "."))}</time></div>
           <div class="tanzaku-gallery-shell">
-            <div class="tanzaku-scroll-hint" aria-hidden="true"><span>‹</span><span>›</span></div>
+            <div class="tanzaku-scroll-hint" aria-hidden="true"><span>«</span><span>»</span></div>
             <div class="tanzaku-gallery" aria-label="短冊作品">${entries}</div>
           </div>
         </article>`;

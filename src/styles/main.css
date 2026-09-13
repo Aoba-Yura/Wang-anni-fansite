@@ -599,8 +599,8 @@ img { display: block; max-width: 100%; }
   .literary-panel.short-form-panel { padding:10px 0 24px; border-color:color-mix(in srgb,var(--line) 48%,transparent); background:transparent; }
   .short-form-panel > .work-meta { margin-inline:20px; align-items:baseline; font-size:.66rem; line-height:1; }
   .tanzaku-gallery-shell { position:relative; }
-  .tanzaku-scroll-hint { position:absolute; z-index:2; top:16px; left:calc(50% - min(28vw,112px)); right:calc(50% - min(28vw,112px)); height:clamp(453px,128.3vw,529px); display:flex; justify-content:space-between; align-items:center; pointer-events:none; }
-  .tanzaku-scroll-hint span { --hint-shift:-5px; width:44px; height:44px; display:grid; place-items:center; color:var(--active-soft); font:300 2.65rem/1 var(--sans); opacity:.62; filter:drop-shadow(0 2px 8px rgba(0,0,0,.5)); animation:tanzaku-swipe-hint 1.5s ease-in-out infinite; }
+  .tanzaku-scroll-hint { position:absolute; z-index:2; top:16px; left:max(12px,calc(33vw - 56px)); right:max(12px,calc(33vw - 56px)); height:clamp(453px,128.3vw,529px); display:flex; justify-content:space-between; align-items:center; pointer-events:none; }
+  .tanzaku-scroll-hint span { --hint-shift:-5px; width:44px; height:44px; display:grid; place-items:center; color:var(--active-soft); font:300 2.3rem/1 var(--sans); letter-spacing:-.16em; opacity:.58; filter:drop-shadow(0 2px 8px rgba(0,0,0,.5)); animation:tanzaku-swipe-hint 1.5s ease-in-out infinite; }
   .tanzaku-scroll-hint span:last-child { --hint-shift:6px; }
   .tanzaku-gallery { display:flex; flex-wrap:nowrap; justify-content:flex-start; gap:18px; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x mandatory; scroll-padding-inline:16px; scrollbar-width:none; padding:6px 16px 16px; }
   .tanzaku-gallery::-webkit-scrollbar { display:none; }
@@ -699,10 +699,8 @@ body.disclaimer-open { position: fixed; inset-inline: 0; width: 100%; overflow: 
 }
 
 @media (max-width: 768px) {
-  :root { --header-h:64px; --page-padding:20px; }
-  .site-header { padding-inline:var(--page-padding); gap:16px; }
-  body[data-page="hymn"] { --header-h:54px; }
-  body[data-page="hymn"] .site-header { border-bottom-color:color-mix(in srgb,var(--line) 62%,transparent); }
+  :root { --header-h:54px; --page-padding:20px; }
+  .site-header { padding-inline:var(--page-padding); gap:16px; border-bottom-color:color-mix(in srgb,var(--line) 62%,transparent); }
   .home-hero { min-height: auto; grid-template-columns: 1fr; grid-template-rows: auto auto auto; gap: 32px; padding: 48px 0 32px; }
   .home-copy h1 > span { font-size: clamp(3.2rem,16vw,5rem); }
   .home-copy h1 > b { font-size: clamp(2.3rem,12vw,3.8rem); }
