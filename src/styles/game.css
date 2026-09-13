@@ -122,18 +122,19 @@
   .game-shell { width: 100%; min-height: calc(100svh - var(--header-h)); padding: 0 0 78px; display: grid; align-content: start; }
   .game-shell .games-back, .game-shell .game-heading { display: none; }
   .game-shell .game-board-wrap { width: min(100%, 44.6svh, 424px); aspect-ratio: 39 / 70; }
-  .breakout-game .game-hud { min-height: 0; padding: max(19px, env(safe-area-inset-top)) 10px 19px; grid-template-columns: minmax(112px, 1.15fr) minmax(142px, 1fr) auto; grid-template-areas: "title stats actions"; gap: 8px; }
+  .breakout-game .game-hud { width: 100%; min-width: 0; min-height: 0; padding: max(8px, env(safe-area-inset-top)) 10px 8px; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto; grid-template-areas: "title actions" "stats stats"; column-gap: 10px; row-gap: 6px; }
   .breakout-game .game-hud-title { grid-area: title; }
-  .breakout-game .game-hud-title span { font-size: clamp(.78rem, 3.7vw, .95rem); }
-  .breakout-game .game-hud-stats { grid-area: stats; justify-content: space-around; gap: 6px; }
-  .breakout-game .game-hud-stats > span { display: grid; gap: 3px; text-align: center; }
+  .breakout-game .game-hud-title span { font-size: .95rem; }
+  .breakout-game .game-hud-stats { width: 100%; min-width: 0; grid-area: stats; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .breakout-game .game-hud-stats > span { min-width: 0; display: flex; align-items: baseline; justify-content: center; gap: 5px; text-align: center; }
   .breakout-game .game-hud-stats span > small { display: none; }
-  .breakout-game .game-hud-stats b { margin-left: 0; }
-  .breakout-game .game-hud-actions { gap: 5px; }
+  .breakout-game .game-hud-stats b { min-width: 0; margin-left: 0; font-size: .84rem; }
+  .breakout-game .game-hud-actions { min-width: 0; gap: 6px; justify-content: flex-end; }
   .breakout-game .hud-icon-button { width: 34px; height: 34px; }
+  .breakout-game .hud-pause { order: -1; }
   .breakout-game .game-hud-actions { grid-area: actions; }
   .breakout-game .hud-reset-button { display: none; }
-  .breakout-game .hud-best { display: none; }
+  .breakout-game .hud-best { display: flex; }
   .breakout-game .game-overlay { padding: 20px 16px calc(20px + env(safe-area-inset-bottom)); }
   .breakout-game .game-overlay h2 { font-size: clamp(2rem, 10vw, 3rem); }
   .breakout-game .game-overlay-actions { width: min(100%, 230px); }

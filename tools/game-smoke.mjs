@@ -126,7 +126,7 @@ assert.equal(elements.get("[data-game-pause]").disabled, false);
 const debug = window.__redbeanGameDebug;
 assert.ok(debug);
 assert.equal(debug.getLayoutName(), mode);
-assert.equal(debug.getBounds().top, (mode === "mobile" ? 76 : 64) + 10);
+assert.equal(debug.getBounds().top, mode === "mobile" ? 76 : 64);
 assert.equal(debug.visualRadius(), mode === "mobile" ? 28 : 27);
 const worldBall = { x: 0, y: 0, vx: -80, vy: -120, radius: 17 };
 assert.equal(debug.constrainBallToWorld(worldBall), true);
@@ -167,14 +167,14 @@ if (mode === "mobile") {
   listeners.get("window:resize")();
   await new Promise(function (resolve) { setTimeout(resolve, 150); });
   assert.equal(debug.getLayoutName(), "mobile");
-  assert.equal(debug.getBounds().top, 88);
+  assert.equal(debug.getBounds().top, 78);
 
   // Height-only browser chrome changes must refresh the measured HUD boundary.
   window.innerHeight = 860;
   hudHeight = 74;
   listeners.get("window:resize")();
   await new Promise(function (resolve) { setTimeout(resolve, 150); });
-  assert.equal(debug.getBounds().top, 84);
+  assert.equal(debug.getBounds().top, 74);
 }
 
 console.log("PASS game smoke " + mode + " (" + canvas.width + "x" + canvas.height + ", " + playableButtons.length + " level layouts)");

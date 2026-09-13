@@ -69,7 +69,7 @@ if (canvas) {
     const hudRect = ui.hud.getBoundingClientRect();
     const scale = canvasRect.width > 0 ? width / canvasRect.width : 1;
     const hudBottom = Math.max(0, hudRect.bottom - canvasRect.top) * scale;
-    return { left: layout.side, right: width - layout.side, top: hudBottom + 10, bottom: height - layout.bottom };
+    return { left: layout.side, right: width - layout.side, top: hudBottom, bottom: height - layout.bottom };
   }
   function readSave() {
     try {
@@ -299,7 +299,7 @@ if (canvas) {
   }
   function showLevelSelect() {
     state = "level-select";
-    setOverlayText("SELECT LEVEL", "选择关卡", "已开放 " + Math.min(save.highestUnlocked, LEVELS.length) + " / " + LEVELS.length + " · 完成关卡会开放下一关");
+    setOverlayText("SELECT LEVEL", "选择关卡", "已开放 " + Math.min(save.highestUnlocked, LEVELS.length) + " / " + LEVELS.length);
     ui.summary.hidden = true;
     ui.levels.hidden = false;
     ui.volumePanel.hidden = true;
