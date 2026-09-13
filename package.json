@@ -11,6 +11,8 @@
     "build": "node tools/build.mjs",
     "preview": "node tools/preview.mjs",
     "audit:mobile": "node tools/mobile-audit.mjs",
+    "audit:desktop": "node tools/desktop-density-smoke.mjs",
+    "test:tanzaku": "node tools/tanzaku-smoke.mjs",
     "test:game": "node tools/game-smoke.mjs desktop && node tools/game-smoke.mjs mobile"
   },
   "dependencies": {

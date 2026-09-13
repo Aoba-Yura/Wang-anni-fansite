@@ -22,6 +22,22 @@
   font-display: fallback;
 }
 
+@font-face {
+  font-family: "Yuji Syuku";
+  src: url("../assets/fonts/yuji-syuku/YujiSyuku-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ma Shan Zheng";
+  src: url("../assets/fonts/ma-shan-zheng/MaShanZheng-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg: #110e0d;
   --surface: #1b1514;
@@ -84,6 +100,12 @@ body {
   overflow-x: clip;
   overscroll-behavior-x: none;
   transition: background .6s ease;
+}
+@media (min-width:769px) {
+  html { background:var(--bg); }
+  body:not([data-page="home"]):not([data-page="games"]):not([data-page="redbean-breakout"]) { zoom:.8; }
+  body[data-page="games"],
+  body[data-page="redbean-breakout"] { zoom:.9; }
 }
 a { color: inherit; text-decoration: none; }
 button { color: inherit; font: inherit; }
@@ -520,7 +542,9 @@ img { display: block; max-width: 100%; }
 
 /* Literary column */
 .hymn-main { background: linear-gradient(135deg,rgba(155,42,44,.035),transparent 45%); }
-.literary-stage { padding: 54px 0 125px; }
+.hymn-main .page-hero { padding-top:20px; padding-bottom:10px; }
+.hymn-main .section-heading-line { font-size:.74rem; font-weight:700; opacity:.86; }
+.literary-stage { padding:20px 0 125px; }
 .literary-tabs { display: flex; border-bottom: 1px solid var(--line); }
 .literary-tabs button { min-width: 210px; padding: 14px 22px; display: grid; grid-template-columns:auto 1fr; gap:3px 16px; border: 0; border-bottom: 2px solid transparent; color: var(--muted); background: transparent; cursor: pointer; font-weight: 700; text-align:left; }
 .literary-tabs button span { color: var(--faint); font: 400 .75rem var(--display); }
@@ -529,6 +553,8 @@ img { display: block; max-width: 100%; }
 .literary-tabs button small { color:var(--faint); font-size:.58rem; font-weight:500; }
 .literary-tabs button.active { color: var(--ink); border-bottom-color: var(--active); }
 .literary-panel { min-height: 720px; padding: clamp(38px,7vw,92px); border: 1px solid var(--line); border-top: 0; background: linear-gradient(145deg,color-mix(in srgb,var(--active) 8%,transparent),transparent 55%),rgba(255,255,255,.018); animation: entry-in .4s ease both; }
+[data-literary-panels] { padding-top:8px; }
+[data-literary-panels] > .literary-panel { border-top-width:1px; }
 .work-meta { display: flex; justify-content: space-between; gap: 30px; color: var(--faint); font-size: .75rem; letter-spacing: .14em; }
 .work-meta span { color: var(--active-soft); font-weight: 900; }
 .literary-panel h2 { max-width: 850px; margin: 42px 0 60px; font-size: clamp(2rem,4vw,4.4rem); line-height: 1.12; letter-spacing: -.05em; }
@@ -541,6 +567,41 @@ img { display: block; max-width: 100%; }
 .inspiration { margin: 55px 0 0; padding-top: 22px; border-top: 1px solid var(--line); color: var(--faint); font-size: .78rem; line-height: 1.8; }
 .inspiration a { color: var(--active-soft); }
 .inspiration > small { margin:0 3px; font-size:.62rem; }
+.literary-panel.short-form-panel { min-height:0; padding:20px clamp(28px,4vw,56px) 44px; }
+.short-form-panel > .work-meta { font-size:.72rem; }
+.tanzaku-gallery { display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; gap:54px; padding:16px 0 22px; }
+.tanzaku-unit { position:relative; flex:0 0 176px; display:flex; justify-content:center; align-items:flex-start; }
+.tanzaku-card { position:relative; display:flex; flex-direction:column; align-items:center; }
+.tanzaku-hanging { width:20px; height:22px; background:url("../assets/tanzaku/hanging-knot.svg") center top/17px 28px no-repeat; opacity:.78; }
+.tanzaku-paper { position:relative; width:143px; height:560px; padding:40px 21px 27px; overflow:hidden; border:1px solid rgba(74,58,42,.14); color:#27231f; background-color:#f5f0e8; background-image:url("../assets/tanzaku/washi-fiber-texture.svg"),url("../assets/tanzaku/washi-speckle-texture.svg"); background-size:180px 180px,220px 220px; box-shadow:0 12px 28px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.44); transition:transform .25s ease,box-shadow .25s ease; }
+.tanzaku-card.is-spring .tanzaku-paper { background-color:#f7f0ea; }
+.tanzaku-card.is-summer .tanzaku-paper { background-color:#f2f3ea; }
+.tanzaku-card.is-autumn .tanzaku-paper { background-color:#f6f0e4; }
+.tanzaku-card.is-winter .tanzaku-paper { background-color:#f3f3f1; }
+.tanzaku-poem { height:100%; writing-mode:vertical-rl; text-orientation:mixed; font:400 25px/1 "Yuji Syuku","Ma Shan Zheng","Yu Mincho","Noto Serif JP",serif; letter-spacing:.1em; }
+.tanzaku-poem .phrase { display:inline; }
+.tanzaku-poem .phrase:not(:last-child)::after { content:""; display:inline-block; inline-size:.72em; }
+.tanzaku-caption { width:143px; min-height:34px; margin-top:11px; display:flex; align-items:baseline; justify-content:center; gap:8px; color:var(--faint); font:500 .62rem/1.35 var(--sans); letter-spacing:.12em; }
+.tanzaku-caption b { color:var(--muted); font-family:var(--sans-ja); font-weight:500; }
+.tanzaku-caption time { font-size:.55rem; letter-spacing:.04em; }
+.tanzaku-source-link { position:absolute; right:10px; bottom:11px; width:30px; height:30px; padding:2px; border-radius:50%; opacity:.64; transition:opacity .2s ease,transform .2s ease; }
+.tanzaku-source-link img { display:block; width:100%; height:100%; }
+.tanzaku-paper:hover,.tanzaku-paper:focus-within { transform:translateY(-3px) rotate(-.25deg); box-shadow:0 16px 34px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.5); }
+.tanzaku-source-link:hover,.tanzaku-source-link:focus-visible { opacity:1; transform:scale(1.04); outline:2px solid rgba(123,105,91,.42); outline-offset:2px; }
+@media (max-width:1099px) {
+  .tanzaku-gallery { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:34px 24px; }
+  .tanzaku-unit { width:100%; min-width:0; flex-direction:column; align-items:center; }
+}
+@media (max-width:699px) {
+  .literary-panel.short-form-panel { padding:18px 0 32px; }
+  .short-form-panel > .work-meta { margin-inline:20px; }
+  .tanzaku-gallery { display:flex; flex-wrap:nowrap; justify-content:flex-start; gap:22px; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x mandatory; scrollbar-width:none; padding:4px max(24px,calc((100vw - min(86vw,300px))/2)) max(24px,env(safe-area-inset-bottom)); }
+  .tanzaku-gallery::-webkit-scrollbar { display:none; }
+  .tanzaku-unit { flex:0 0 min(86vw,300px); scroll-snap-align:center; }
+  .tanzaku-paper { width:136px; height:520px; padding:38px 20px 24px; }
+  .tanzaku-poem { font-size:23px; }
+  .tanzaku-caption { width:136px; }
+}
 .cheer-label small { display:block; margin-top:3px; font-size:.56rem; font-weight:500; opacity:.75; }
 .cheer-button { position: relative; overflow: hidden; width: 100%; min-height: 180px; margin-top: 34px; padding: 30px; display: flex; align-items: center; justify-content: center; gap: 24px; border: 1px solid color-mix(in srgb, var(--cream) 32%, transparent); color: var(--on-active); background: linear-gradient(110deg, var(--active) 0%, color-mix(in srgb, var(--active) 72%, #351c18) 52%, #5d2929 100%); box-shadow: 0 18px 50px color-mix(in srgb, var(--active) 20%, transparent); cursor: pointer; font-size: clamp(1.35rem,3vw,2.4rem); font-weight: 900; isolation: isolate; letter-spacing: .06em; }
 .cheer-button::after { content: "ANNIE CHEER · 紅豆妮"; position: absolute; top: 17px; right: 23px; color: var(--cream); font: 400 .68rem var(--display); letter-spacing: .14em; opacity: .78; }
@@ -706,7 +767,8 @@ body.disclaimer-open { position: fixed; inset-inline: 0; width: 100%; overflow: 
   .guide-grid { grid-template-columns: 1fr; }
   .official-reference { grid-template-columns: 1fr auto; }
   .official-reference span { grid-column: 1 / -1; }
-  .literary-stage { padding: 32px 0 64px; }
+  .literary-stage { padding: 18px 0 64px; }
+  .hymn-main .page-hero { padding:18px 0 10px; }
   .literary-tabs {
     overflow-x: auto;
     overscroll-behavior-inline: contain;

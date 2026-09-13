@@ -338,9 +338,39 @@ const literaryPanelsRoot = document.querySelector("[data-literary-panels]");
 
 if (literaryTabsRoot && literaryPanelsRoot) {
   const escapeLiterary = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
+  const tanzakuData = JSON.parse(document.querySelector("#tanzaku-data")?.textContent || '{"poems":[],"diaryById":{}}');
+  const renderTanzakuSource = (source) => {
+    if (!source?.url) return "";
+    const sourceType = source.platform === "bilibili" ? "视频" : "微博";
+    return `<a class="tanzaku-source-link" href="${escapeLiterary(source.url)}" target="_blank" rel="noopener noreferrer" aria-label="原${sourceType}を見る">
+      <img src="./assets/tanzaku/source-link-mark.svg" alt="">
+    </a>`;
+  };
+  const renderTanzaku = (poem) => {
+    const source = poem.source_id ? tanzakuData.diaryById[poem.source_id] : null;
+    const displayDate = source?.date || poem.date || "";
+    const formLabel = poem.type === "haiku" ? "俳句" : "川柳";
+    const phrases = poem.text.map((line) => `<span class="phrase">${escapeLiterary(line)}</span>`).join("");
+    const title = poem.title ? `<b lang="ja">${escapeLiterary(poem.title)}</b>` : "";
+    const date = displayDate ? `<time datetime="${escapeLiterary(displayDate)}">${escapeLiterary(displayDate.replaceAll("-", "."))}</time>` : "";
+    return `<div class="tanzaku-unit">
+      <article class="tanzaku-card is-${escapeLiterary(poem.season || "none")}">
+        <div class="tanzaku-hanging" aria-hidden="true"></div>
+        <div class="tanzaku-paper"><div class="tanzaku-poem" lang="ja">${phrases}</div>${renderTanzakuSource(source)}</div>
+        <div class="tanzaku-caption"><span>${formLabel}</span>${title}${date}</div>
+      </article>
+    </div>`;
+  };
   const renderLiterary = ({ items }) => {
     literaryTabsRoot.innerHTML = items.map((item, index) => `<button class="${index === 0 ? "active" : ""}" id="${escapeLiterary(item.id)}-tab" type="button" role="tab" aria-selected="${index === 0}" aria-controls="${escapeLiterary(item.id)}-panel" ${index === 0 ? "" : 'tabindex="-1"'} data-literary-tab="${escapeLiterary(item.id)}"><span>${String(index + 1).padStart(2, "0")}</span><b>${escapeLiterary(item.tabTitle)}</b><small lang="ja">${escapeLiterary(item.tabTitleJa)}</small></button>`).join("");
     literaryPanelsRoot.innerHTML = items.map((item, index) => {
+      if (item.kind === "short-form-collection") {
+        const entries = tanzakuData.poems.map(renderTanzaku).join("");
+        return `<article class="literary-panel short-form-panel ${index === 0 ? "active" : ""}" id="${escapeLiterary(item.id)}-panel" role="tabpanel" aria-labelledby="${escapeLiterary(item.id)}-tab" data-literary-panel="${escapeLiterary(item.id)}" ${index === 0 ? "" : "hidden"}>
+          <div class="work-meta"><span>TANZAKU GALLERY</span><time datetime="${escapeLiterary(item.date)}">${escapeLiterary(item.date.replaceAll("-", "."))}</time></div>
+          <div class="tanzaku-gallery" aria-label="短冊作品">${entries}</div>
+        </article>`;
+      }
       const copyClass = item.kind === "prose" ? "prose-text" : "poem-text";
       const copy = item.paragraphs.map((lines) => `<p>${lines.map(escapeLiterary).join("<br>")}</p>`).join("");
       const links = (item.links || []).map((link) => `<a href="${escapeLiterary(link.href)}" target="_blank" rel="noreferrer">${escapeLiterary(link.label)}</a>`).join("　");

@@ -1,8 +1,9 @@
 {
+  "schemaVersion": 1,
   "items": [
     {
       "id": "prose",
-      "tabTitle": "赞颂骈文",
+      "tabTitle": "赞安妮辞",
       "tabTitleJa": "賛辞",
       "date": "2026-09-07",
       "title": "赞安妮辞",
@@ -10,8 +11,8 @@
       "paragraphs": [
         ["携温州乡音，入沪上灯火；课业与公演并肩，华服同话筒相映"],
         ["隔离之日，问远方晴否；津门巡演，望冬夜飘雪"],
-        ["残樱有未散之名，青春存剧终之叹；然伊容笑泪同席，请众人向梦而行"],
         ["七周年毕，故事未毕；远道者、默伴者、始终相随者，皆一一珍重"],
+        ["残樱有未散之名，青春存剧终之叹；然伊容笑泪同席，请众人向梦而行"],
         ["故赞曰："],
         ["红豆为伴，伴她寸寸前程"],
         ["抹茶作风，随她年年好景"],
@@ -19,8 +20,7 @@
       ],
       "footerLabel": "灵感片段",
       "links": [
-        { "label": "七周年致谢 ↗", "href": "https://www.sina.cn/news/detail/5248987510604513.html" },
-        { "label": "天津巡演日志 ↗", "href": "https://www.bilibili.com/video/BV1YP4y1R7nv/" }
+        { "label": "七周年致谢 ↗", "href": "https://www.sina.cn/news/detail/5248987510604513.html" }
       ]
     },
     {
@@ -40,6 +40,15 @@
       ],
       "footerLabel": "作者",
       "footerText": "：曾经跟鲑鱼一起看蒋公逆流而上"
+    },
+    {
+      "id": "haiku-senryu",
+      "tabTitle": "俳句・川柳",
+      "tabTitleJa": "俳句・川柳",
+      "date": "2026-09-13",
+      "title": "俳句・川柳",
+      "kind": "short-form-collection",
+      "description": "俳句寄意于季节，川柳落笔于人情。轻触「縁」，可直接前往这句话的由来。"
     }
   ]
 }

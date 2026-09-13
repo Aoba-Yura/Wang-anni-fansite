@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "haiku-20260913-01",
+      "type": "haiku",
+      "text": [
+        "春惜しむ",
+        "笑って泣いて",
+        "幕おりる"
+      ],
+      "season": "spring",
+      "title": "残桜",
+      "source_id": "5335019942064579",
+      "source_label": "縁"
+    },
+    {
+      "id": "haiku-20260913-02",
+      "type": "haiku",
+      "text": [
+        "雨あがり",
+        "会えば心は",
+        "紅葉色"
+      ],
+      "season": "autumn",
+      "title": "会いたい",
+      "source_id": "5330128084141468",
+      "source_label": "縁"
+    },
+    {
+      "id": "senryu-20260913-01",
+      "type": "senryu",
+      "text": [
+        "成功者",
+        "指導の前に",
+        "三ポーズ"
+      ],
+      "season": "none",
+      "title": "握手会",
+      "source_id": "5302167424470250",
+      "source_label": "縁"
+    },
+    {
+      "id": "haiku-20260913-03",
+      "type": "haiku",
+      "text": [
+        "ゆく夏や",
+        "乱れし髪に",
+        "潮匂ふ"
+      ],
+      "season": "summer",
+      "title": "夏の終わり",
+      "source_id": "4813942696969941",
+      "source_label": "縁"
+    }
+  ]
+}

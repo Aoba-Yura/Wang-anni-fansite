@@ -29,6 +29,62 @@ diaryKindDocument.categories.forEach((category) => {
 });
 const diaryKindDataScript = `<script id="diary-kind-data" type="application/json">${diaryKindData.replaceAll("<", "\\u003c")}</script>`;
 const hymnData = await readFile(join(source, "data/hymns.json"), "utf8");
+const hymnDocument = JSON.parse(hymnData);
+if (hymnDocument.schemaVersion !== 1 || !Array.isArray(hymnDocument.items) || !hymnDocument.items.length) {
+  throw new Error("hymns.json must contain schemaVersion 1 and at least one item.");
+}
+const literaryIds = new Set();
+hymnDocument.items.forEach((item) => {
+  if (!item.id || literaryIds.has(item.id)) throw new Error("Missing or duplicate literary item id: " + item.id);
+  literaryIds.add(item.id);
+});
+const poemsData = await readFile(join(source, "data/poems.json"), "utf8");
+const poemsDocument = JSON.parse(poemsData);
+if (poemsDocument.schemaVersion !== 1 || !Array.isArray(poemsDocument.items) || !poemsDocument.items.length) {
+  throw new Error("poems.json must contain schemaVersion 1 and at least one item.");
+}
+const poemIds = new Set();
+poemsDocument.items.forEach((poem) => {
+  const hasValidText = Array.isArray(poem.text)
+    && poem.text.length === 3
+    && poem.text.every((line) => String(line).trim());
+  const isValid = poem.id
+    && !poemIds.has(poem.id)
+    && ["haiku", "senryu"].includes(poem.type)
+    && hasValidText;
+  if (!isValid) {
+    throw new Error(`Invalid poem: ${poem.id || "unnamed"}.`);
+  }
+  poemIds.add(poem.id);
+});
+const weiboArchive = JSON.parse(await readFile(join(source, "data/weibo.json"), "utf8"));
+const bilibiliArchive = JSON.parse(await readFile(join(source, "data/bilibili.json"), "utf8"));
+const diaryById = Object.fromEntries(
+  [...weiboArchive.records, ...bilibiliArchive.records]
+    .filter((record) => record.display)
+    .map((record) => [record.id, {
+      id: record.id,
+      date: record.display.date,
+      platform: record.display.platform,
+      excerpt: record.display.excerpt,
+      note: record.display.note,
+      title: record.display.title,
+      url: record.display.source,
+    }])
+);
+poemsDocument.items.forEach((poem) => {
+  if (poem.source_id && !diaryById[poem.source_id]) console.warn(`[Tanzaku] Missing diary source: ${poem.source_id}`);
+});
+const referencedDiaryById = Object.fromEntries(
+  poemsDocument.items
+    .filter((poem) => poem.source_id && diaryById[poem.source_id])
+    .map((poem) => [poem.source_id, diaryById[poem.source_id]])
+);
+const tanzakuData = JSON.stringify({
+  poems: poemsDocument.items,
+  diaryById: referencedDiaryById,
+}).replaceAll("<", "\\u003c");
+const tanzakuDataScript = `<script id="tanzaku-data" type="application/json">${tanzakuData}</script>`;
 const redbeanLevelData = await readFile(join(source, "data/redbean-levels.json"), "utf8");
 const redbeanLevelDocument = JSON.parse(redbeanLevelData);
 const redbeanPatterns = new Set(["full", "stripes", "steps", "gates", "diamond", "ring", "tunnel", "checker", "fortress", "heart", "zigzag", "shield", "pinwheel", "core", "final"]);
@@ -50,7 +106,7 @@ const navigation = [
   { href: "profile.html", label: "人物档案", japanese: "プロフィール", mobileLabel: "档案", mobileJapanese: "プロフィール", icon: "✦" },
   { href: "diary.html", label: "安妮日常", japanese: "ダイアリー", mobileLabel: "日常", mobileJapanese: "ダイアリー", icon: "✎" },
   { href: "notices.html", label: "公告栏", japanese: "お知らせ", mobileLabel: "公告", mobileJapanese: "お知らせ", icon: "♡" },
-  { href: "hymn.html", label: "安妮颂", japanese: "アニー賛歌", mobileLabel: "安妮颂", mobileJapanese: "アニー賛歌", icon: "✿" },
+  { href: "hymn.html", label: "安妮颂", japanese: "賛歌", mobileLabel: "安妮颂", mobileJapanese: "賛歌", icon: "✿" },
   { href: "game.html", label: "小游戏", japanese: "ミニゲーム", mobileLabel: "游戏", mobileJapanese: "ミニゲーム", icon: "▦" },
 ];
 
@@ -103,6 +159,7 @@ for (const file of await readdir(pages)) {
     .replaceAll("<!-- DIARY_KIND_DATA -->", file === "diary.html" ? diaryKindDataScript : "")
     .replaceAll("<!-- NOTICE_DATA -->", file === "notices.html" ? noticeDataScript : "")
     .replaceAll("<!-- HYMN_DATA -->", file === "hymn.html" ? hymnDataScript : "")
+    .replaceAll("<!-- TANZAKU_DATA -->", file === "hymn.html" ? tanzakuDataScript : "")
     .replaceAll("<!-- REDBEAN_LEVEL_DATA -->", file === "redbean-breakout.html" ? redbeanLevelDataScript : "");
   await writeFile(join(dist, file), html);
 }
@@ -121,7 +178,6 @@ await cp(join(source, "assets"), join(dist, "assets"), { recursive: true });
 await cp(join(source, "data"), join(dist, "data"), { recursive: true });
 
 // Keep the complete Weibo archive in Git, but publish only fields the page may read.
-const weiboArchive = JSON.parse(await readFile(join(source, "data/weibo.json"), "utf8"));
 const visibleWeiboRecords = weiboArchive.records.filter((record) => record.display);
 const addDiaryKindGroup = (record) => {
   const kindGroup = diaryKindGroups.get(record.display.kind);
@@ -141,7 +197,6 @@ const publicWeibo = {
 await writeFile(join(dist, "data/weibo.json"), JSON.stringify(publicWeibo));
 console.log(`Weibo archive: ${weiboStats.total} total, ${weiboStats.visible} visible, ${weiboStats.hidden} hidden`);
 
-const bilibiliArchive = JSON.parse(await readFile(join(source, "data/bilibili.json"), "utf8"));
 const visibleBilibiliRecords = bilibiliArchive.records.filter((record) => record.display);
 const bilibiliStats = {
   total: bilibiliArchive.records.length,

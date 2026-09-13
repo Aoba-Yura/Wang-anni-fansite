@@ -43,6 +43,18 @@ if (canvas) {
   }
   const colors = { red: "#a93438", redLight: "#ef7a76", green: "#9da65e", greenLight: "#dce69b", strong: "#d08a43", strongLight: "#ffd19a", moving: "#4d9190", movingLight: "#9de0d4", obstacle: "#595963", chalk: "#eee8d8" };
   const defaultSave = { highScore: 0, highestUnlocked: 1, levelBest: {}, levelCleared: {}, bestCombo: 0, noMissClear: {}, volume: .7, muted: false };
+  const SOUND_DEFINITIONS = {
+    wall: [180, .035, "sine", .045],
+    paddle: [310, .055, "triangle", .07],
+    brick: [520, .045, "square", .045],
+    strong: [250, .07, "sawtooth", .06],
+    power: [720, .15, "sine", .08],
+    combo: [880, .11, "triangle", .07],
+    lose: [130, .28, "sawtooth", .08],
+    clear: [1040, .42, "triangle", .08],
+    over: [85, .48, "square", .055],
+  };
+  const SOUND_INTERVALS = { wall: .025, paddle: .025, brick: .018, strong: .018 };
 
   let save = readSave();
   let layoutName = getLayoutName();
@@ -54,7 +66,11 @@ if (canvas) {
   let currentLevel = Math.max(0, Math.min(LEVELS.length - 1, save.highestUnlocked - 1));
   let score = 0, lives = 3, combo = 0, maxCombo = 0, misses = 0, destroyedCount = 0;
   let gameTime = 0, countdown = 3, countdownTimer = 0, messageTimer = 0;
-  let lastTime = performance.now(), viewportWidth = window.innerWidth, viewportHeight = window.innerHeight, resizeTimer = 0, audioContext = null;
+  let lastTime = performance.now();
+  let viewportWidth = window.innerWidth, viewportHeight = window.innerHeight;
+  let resizeTimer = 0, saveTimer = 0;
+  let audioContext = null, backgroundGradient = null;
+  const lastSoundAt = Object.create(null);
   let bricks = [], obstacles = [], balls = [], pickups = [], particles = [];
   let primaryAction = function () {}, secondaryAction = function () {}, tertiaryAction = function () {};
   const keys = { left: false, right: false };
@@ -82,7 +98,13 @@ if (canvas) {
     }
   }
   function writeSave() {
+    clearTimeout(saveTimer);
+    saveTimer = 0;
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(save)); } catch { /* Optional local scores. */ }
+  }
+  function scheduleSave() {
+    if (saveTimer) return;
+    saveTimer = setTimeout(writeSave, 300);
   }
   function seeded(index, salt) {
     const value = Math.sin((index + 1) * 9283.31 + (currentLevel + 1) * 77.13 + (salt || 0)) * 43758.5453;
@@ -214,6 +236,7 @@ if (canvas) {
     bounds = getBounds();
     canvas.width = width;
     canvas.height = height;
+    backgroundGradient = null;
     resetPaddle();
     makeLevel(oldBricks);
     balls = ratios.map(function (ball) {
@@ -443,13 +466,11 @@ if (canvas) {
     if (save.muted || save.volume <= 0) return;
     initAudio();
     if (!audioContext) return;
-    const sounds = {
-      wall: [180, .035, "sine", .045], paddle: [310, .055, "triangle", .07], brick: [520, .045, "square", .045],
-      strong: [250, .07, "sawtooth", .06], power: [720, .15, "sine", .08], combo: [880, .11, "triangle", .07],
-      lose: [130, .28, "sawtooth", .08], clear: [1040, .42, "triangle", .08], over: [85, .48, "square", .055]
-    };
-    const sound = sounds[kind] || sounds.wall;
+    const sound = SOUND_DEFINITIONS[kind] || SOUND_DEFINITIONS.wall;
     const now = audioContext.currentTime;
+    const minimumInterval = SOUND_INTERVALS[kind] || 0;
+    if (minimumInterval && now - (lastSoundAt[kind] || -Infinity) < minimumInterval) return;
+    lastSoundAt[kind] = now;
     const oscillator = audioContext.createOscillator();
     const gain = audioContext.createGain();
     oscillator.type = sound[2];
@@ -459,6 +480,7 @@ if (canvas) {
     gain.gain.setValueAtTime(Math.max(.0001, sound[3] * save.volume), now);
     gain.gain.exponentialRampToValueAtTime(.0001, now + sound[1]);
     oscillator.connect(gain).connect(audioContext.destination);
+    oscillator.addEventListener("ended", function () { oscillator.disconnect(); gain.disconnect(); }, { once: true });
     oscillator.start(now);
     oscillator.stop(now + sound[1]);
   }
@@ -570,7 +592,7 @@ if (canvas) {
       playSound("combo");
     }
     save.highScore = Math.max(save.highScore, score);
-    writeSave();
+    scheduleSave();
     updateHud();
     if (bricks.every(function (item) { return !item.alive; })) completeLevel();
   }
@@ -739,10 +761,12 @@ if (canvas) {
     ctx.closePath();
   }
   function drawBackground() {
-    const gradient = ctx.createLinearGradient(0, 0, 0, height);
-    gradient.addColorStop(0, "#11201d");
-    gradient.addColorStop(1, "#07100f");
-    ctx.fillStyle = gradient;
+    if (!backgroundGradient) {
+      backgroundGradient = ctx.createLinearGradient(0, 0, 0, height);
+      backgroundGradient.addColorStop(0, "#11201d");
+      backgroundGradient.addColorStop(1, "#07100f");
+    }
+    ctx.fillStyle = backgroundGradient;
     ctx.fillRect(0, 0, width, height);
     ctx.save();
     ctx.strokeStyle = "rgba(238,232,216,.035)";
@@ -764,7 +788,7 @@ if (canvas) {
       const palette = brickColor(brick);
       ctx.save();
       ctx.shadowColor = palette[0];
-      ctx.shadowBlur = brick.type === "moving" ? 16 : 10;
+      ctx.shadowBlur = brick.type === "moving" ? 8 : brick.type === "strong" ? 5 : 0;
       roundedRect(brick.x, brick.y, brick.width, brick.height, 5);
       ctx.fillStyle = palette[0];
       ctx.fill();
@@ -970,6 +994,7 @@ if (canvas) {
   });
   window.addEventListener("blur", function () { if (["playing", "countdown"].includes(state)) pauseGame(); });
   document.addEventListener("visibilitychange", function () { if (document.hidden && ["playing", "countdown"].includes(state)) pauseGame(); });
+  window.addEventListener("pagehide", function () { if (saveTimer) writeSave(); });
   window.addEventListener("resize", function () {
     if (window.innerWidth === viewportWidth && window.innerHeight === viewportHeight) return;
     viewportWidth = window.innerWidth;
@@ -985,7 +1010,7 @@ if (canvas) {
   ui.volume.addEventListener("input", function () {
     save.volume = Number(ui.volume.value);
     save.muted = false;
-    writeSave();
+    scheduleSave();
     updateSoundUi();
     initAudio();
   });
