@@ -23,14 +23,15 @@ if (canvas) {
     message: document.querySelector("[data-game-message]"),
     status: document.querySelector("[data-game-status]")
   };
+  ui.hud = document.querySelector(".game-hud");
   const STORAGE_KEY = "annie-redbean-breakout-v2";
   const dogImage = new Image();
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   dogImage.src = canvas.dataset.dogSrc;
 
   const LAYOUTS = {
-    desktop: { width: 900, height: 600, hud: 66, side: 28, bottom: 16, paddleWidth: 138, paddleHeight: 16, paddleBottom: 36, radius: 17, imageSize: 54, keySpeed: 760, brickGap: 7, brickHeight: 25 },
-    mobile: { width: 390, height: 700, hud: 84, side: 18, bottom: 14, paddleWidth: 98, paddleHeight: 16, paddleBottom: 54, radius: 17, imageSize: 56, keySpeed: 510, brickGap: 6, brickHeight: 25 }
+    desktop: { width: 900, height: 600, side: 28, bottom: 16, paddleWidth: 138, paddleHeight: 16, paddleBottom: 36, radius: 17, imageSize: 54, keySpeed: 760, brickGap: 7, brickHeight: 25 },
+    mobile: { width: 390, height: 700, side: 18, bottom: 14, paddleWidth: 98, paddleHeight: 16, paddleBottom: 54, radius: 17, imageSize: 56, keySpeed: 510, brickGap: 6, brickHeight: 25 }
   };
   const levelDataElement = document.querySelector("#redbean-level-data");
   if (!levelDataElement) throw new Error("Redbean Breakout level data is missing.");
@@ -52,7 +53,7 @@ if (canvas) {
   let currentLevel = Math.max(0, Math.min(LEVELS.length - 1, save.highestUnlocked - 1));
   let score = 0, lives = 3, combo = 0, maxCombo = 0, misses = 0, destroyedCount = 0;
   let gameTime = 0, countdown = 3, countdownTimer = 0, messageTimer = 0;
-  let lastTime = performance.now(), viewportWidth = window.innerWidth, audioContext = null;
+  let lastTime = performance.now(), viewportWidth = window.innerWidth, viewportHeight = window.innerHeight, resizeTimer = 0, audioContext = null;
   let bricks = [], obstacles = [], balls = [], pickups = [], particles = [];
   let primaryAction = function () {}, secondaryAction = function () {}, tertiaryAction = function () {};
   const keys = { left: false, right: false };
@@ -61,10 +62,14 @@ if (canvas) {
   const effects = { longUntil: 0, pierceUntil: 0, multiUntil: 0 };
 
   function getLayoutName() {
-    return window.innerWidth <= 600 && window.innerHeight > window.innerWidth ? "mobile" : "desktop";
+    return window.innerWidth <= 768 && window.innerHeight > window.innerWidth ? "mobile" : "desktop";
   }
   function getBounds() {
-    return { left: layout.side, right: width - layout.side, top: layout.hud + 10, bottom: height - layout.bottom };
+    const canvasRect = canvas.getBoundingClientRect();
+    const hudRect = ui.hud.getBoundingClientRect();
+    const scale = canvasRect.width > 0 ? width / canvasRect.width : 1;
+    const hudBottom = Math.max(0, hudRect.bottom - canvasRect.top) * scale;
+    return { left: layout.side, right: width - layout.side, top: hudBottom + 10, bottom: height - layout.bottom };
   }
   function readSave() {
     try {
@@ -112,13 +117,23 @@ if (canvas) {
     const top = bounds.top + (layoutName === "mobile" ? 24 : 20);
     const old = previous ? new Map(previous.map(function (brick) { return [brick.id, brick]; })) : null;
     bricks = [];
+    const reserved = new Set();
     let index = 0;
     for (let row = 0; row < rows; row += 1) {
       for (let column = 0; column < columns; column += 1) {
-        if (!patternAllows(config.pattern, row, column, rows, columns)) continue;
+        if (!patternAllows(config.pattern, row, column, rows, columns) || reserved.has(row + "-" + column)) continue;
         const id = row + "-" + column;
         const chance = seeded(index, row * 13 + column);
-        const moving = Boolean(config.moving && chance < config.moving);
+        let moving = Boolean(config.moving && chance < config.moving);
+        let railColumn = column;
+        if (moving) {
+          const neighbors = [column + 1].filter(function (candidate) { return candidate < columns && !reserved.has(row + "-" + candidate); });
+          if (!neighbors.length) moving = false;
+          else {
+            railColumn = neighbors[0];
+            if (patternAllows(config.pattern, row, railColumn, rows, columns)) reserved.add(row + "-" + railColumn);
+          }
+        }
         const strong = Boolean(!moving && config.strong && chance > 1 - config.strong);
         const prior = old && old.get(id);
         const x = bounds.left + column * (brickWidth + gap);
@@ -130,7 +145,8 @@ if (canvas) {
           alive: prior ? prior.alive : true,
           phase: seeded(index, 7) * Math.PI * 2,
           moveSpeed: .55 + seeded(index, 9) * .35,
-          moveRange: Math.min(gap * 1.7, layoutName === "mobile" ? 6 : 10)
+          railStartX: Math.min(x, bounds.left + railColumn * (brickWidth + gap)),
+          railEndX: Math.max(x, bounds.left + railColumn * (brickWidth + gap))
         });
         index += 1;
       }
@@ -184,15 +200,16 @@ if (canvas) {
   }
   function applyLayout() {
     const nextName = getLayoutName();
-    if (nextName === layoutName) return;
+    const nextLayout = LAYOUTS[nextName];
+    const nextWidth = nextLayout.width, nextHeight = nextLayout.height;
     const oldWidth = width, oldHeight = height, oldBricks = bricks;
     const ratios = balls.map(function (ball) {
       return Object.assign({}, ball, { rx: ball.x / oldWidth, ry: ball.y / oldHeight });
     });
     layoutName = nextName;
-    layout = LAYOUTS[layoutName];
-    width = layout.width;
-    height = layout.height;
+    layout = nextLayout;
+    width = nextWidth;
+    height = nextHeight;
     bounds = getBounds();
     canvas.width = width;
     canvas.height = height;
@@ -218,9 +235,9 @@ if (canvas) {
     if (element === ui.secondary) secondaryAction = action;
     if (element === ui.tertiary) tertiaryAction = action;
   }
-  function setOverlayText(kicker, title, japanese, copy) {
+  function setOverlayText(kicker, title, copy) {
     ui.kicker.textContent = kicker;
-    ui.title.innerHTML = title + (japanese ? '<small lang="ja">' + japanese + "</small>" : "");
+    ui.title.textContent = title;
     ui.copy.innerHTML = copy;
   }
   function showOverlay() { ui.overlay.hidden = false; }
@@ -235,7 +252,7 @@ if (canvas) {
     ui.lives.textContent = lives > 0 ? Array.from({ length: lives }, function () { return "♥"; }).join(" ") : "—";
     ui.lives.setAttribute("aria-label", "剩余" + Math.max(0, lives) + "次机会");
     ui.pause.disabled = !["playing", "countdown", "paused"].includes(state);
-    ui.pause.textContent = state === "paused" ? "▶" : "⏸";
+    ui.pause.classList.toggle("is-resume", state === "paused");
   }
   function flashMessage(text) {
     ui.message.textContent = text;
@@ -270,7 +287,7 @@ if (canvas) {
     resetPaddle();
     balls = [newBall()];
     updateHud();
-    setOverlayText("ARCADE MODE", "红豆打砖块", "小豆ブロック崩し", '移动挡板，接住红豆，把所有砖块打掉。<br><small>鼠标 · A D · 方向键 · 触摸拖动</small><small lang="ja">バーを動かして、小豆でブロックを全部壊そう。</small>');
+    setOverlayText("ARCADE MODE", "红豆打砖块", '移动挡板，接住红豆，清空砖块<br><lang="ja">バーを動かして、ブロックを全部壊そう<small>鼠标 · A D · 方向键 · 触摸拖动</small>');
     ui.summary.hidden = true;
     ui.levels.hidden = true;
     ui.volumePanel.hidden = false;
@@ -282,7 +299,7 @@ if (canvas) {
   }
   function showLevelSelect() {
     state = "level-select";
-    setOverlayText("SELECT LEVEL", "选择关卡", "レベル選択", "已开放 " + Math.min(save.highestUnlocked, LEVELS.length) + " / " + LEVELS.length + " · 完成关卡会开放下一关");
+    setOverlayText("SELECT LEVEL", "选择关卡", "已开放 " + Math.min(save.highestUnlocked, LEVELS.length) + " / " + LEVELS.length + " · 完成关卡会开放下一关");
     ui.summary.hidden = true;
     ui.levels.hidden = false;
     ui.volumePanel.hidden = true;
@@ -322,7 +339,7 @@ if (canvas) {
     if (!["playing", "countdown"].includes(state)) return;
     keys.left = false; keys.right = false;
     state = "paused";
-    setOverlayText("PAUSED", "游戏暂停", "一時停止", "LEVEL " + String(currentLevel + 1).padStart(2, "0") + " · 当前位置与进度已保留");
+    setOverlayText("PAUSED", "游戏暂停", "LEVEL " + String(currentLevel + 1).padStart(2, "0") + " · 当前位置与进度已保留");
     ui.summary.hidden = true;
     ui.levels.hidden = true;
     ui.volumePanel.hidden = false;
@@ -369,7 +386,7 @@ if (canvas) {
     save.highestUnlocked = Math.min(LEVELS.length, Math.max(save.highestUnlocked, currentLevel + 2));
     writeSave();
     const final = currentLevel === LEVELS.length - 1;
-    setOverlayText(final ? "ALL CLEAR!" : "LEVEL CLEAR!", final ? "街机挑战完成" : "全部击破", final ? "オールクリア" : "ステージクリア", final ? "红豆穿过了最后一道防线。完美收工！" : LEVELS[currentLevel].name + " 完成" + (score > previous ? " · 刷新纪录！" : ""));
+    setOverlayText(final ? "ALL CLEAR!" : "LEVEL CLEAR!", final ? "街机挑战完成" : "全部击破", final ? "红豆穿过了最后一道防线。完美收工！" : LEVELS[currentLevel].name + " 完成" + (score > previous ? " · 刷新纪录！" : ""));
     showSummary();
     ui.levels.hidden = true;
     ui.volumePanel.hidden = true;
@@ -388,7 +405,7 @@ if (canvas) {
     save.highScore = Math.max(save.highScore, score);
     save.bestCombo = Math.max(save.bestCombo, maxCombo);
     writeSave();
-    setOverlayText("GAME OVER", "再来一次？", "もう一度？", LEVELS[currentLevel].name + " · 红豆等你把剩下的砖块打掉。");
+    setOverlayText("GAME OVER", "再来一次？", LEVELS[currentLevel].name + " · 红豆等你把剩下的砖块打掉。");
     showSummary();
     ui.levels.hidden = true;
     ui.volumePanel.hidden = false;
@@ -451,7 +468,6 @@ if (canvas) {
     if (!save.muted) { initAudio(); playSound("power"); }
   }
   function updateSoundUi() {
-    ui.sound.textContent = save.muted ? "×" : "♪";
     ui.sound.classList.toggle("is-muted", save.muted);
     ui.sound.setAttribute("aria-label", save.muted ? "开启音效" : "关闭音效");
     ui.sound.title = save.muted ? "开启音效" : "关闭音效";
@@ -464,25 +480,32 @@ if (canvas) {
     const dx = ball.x - nearestX, dy = ball.y - nearestY;
     return dx * dx + dy * dy <= ball.radius * ball.radius;
   }
-  function bounceRect(ball, rect, previousX, previousY) {
-    if (previousY + ball.radius <= rect.y) {
-      ball.y = rect.y - ball.radius - .5;
-      ball.vy = -Math.abs(ball.vy);
-    } else if (previousY - ball.radius >= rect.y + rect.height) {
-      ball.y = rect.y + rect.height + ball.radius + .5;
-      ball.vy = Math.abs(ball.vy);
-    } else if (previousX + ball.radius <= rect.x) {
-      ball.x = rect.x - ball.radius - .5;
-      ball.vx = -Math.abs(ball.vx);
-    } else if (previousX - ball.radius >= rect.x + rect.width) {
-      ball.x = rect.x + rect.width + ball.radius + .5;
-      ball.vx = Math.abs(ball.vx);
+  function bounceRect(ball, rect) {
+    const nearestX = Math.max(rect.x, Math.min(ball.x, rect.x + rect.width));
+    const nearestY = Math.max(rect.y, Math.min(ball.y, rect.y + rect.height));
+    let dx = ball.x - nearestX, dy = ball.y - nearestY;
+    let distance = Math.hypot(dx, dy), nx, ny, penetration;
+    if (distance > 1e-7) {
+      nx = dx / distance; ny = dy / distance;
+      penetration = ball.radius - distance;
     } else {
-      const centerDx = ball.x - (rect.x + rect.width / 2);
-      const centerDy = ball.y - (rect.y + rect.height / 2);
-      if (Math.abs(centerDx / rect.width) > Math.abs(centerDy / rect.height)) ball.vx *= -1;
-      else ball.vy *= -1;
+      const sides = [
+        { distance: ball.x - rect.x, nx: -1, ny: 0 },
+        { distance: rect.x + rect.width - ball.x, nx: 1, ny: 0 },
+        { distance: ball.y - rect.y, nx: 0, ny: -1 },
+        { distance: rect.y + rect.height - ball.y, nx: 0, ny: 1 }
+      ].sort(function (a, b) { return a.distance - b.distance; });
+      nx = sides[0].nx; ny = sides[0].ny;
+      penetration = ball.radius + sides[0].distance;
     }
+    if (penetration < 0) return false;
+    ball.x += nx * (penetration + .5);
+    ball.y += ny * (penetration + .5);
+    const approachingSpeed = ball.vx * nx + ball.vy * ny;
+    if (approachingSpeed >= 0) return false;
+    ball.vx -= 2 * approachingSpeed * nx;
+    ball.vy -= 2 * approachingSpeed * ny;
+    return true;
   }
   function normalizeVelocity(ball) {
     const speed = Math.min(levelSpeed() * 1.22, Math.max(levelSpeed() * .94, Math.hypot(ball.vx, ball.vy)));
@@ -614,6 +637,19 @@ if (canvas) {
     });
     particles = particles.filter(function (particle) { return particle.life > 0; });
   }
+  function constrainBallToWorld(ball) {
+    const visualRadius = Math.max(ball.radius, layout.imageSize / 2);
+    let hit = false;
+    if (ball.x - visualRadius <= bounds.left) {
+      ball.x = bounds.left + visualRadius; ball.vx = Math.abs(ball.vx); hit = true;
+    } else if (ball.x + visualRadius >= bounds.right) {
+      ball.x = bounds.right - visualRadius; ball.vx = -Math.abs(ball.vx); hit = true;
+    }
+    if (ball.y - visualRadius <= bounds.top) {
+      ball.y = bounds.top + visualRadius; ball.vy = Math.abs(ball.vy); hit = true;
+    }
+    return hit;
+  }
   function updateBall(ball, step) {
     ball.hitCooldown = Math.max(0, ball.hitCooldown - step);
     const distance = Math.hypot(ball.vx, ball.vy) * step;
@@ -624,20 +660,12 @@ if (canvas) {
       ball.x += ball.vx * slice;
       ball.y += ball.vy * slice;
       if (!reducedMotion.matches) ball.angle += slice * 4.2;
-      if (ball.x - ball.radius <= bounds.left) {
-        ball.x = bounds.left + ball.radius; ball.vx = Math.abs(ball.vx); playSound("wall");
-      } else if (ball.x + ball.radius >= bounds.right) {
-        ball.x = bounds.right - ball.radius; ball.vx = -Math.abs(ball.vx); playSound("wall");
-      }
-      if (ball.y - ball.radius <= bounds.top) {
-        ball.y = bounds.top + ball.radius; ball.vy = Math.abs(ball.vy); playSound("wall");
-      }
+      if (constrainBallToWorld(ball)) playSound("wall");
       if (ball.vy > 0 && circleHitsRect(ball, paddle)) paddleBounce(ball);
       let collided = false;
       for (const obstacle of obstacles) {
         if (!circleHitsRect(ball, obstacle)) continue;
-        bounceRect(ball, obstacle, previousX, previousY);
-        playSound("wall");
+        if (bounceRect(ball, obstacle)) playSound("wall");
         collided = true;
         break;
       }
@@ -646,7 +674,7 @@ if (canvas) {
           if (!brick.alive || (ball.hitCooldown > 0 && ball.lastHit === brick.id) || !circleHitsRect(ball, brick)) continue;
           const piercing = effects.pierceUntil > gameTime && brick.type !== "strong";
           hitBrick(ball, brick);
-          if (!piercing) bounceRect(ball, brick, previousX, previousY);
+          if (!piercing) bounceRect(ball, brick);
           ball.lastHit = brick.id;
           ball.hitCooldown = .035;
           normalizeVelocity(ball);
@@ -685,7 +713,8 @@ if (canvas) {
     clampPaddle();
     bricks.forEach(function (brick) {
       if (brick.alive && brick.type === "moving") {
-        brick.x = Math.max(bounds.left, Math.min(bounds.right - brick.width, brick.baseX + Math.sin(gameTime * brick.moveSpeed * Math.PI + brick.phase) * brick.moveRange));
+        const progress = (Math.sin(gameTime * brick.moveSpeed * Math.PI + brick.phase) + 1) / 2;
+        brick.x = brick.railStartX + (brick.railEndX - brick.railStartX) * progress;
       }
     });
     updateEffects();
@@ -941,9 +970,11 @@ if (canvas) {
   window.addEventListener("blur", function () { if (["playing", "countdown"].includes(state)) pauseGame(); });
   document.addEventListener("visibilitychange", function () { if (document.hidden && ["playing", "countdown"].includes(state)) pauseGame(); });
   window.addEventListener("resize", function () {
-    if (window.innerWidth === viewportWidth) return;
+    if (window.innerWidth === viewportWidth && window.innerHeight === viewportHeight) return;
     viewportWidth = window.innerWidth;
-    applyLayout();
+    viewportHeight = window.innerHeight;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(applyLayout, 120);
   });
   ui.primary.addEventListener("click", function () { primaryAction(); });
   ui.secondary.addEventListener("click", function () { secondaryAction(); });
@@ -958,6 +989,16 @@ if (canvas) {
     initAudio();
   });
   ui.volume.addEventListener("change", function () { playSound("power"); });
+
+  // Small deterministic surface for the Node regression harness; it has no effect on gameplay.
+  window.__redbeanGameDebug = {
+    bounceRect: bounceRect,
+    getBounds: function () { return Object.assign({}, bounds); },
+    getLayoutName: function () { return layoutName; },
+    getBricks: function () { return bricks.map(function (brick) { return Object.assign({}, brick); }); },
+    visualRadius: function () { return Math.max(layout.radius, layout.imageSize / 2); },
+    constrainBallToWorld: constrainBallToWorld
+  };
 
   canvas.width = width;
   canvas.height = height;

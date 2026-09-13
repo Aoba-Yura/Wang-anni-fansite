@@ -67,7 +67,14 @@
 .breakout-game .game-hud-stats .hud-life b { color: var(--active-soft); font-size: .8rem; letter-spacing: .1em; }
 .breakout-game .game-hud-actions { display: flex; align-items: center; gap: 7px; pointer-events: auto; }
 .breakout-game .hud-icon-button, .breakout-game .hud-reset-button { min-height: 34px; border: 1px solid var(--line); color: var(--ink); background: rgba(255,255,255,.06); cursor: pointer; font-weight: 900; }
-.breakout-game .hud-icon-button { width: 36px; padding: 0; color: var(--on-active); border-color: var(--active); background: var(--active); font-size: 1.05rem; }
+.breakout-game .hud-icon-button { width: 36px; height: 36px; min-height: 0; padding: 0; display: grid; place-items: center; color: rgba(238,232,216,.88); border-color: rgba(238,232,216,.2); border-radius: 7px; background: rgba(0,0,0,.24); box-shadow: inset 0 1px rgba(255,255,255,.08); transition: transform .12s ease, color .12s ease, background .12s ease; }
+.breakout-game .hud-icon-button:active { transform: translateY(1px) scale(.97); }
+.breakout-game .hud-icon-button:disabled { opacity: .38; cursor: default; }
+.breakout-game .hud-icon-button svg { width: 20px; height: 20px; fill: currentColor; }
+.breakout-game .hud-icon-button .sound-wave, .breakout-game .hud-icon-button .sound-slash { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.breakout-game .hud-icon-button .sound-slash, .breakout-game .hud-icon-button .play-mark { display: none; }
+.breakout-game .hud-icon-button.is-muted .sound-wave, .breakout-game .hud-icon-button.is-resume .pause-bars { display: none; }
+.breakout-game .hud-icon-button.is-muted .sound-slash, .breakout-game .hud-icon-button.is-resume .play-mark { display: block; }
 .breakout-game .hud-reset-button { padding: 0 10px; font-size: .7rem; }
 .breakout-game .hud-reset-button small { display:block; font-size:.48rem; font-weight:500; opacity:.72; }
 .breakout-game .game-overlay { z-index: 4; overflow: auto; overscroll-behavior: contain; background: radial-gradient(circle at 50% 42%, rgba(52,35,48,.82), rgba(6,12,11,.94) 68%); }
@@ -115,10 +122,15 @@
   .game-shell { width: 100%; min-height: calc(100svh - var(--header-h)); padding: 0 0 78px; display: grid; align-content: start; }
   .game-shell .games-back, .game-shell .game-heading { display: none; }
   .game-shell .game-board-wrap { width: min(100%, 44.6svh, 424px); aspect-ratio: 39 / 70; }
-  .breakout-game .game-hud { min-height: 82px; padding: max(9px, env(safe-area-inset-top)) 12px 9px; grid-template-columns: 1fr auto; grid-template-areas: "title actions" "stats stats"; gap: 7px 12px; }
+  .breakout-game .game-hud { min-height: 0; padding: max(19px, env(safe-area-inset-top)) 10px 19px; grid-template-columns: minmax(112px, 1.15fr) minmax(142px, 1fr) auto; grid-template-areas: "title stats actions"; gap: 8px; }
   .breakout-game .game-hud-title { grid-area: title; }
-  .breakout-game .game-hud-title span { font-size: .95rem; }
-  .breakout-game .game-hud-stats { grid-area: stats; justify-content: space-between; gap: 8px; }
+  .breakout-game .game-hud-title span { font-size: clamp(.78rem, 3.7vw, .95rem); }
+  .breakout-game .game-hud-stats { grid-area: stats; justify-content: space-around; gap: 6px; }
+  .breakout-game .game-hud-stats > span { display: grid; gap: 3px; text-align: center; }
+  .breakout-game .game-hud-stats span > small { display: none; }
+  .breakout-game .game-hud-stats b { margin-left: 0; }
+  .breakout-game .game-hud-actions { gap: 5px; }
+  .breakout-game .hud-icon-button { width: 34px; height: 34px; }
   .breakout-game .game-hud-actions { grid-area: actions; }
   .breakout-game .hud-reset-button { display: none; }
   .breakout-game .hud-best { display: none; }

@@ -59,6 +59,13 @@ const selectors = [
   "[data-game-level]", "[data-game-message]", "[data-game-status]"
 ];
 const elements = new Map(selectors.map(function (selector) { return [selector, new ElementMock(selector)]; }));
+const hud = new ElementMock("game-hud");
+let hudHeight = mode === "mobile" ? 76 : 64;
+hud.getBoundingClientRect = function () {
+  const rectWidth = window.innerWidth <= 768 && window.innerHeight > window.innerWidth ? 390 : 900;
+  return { left: 0, top: 0, right: rectWidth, bottom: hudHeight, width: rectWidth, height: hudHeight };
+};
+elements.set(".game-hud", hud);
 const levelDataElement = new ElementMock("redbean-level-data");
 levelDataElement.textContent = levelDataJson;
 elements.set("#redbean-level-data", levelDataElement);
@@ -66,6 +73,10 @@ const canvas = new ElementMock("canvas");
 canvas.dataset.dogSrc = "./assets/images/pomeranian-ball.png";
 canvas.getContext = function () { return drawingContext; };
 canvas.setPointerCapture = function () {};
+canvas.getBoundingClientRect = function () {
+  const mobileViewport = window.innerWidth <= 768 && window.innerHeight > window.innerWidth;
+  return { left: 0, top: 0, width: mobileViewport ? 390 : 900, height: mobileViewport ? 700 : 600 };
+};
 elements.set("#breakout-game", canvas);
 
 globalThis.document = {
@@ -111,5 +122,59 @@ playableButtons.forEach(function (button) {
 });
 assert.equal(elements.get("[data-game-overlay]").hidden, true);
 assert.equal(elements.get("[data-game-pause]").disabled, false);
+
+const debug = window.__redbeanGameDebug;
+assert.ok(debug);
+assert.equal(debug.getLayoutName(), mode);
+assert.equal(debug.getBounds().top, (mode === "mobile" ? 76 : 64) + 10);
+assert.equal(debug.visualRadius(), mode === "mobile" ? 28 : 27);
+const worldBall = { x: 0, y: 0, vx: -80, vy: -120, radius: 17 };
+assert.equal(debug.constrainBallToWorld(worldBall), true);
+assert.equal(worldBall.x, debug.getBounds().left + debug.visualRadius());
+assert.equal(worldBall.y, debug.getBounds().top + debug.visualRadius());
+assert.ok(worldBall.vx > 0 && worldBall.vy > 0);
+
+// A corner impact is separated along its true contact normal and reflected once.
+const cornerBall = { x: 91, y: 91, vx: 120, vy: 120, radius: 14 };
+const obstacle = { x: 100, y: 100, width: 60, height: 20 };
+assert.equal(debug.bounceRect(cornerBall, obstacle), true);
+assert.ok(Math.hypot(cornerBall.x - 100, cornerBall.y - 100) > cornerBall.radius);
+assert.ok(cornerBall.vx < 0 && cornerBall.vy < 0);
+const afterCornerVelocity = [cornerBall.vx, cornerBall.vy];
+assert.equal(debug.bounceRect(cornerBall, obstacle), false);
+assert.deepEqual([cornerBall.vx, cornerBall.vy], afterCornerVelocity);
+
+// A deeply embedded ball is pushed to the nearest face before reflection.
+const embeddedBall = { x: 105, y: 110, vx: 90, vy: 15, radius: 17 };
+assert.equal(debug.bounceRect(embeddedBall, obstacle), true);
+assert.ok(embeddedBall.x < obstacle.x - embeddedBall.radius);
+assert.ok(embeddedBall.vx < 0);
+
+// Every moving brick owns an empty adjacent grid slot and traverses one full pitch.
+const levelBricks = debug.getBricks();
+const occupied = new Set(levelBricks.map(function (brick) { return brick.row + "-" + brick.column; }));
+const movingBricks = levelBricks.filter(function (brick) { return brick.type === "moving"; });
+assert.ok(movingBricks.length > 0);
+movingBricks.forEach(function (brick) {
+  assert.ok(brick.railEndX - brick.railStartX >= brick.width);
+  assert.equal(occupied.has(brick.row + "-" + (brick.column + 1)), false);
+});
+
+if (mode === "mobile") {
+  window.innerWidth = 700;
+  window.innerHeight = 900;
+  hudHeight = 78;
+  listeners.get("window:resize")();
+  await new Promise(function (resolve) { setTimeout(resolve, 150); });
+  assert.equal(debug.getLayoutName(), "mobile");
+  assert.equal(debug.getBounds().top, 88);
+
+  // Height-only browser chrome changes must refresh the measured HUD boundary.
+  window.innerHeight = 860;
+  hudHeight = 74;
+  listeners.get("window:resize")();
+  await new Promise(function (resolve) { setTimeout(resolve, 150); });
+  assert.equal(debug.getBounds().top, 84);
+}
 
 console.log("PASS game smoke " + mode + " (" + canvas.width + "x" + canvas.height + ", " + playableButtons.length + " level layouts)");
