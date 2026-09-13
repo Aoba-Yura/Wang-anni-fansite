@@ -136,11 +136,58 @@ if (matchMedia("(pointer: fine)").matches) {
 const diaryList = document.querySelector("[data-diary-list]");
 if (diaryList) {
   const countLabel = document.querySelector("[data-diary-count]");
+  const filterBar = document.querySelector(".filter-bar");
+  const filterSummary = filterBar?.querySelector(":scope > summary");
+  const filterPanel = filterBar?.querySelector(":scope > .filter-panel");
+  const filterPanelInner = filterPanel?.querySelector(":scope > .filter-panel-inner");
+  let filterBarAnimation = null;
+  filterSummary?.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (filterBarAnimation) return;
+    if (reduceMotion || typeof filterPanel?.animate !== "function") {
+      filterBar.toggleAttribute("open");
+      return;
+    }
+    const opening = !filterBar.open;
+    filterBar.classList.add("is-animating");
+    if (opening) filterBar.open = true;
+    void filterBar.offsetWidth;
+    const panelStyle = getComputedStyle(filterPanel);
+    const filterGroups = [...filterPanelInner.children];
+    const firstGroupTop = filterGroups[0]?.getBoundingClientRect().top || 0;
+    const lastGroupBottom = filterGroups.at(-1)?.getBoundingClientRect().bottom || firstGroupTop;
+    const expandedHeight = lastGroupBottom - firstGroupTop
+      + parseFloat(panelStyle.paddingTop) + parseFloat(panelStyle.paddingBottom)
+      + parseFloat(panelStyle.borderTopWidth) + parseFloat(panelStyle.borderBottomWidth);
+    filterBarAnimation = filterPanel.animate(
+      opening ? {
+        height: ["0px", expandedHeight + "px"],
+        paddingTop: ["0px", panelStyle.paddingTop],
+        paddingBottom: ["0px", panelStyle.paddingBottom],
+        opacity: [0, 1],
+        transform: ["translateY(-7px)", "translateY(0)"]
+      } : {
+        height: [expandedHeight + "px", "0px"],
+        paddingTop: [panelStyle.paddingTop, "0px"],
+        paddingBottom: [panelStyle.paddingBottom, "0px"],
+        opacity: [1, 0],
+        transform: ["translateY(0)", "translateY(-7px)"]
+      },
+      { duration: opening ? 620 : 440, easing: opening ? "cubic-bezier(.22, 1, .36, 1)" : "cubic-bezier(.4, 0, .2, 1)" }
+    );
+    filterBarAnimation.addEventListener("finish", () => {
+      if (!opening) filterBar.open = false;
+      filterBar.classList.remove("is-animating");
+      filterBarAnimation = null;
+    }, { once: true });
+  });
   const platforms = [
     { id: "all", label: "全部" },
     { id: "weibo", label: "微博" },
     { id: "bilibili", label: "B 站" },
   ];
+  const diaryKindDocument = JSON.parse(document.querySelector("#diary-kind-data")?.textContent || '{"categories":[]}');
+  const diaryKinds = diaryKindDocument.categories.map(({ id, label }) => ({ id, label }));
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
   const filterState = { platform: "all", year: "all", kind: "all" };
   const diaryPageSize = 6;
@@ -151,7 +198,7 @@ if (diaryList) {
     const choices = {
       platform: platforms.map(({ id, label }) => [id, label]),
       year: [...new Set(items.map((item) => item.date.slice(0, 4)))].map((year) => [year, year]),
-      kind: [...new Set(items.map((item) => item.kind).filter(Boolean))].map((kind) => [kind, kind]),
+      kind: diaryKinds.filter(({ id }) => items.some((item) => item.kindGroup === id)).map(({ id, label }) => [id, label]),
     };
     Object.entries(choices).forEach(([group, values]) => {
       const container = document.querySelector(`[data-filter-group="${group}"]`);
@@ -192,7 +239,9 @@ if (diaryList) {
     visibleRecords.sort((a, b) => String(b.date).localeCompare(String(a.date)) || String(b.published_at).localeCompare(String(a.published_at)));
     fillFilters(visibleRecords);
     const applyFilters = () => {
-      filteredRecords = visibleRecords.filter((item) => Object.entries(filterState).every(([group, value]) => value === "all" || (group === "year" ? item.date.startsWith(value) : item[group] === value)));
+      filteredRecords = visibleRecords.filter((item) => Object.entries(filterState).every(([group, value]) =>
+        value === "all" || (group === "year" ? item.date.startsWith(value) : group === "kind" ? item.kindGroup === value : item[group] === value)
+      ));
       renderDiary(filteredRecords);
     };
     applyFilters();
@@ -207,9 +256,8 @@ if (diaryList) {
       visibleLimit = diaryPageSize;
       document.querySelectorAll(`[data-filter-group-name="${group}"]`).forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
       const activeFilterCount = Object.values(filterState).filter((value) => value !== "all").length;
-      const filterSummary = document.querySelector("[data-filter-summary]");
-      if (filterSummary) filterSummary.textContent = activeFilterCount ? `已启用 ${activeFilterCount} 项` : "点击展开";
-      button.closest(".filter-bar")?.removeAttribute("open");
+      const filterSummaryText = document.querySelector("[data-filter-summary]");
+      if (filterSummaryText) filterSummaryText.textContent = activeFilterCount ? `已启用 ${activeFilterCount} 项` : "点击展开";
       applyFilters();
     }));
   }).catch(() => { diaryList.innerHTML = '<p class="source-note">日常记录暂时无法载入。<small lang="ja">投稿データを読み込めませんでした。</small></p>'; });

@@ -14,6 +14,20 @@ const header = await readFile(join(partials, "header.html"), "utf8");
 const footer = await readFile(join(partials, "footer.html"), "utf8");
 const noticeData = await readFile(join(source, "data/notices.json"), "utf8");
 const noticeDataScript = `<script id="notice-data" type="application/json">${noticeData.replaceAll("<", "\\u003c")}</script>`;
+const diaryKindData = await readFile(join(source, "data/diary-kinds.json"), "utf8");
+const diaryKindDocument = JSON.parse(diaryKindData);
+if (diaryKindDocument.schemaVersion !== 1 || !Array.isArray(diaryKindDocument.categories) || !diaryKindDocument.categories.length) {
+  throw new Error("diary-kinds.json must contain schemaVersion 1 and at least one category.");
+}
+const diaryKindGroups = new Map();
+diaryKindDocument.categories.forEach((category) => {
+  if (!category.id || !category.label || !Array.isArray(category.kinds) || !category.kinds.length) throw new Error("Invalid diary category: " + (category.id || "unnamed"));
+  category.kinds.forEach((kind) => {
+    if (diaryKindGroups.has(kind)) throw new Error(`Diary kind "${kind}" belongs to both "${diaryKindGroups.get(kind)}" and "${category.id}".`);
+    diaryKindGroups.set(kind, category.id);
+  });
+});
+const diaryKindDataScript = `<script id="diary-kind-data" type="application/json">${diaryKindData.replaceAll("<", "\\u003c")}</script>`;
 const hymnData = await readFile(join(source, "data/hymns.json"), "utf8");
 const redbeanLevelData = await readFile(join(source, "data/redbean-levels.json"), "utf8");
 const redbeanLevelDocument = JSON.parse(redbeanLevelData);
@@ -86,6 +100,7 @@ for (const file of await readdir(pages)) {
     .replaceAll("<!-- HOME_NAV -->", file === "index.html" ? renderHomeNav() : "")
     .replaceAll("../vendor/motion.js", "./motion.js")
     .replaceAll("<!-- DIARY_DATA -->", "")
+    .replaceAll("<!-- DIARY_KIND_DATA -->", file === "diary.html" ? diaryKindDataScript : "")
     .replaceAll("<!-- NOTICE_DATA -->", file === "notices.html" ? noticeDataScript : "")
     .replaceAll("<!-- HYMN_DATA -->", file === "hymn.html" ? hymnDataScript : "")
     .replaceAll("<!-- REDBEAN_LEVEL_DATA -->", file === "redbean-breakout.html" ? redbeanLevelDataScript : "");
@@ -108,6 +123,11 @@ await cp(join(source, "data"), join(dist, "data"), { recursive: true });
 // Keep the complete Weibo archive in Git, but publish only fields the page may read.
 const weiboArchive = JSON.parse(await readFile(join(source, "data/weibo.json"), "utf8"));
 const visibleWeiboRecords = weiboArchive.records.filter((record) => record.display);
+const addDiaryKindGroup = (record) => {
+  const kindGroup = diaryKindGroups.get(record.display.kind);
+  if (!kindGroup) throw new Error(`Unclassified diary kind "${record.display.kind}" in record "${record.id}".`);
+  return { id: record.id, display: { ...record.display, kindGroup } };
+};
 const weiboStats = {
   total: weiboArchive.records.length,
   visible: visibleWeiboRecords.length,
@@ -116,7 +136,7 @@ const weiboStats = {
 const publicWeibo = {
   schema_version: weiboArchive.schema_version,
   records: visibleWeiboRecords
-    .map((record) => ({ id: record.id, display: record.display })),
+    .map(addDiaryKindGroup),
 };
 await writeFile(join(dist, "data/weibo.json"), JSON.stringify(publicWeibo));
 console.log(`Weibo archive: ${weiboStats.total} total, ${weiboStats.visible} visible, ${weiboStats.hidden} hidden`);
@@ -130,7 +150,7 @@ const bilibiliStats = {
 };
 const publicBilibili = {
   schema_version: bilibiliArchive.schema_version,
-  records: visibleBilibiliRecords.map((record) => ({ id: record.id, display: record.display })),
+  records: visibleBilibiliRecords.map(addDiaryKindGroup),
 };
 await writeFile(join(dist, "data/bilibili.json"), JSON.stringify(publicBilibili));
 console.log(`Bilibili archive: ${bilibiliStats.total} total, ${bilibiliStats.visible} visible, ${bilibiliStats.hidden} hidden`);
