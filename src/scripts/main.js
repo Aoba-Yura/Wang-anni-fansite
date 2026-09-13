@@ -357,8 +357,36 @@ if (literaryTabsRoot && literaryPanelsRoot) {
     if (!source?.url) return "";
     const sourceType = source.platform === "bilibili" ? "视频" : "微博";
     return `<a class="tanzaku-source-link" href="${escapeLiterary(source.url)}" target="_blank" rel="noopener noreferrer" aria-label="原${sourceType}を見る">
-      <img src="./assets/tanzaku/source-link-mark.svg" alt="">
+      <img src="./assets/tanzaku/source-link-mark.png" alt="">
     </a>`;
+  };
+  const createTanzakuStyle = (id) => {
+    let state = [...String(id)].reduce((hash, char) => Math.imul(hash ^ char.charCodeAt(0), 16777619), 2166136261) >>> 0;
+    const random = () => {
+      state += 0x6d2b79f5;
+      let value = state;
+      value = Math.imul(value ^ (value >>> 15), value | 1);
+      value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+      return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+    };
+    const between = (min, max, digits = 2) => (min + random() * (max - min)).toFixed(digits);
+    const phase = (range) => `${between(-range, range, 1)}px ${between(-range, range, 1)}px`;
+    const paperShape = `polygon(${between(.25, .7)}% ${between(0, .2)}%,24% ${between(0, .18)}%,53% ${between(0, .2)}%,76% ${between(0, .18)}%,${between(99.3, 99.75)}% ${between(0, .24)}%,${between(99.4, 99.8)}% 18%,${between(99.35, 99.8)}% 43%,${between(99.45, 99.85)}% 68%,${between(99.35, 99.75)}% 86%,${between(99.35, 99.75)}% ${between(99.7, 100)}%,78% ${between(99.72, 100)}%,51% ${between(99.7, 100)}%,27% ${between(99.72, 100)}%,${between(.3, .7)}% ${between(99.7, 100)}%,${between(.15, .55)}% 81%,${between(.15, .55)}% 62%,${between(.15, .55)}% 39%,${between(.25, .65)}% 17%)`;
+    const paperPosition = [
+      `${between(-5, 5, 1)}% ${between(-4, 7, 1)}%`,
+      `${between(-5, 7, 1)}% ${between(-4, 8, 1)}%`,
+      `${between(-4, 6, 1)}% ${between(-5, 7, 1)}%`,
+      `${between(-5, 6, 1)}% ${between(-4, 6, 1)}%`,
+      "0 0",
+      phase(14),
+      phase(16),
+      phase(17),
+      "0 0",
+      "0 0",
+      "0 0",
+    ].join(",");
+    const fiberPosition = ["center bottom", phase(18), phase(20), phase(22), phase(19), phase(23)].join(",");
+    return `--paper-rotate:${between(-.2, .2)}deg;--paper-offset:${between(-1, 2, 1)}px;--paper-shape:${paperShape};--paper-position:${paperPosition};--fiber-position:${fiberPosition}`;
   };
   const renderTanzaku = (poem) => {
     const source = poem.source_id ? tanzakuData.diaryById[poem.source_id] : null;
@@ -368,7 +396,7 @@ if (literaryTabsRoot && literaryPanelsRoot) {
     const title = poem.title ? `<b lang="ja">${escapeLiterary(poem.title)}</b>` : "";
     const date = displayDate ? `<time datetime="${escapeLiterary(displayDate)}">${escapeLiterary(displayDate.replaceAll("-", "."))}</time>` : "";
     return `<div class="tanzaku-unit">
-      <article class="tanzaku-card is-${escapeLiterary(poem.season || "none")}">
+      <article class="tanzaku-card is-${escapeLiterary(poem.season || "none")}" style="${createTanzakuStyle(poem.id)}">
         <div class="tanzaku-hanging" aria-hidden="true"></div>
         <div class="tanzaku-paper"><div class="tanzaku-poem" lang="ja">${phrases}</div>${renderTanzakuSource(source)}</div>
         <div class="tanzaku-caption"><span>${formLabel}</span>${title}${date}</div>
