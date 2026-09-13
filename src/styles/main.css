@@ -596,16 +596,19 @@ img { display: block; max-width: 100%; }
 @media (max-width:699px) {
   .literary-panel.short-form-panel { position:relative; padding:18px 0 32px; }
   .short-form-panel > .work-meta { margin-inline:20px; }
-  .tanzaku-scroll-hint { margin:8px 20px 0; display:flex; justify-content:center; align-items:center; gap:8px; color:var(--faint); font:600 .58rem/1 var(--sans); letter-spacing:.12em; }
-  .tanzaku-scroll-hint span { color:var(--active-soft); font-size:.8rem; animation:tanzaku-swipe-hint 1.8s ease-in-out infinite; }
+  .tanzaku-scroll-hint { width:max-content; margin:8px auto 0; padding:7px 12px; display:flex; justify-content:center; align-items:center; gap:9px; border:1px solid color-mix(in srgb,var(--active) 32%,transparent); border-radius:999px; color:var(--muted); background:color-mix(in srgb,var(--surface-2) 88%,transparent); font:700 .62rem/1 var(--sans); letter-spacing:.1em; }
+  .tanzaku-scroll-hint span { color:var(--active-soft); font-size:1rem; animation:tanzaku-swipe-hint 1.8s ease-in-out infinite; }
   .tanzaku-scroll-hint span:last-child { animation-direction:reverse; }
   .tanzaku-gallery { display:flex; flex-wrap:nowrap; justify-content:flex-start; gap:18px; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x mandatory; scroll-padding-inline:16px; scrollbar-width:none; padding:8px 16px max(24px,env(safe-area-inset-bottom)); }
   .tanzaku-gallery::-webkit-scrollbar { display:none; }
   .tanzaku-unit { flex:0 0 calc(100vw - 32px); scroll-snap-align:center; scroll-snap-stop:always; }
-  .tanzaku-paper { width:136px; height:520px; padding:38px 20px 24px; }
-  .tanzaku-poem[lang="ja"] { font-size:23px; letter-spacing:.075em; }
-  .tanzaku-poem .phrase:not(:last-child)::after { inline-size:.58em; }
-  .tanzaku-caption { width:136px; }
+  .tanzaku-hanging { height:16px; background-size:14px 23px; }
+  .tanzaku-paper { width:116px; height:438px; padding:29px 15px 20px; }
+  .tanzaku-poem[lang="ja"] { font-size:19px; letter-spacing:.055em; opacity:0; transition:opacity .18s ease; }
+  .short-form-panel.is-font-ready .tanzaku-poem[lang="ja"] { opacity:1; }
+  .tanzaku-poem .phrase:not(:last-child)::after { inline-size:.5em; }
+  .tanzaku-caption { width:116px; min-height:28px; margin-top:8px; font-size:.56rem; gap:6px; }
+  .tanzaku-source-link { right:7px; bottom:8px; width:26px; height:26px; }
 }
 @keyframes tanzaku-swipe-hint {
   0%,100% { transform:translateX(0); opacity:.55; }

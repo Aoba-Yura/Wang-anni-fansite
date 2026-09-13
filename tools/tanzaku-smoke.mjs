@@ -37,7 +37,7 @@ try {
   if (result.desktop.writingMode !== "vertical-rl" || !result.desktop.font.includes("Yuji Syuku") || !result.desktop.font.includes("Ma Shan Zheng")) failures.push("vertical font styling is missing");
   if (![result.desktop, result.mobile].every(({ fallback }) => fallback.an[0] === fallback.an[1] && fallback.an[0] !== fallback.an[2] && fallback.ni[0] === fallback.ni[2] && fallback.ni[0] !== fallback.ni[1])) failures.push("per-glyph fallback for 安妮 is incorrect");
   if (![result.desktop, result.mobile].every(({ phraseRects }) => phraseRects.length === 3 && new Set(phraseRects.map((rect) => rect.x)).size === 1 && phraseRects.every((rect, index) => !index || rect.top > phraseRects[index - 1].bottom))) failures.push("phrases are not separated on one vertical axis");
-  if (String(result.desktop.paper) !== "143,560" || String(result.mobile.paper) !== "136,520") failures.push("tanzaku proportions changed");
+  if (String(result.desktop.paper) !== "143,560" || String(result.mobile.paper) !== "116,438") failures.push("tanzaku proportions changed");
   if (result.desktop.redundantHeading || result.mobile.redundantHeading || result.desktop.galleryOffset > 110) failures.push("redundant heading or excessive gallery spacing returned");
   if (String(result.desktop.rhythm) !== "16,11,20,8" || result.desktop.hangerHeight !== 22) failures.push("desktop vertical rhythm changed");
   if (result.desktop.visiblePaper < 99 || result.mobile.visiblePaper < 99) failures.push("the complete tanzaku is not visible in the first viewport");

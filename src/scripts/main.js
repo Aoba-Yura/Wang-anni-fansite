@@ -379,6 +379,17 @@ if (literaryTabsRoot && literaryPanelsRoot) {
       return `<article class="literary-panel ${index === 0 ? "active" : ""} ${item.id === "bangs" ? "bangs-panel" : ""}" id="${escapeLiterary(item.id)}-panel" role="tabpanel" aria-labelledby="${escapeLiterary(item.id)}-tab" data-literary-panel="${escapeLiterary(item.id)}" ${index === 0 ? "" : "hidden"}><div class="work-meta"><span>${escapeLiterary(item.meta)} <small lang="ja">${escapeLiterary(item.metaJa)}</small></span><time datetime="${escapeLiterary(item.date)}">${escapeLiterary(item.date.replaceAll("-", "."))}</time></div><h2${index === 0 ? ' id="literary-title"' : ""}>${escapeLiterary(item.title)}</h2>${item.kind === "poem" ? `<div class="poem-layout"><div class="${copyClass}"${item.language ? ` lang="${escapeLiterary(item.language)}"` : ""}>${copy}</div></div>` : `<div class="${copyClass}">${copy}</div>`}<p class="inspiration">${footer}</p></article>`;
     }).join("");
 
+    const shortFormPanel = literaryPanelsRoot.querySelector(".short-form-panel");
+    if (shortFormPanel && document.fonts) {
+      const fontSample = `${tanzakuData.poems.flatMap((poem) => poem.text).join("")}妮`;
+      Promise.all([
+        document.fonts.load('400 20px "Yuji Syuku"', fontSample),
+        document.fonts.load('400 20px "Ma Shan Zheng"', "妮"),
+      ]).catch(() => []).finally(() => shortFormPanel.classList.add("is-font-ready"));
+    } else {
+      shortFormPanel?.classList.add("is-font-ready");
+    }
+
     const literaryTabs = [...literaryTabsRoot.querySelectorAll("[data-literary-tab]")];
     const literaryPanels = [...literaryPanelsRoot.querySelectorAll("[data-literary-panel]")];
     literaryTabs.forEach((tab) => {
