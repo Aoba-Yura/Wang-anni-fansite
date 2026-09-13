@@ -336,6 +336,20 @@ if (noticeList) {
 const literaryTabsRoot = document.querySelector("[data-literary-tabs]");
 const literaryPanelsRoot = document.querySelector("[data-literary-panels]");
 
+const mobileNav = document.querySelector(".mobile-nav");
+if (mobileNav) {
+  const syncBottomNavSpace = () => {
+    const rect = mobileNav.getBoundingClientRect();
+    const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    const bottomOffset = Math.max(0, viewportHeight - rect.bottom);
+    document.documentElement.style.setProperty("--bottom-nav-space", `${Math.ceil(rect.height + bottomOffset + 16)}px`);
+  };
+  if ("ResizeObserver" in window) new ResizeObserver(syncBottomNavSpace).observe(mobileNav);
+  window.visualViewport?.addEventListener("resize", syncBottomNavSpace);
+  window.addEventListener("resize", syncBottomNavSpace, { passive: true });
+  syncBottomNavSpace();
+}
+
 if (literaryTabsRoot && literaryPanelsRoot) {
   const escapeLiterary = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
   const tanzakuData = JSON.parse(document.querySelector("#tanzaku-data")?.textContent || '{"poems":[],"diaryById":{}}');
@@ -368,8 +382,10 @@ if (literaryTabsRoot && literaryPanelsRoot) {
         const entries = tanzakuData.poems.map(renderTanzaku).join("");
         return `<article class="literary-panel short-form-panel ${index === 0 ? "active" : ""}" id="${escapeLiterary(item.id)}-panel" role="tabpanel" aria-labelledby="${escapeLiterary(item.id)}-tab" data-literary-panel="${escapeLiterary(item.id)}" ${index === 0 ? "" : "hidden"}>
           <div class="work-meta"><span>TANZAKU GALLERY</span><time datetime="${escapeLiterary(item.date)}">${escapeLiterary(item.date.replaceAll("-", "."))}</time></div>
-          <div class="tanzaku-scroll-hint" aria-hidden="true"><span>‹</span><span>›</span></div>
-          <div class="tanzaku-gallery" aria-label="短冊作品">${entries}</div>
+          <div class="tanzaku-gallery-shell">
+            <div class="tanzaku-scroll-hint" aria-hidden="true"><span>‹</span><span>›</span></div>
+            <div class="tanzaku-gallery" aria-label="短冊作品">${entries}</div>
+          </div>
         </article>`;
       }
       const copyClass = item.kind === "prose" ? "prose-text" : "poem-text";
