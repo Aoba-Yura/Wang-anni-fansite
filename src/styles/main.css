@@ -24,7 +24,7 @@
 
 @font-face {
   font-family: "Yuji Syuku";
-  src: url("../assets/fonts/yuji-syuku/YujiSyuku-Regular.woff2") format("woff2");
+  src: url("../assets/fonts/yuji-syuku/YujiSyuku-Tanzaku.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -32,7 +32,7 @@
 
 @font-face {
   font-family: "Ma Shan Zheng";
-  src: url("../assets/fonts/ma-shan-zheng/MaShanZheng-Regular.woff2") format("woff2");
+  src: url("../assets/fonts/ma-shan-zheng/MaShanZheng-Tanzaku.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -596,9 +596,9 @@ img { display: block; max-width: 100%; }
 @media (max-width:699px) {
   .literary-panel.short-form-panel { position:relative; padding:18px 0 32px; }
   .short-form-panel > .work-meta { margin-inline:20px; }
-  .tanzaku-scroll-hint { width:max-content; margin:8px auto 0; padding:7px 12px; display:flex; justify-content:center; align-items:center; gap:9px; border:1px solid color-mix(in srgb,var(--active) 32%,transparent); border-radius:999px; color:var(--muted); background:color-mix(in srgb,var(--surface-2) 88%,transparent); font:700 .62rem/1 var(--sans); letter-spacing:.1em; }
-  .tanzaku-scroll-hint span { color:var(--active-soft); font-size:1rem; animation:tanzaku-swipe-hint 1.8s ease-in-out infinite; }
-  .tanzaku-scroll-hint span:last-child { animation-direction:reverse; }
+  .tanzaku-scroll-hint { position:absolute; z-index:2; inset:72px 13px auto; height:438px; display:flex; justify-content:space-between; align-items:center; pointer-events:none; }
+  .tanzaku-scroll-hint span { --hint-shift:-6px; color:var(--active-soft); font:300 3.1rem/1 var(--sans); opacity:.7; filter:drop-shadow(0 2px 8px rgba(0,0,0,.55)); animation:tanzaku-swipe-hint 1.5s ease-in-out infinite; }
+  .tanzaku-scroll-hint span:last-child { --hint-shift:6px; }
   .tanzaku-gallery { display:flex; flex-wrap:nowrap; justify-content:flex-start; gap:18px; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x mandatory; scroll-padding-inline:16px; scrollbar-width:none; padding:8px 16px max(24px,env(safe-area-inset-bottom)); }
   .tanzaku-gallery::-webkit-scrollbar { display:none; }
   .tanzaku-unit { flex:0 0 calc(100vw - 32px); scroll-snap-align:center; scroll-snap-stop:always; }
@@ -611,8 +611,8 @@ img { display: block; max-width: 100%; }
   .tanzaku-source-link { right:7px; bottom:8px; width:26px; height:26px; }
 }
 @keyframes tanzaku-swipe-hint {
-  0%,100% { transform:translateX(0); opacity:.55; }
-  50% { transform:translateX(3px); opacity:1; }
+  0%,100% { transform:translateX(0) scale(.92); opacity:.42; }
+  50% { transform:translateX(var(--hint-shift)) scale(1); opacity:.92; }
 }
 @media (prefers-reduced-motion:reduce) {
   .tanzaku-scroll-hint span { animation:none; }

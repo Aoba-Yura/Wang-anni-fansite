@@ -17,5 +17,8 @@
   },
   "dependencies": {
     "motion": "^13.2.0"
+  },
+  "devDependencies": {
+    "subset-font": "^2.7.0"
   }
 }

@@ -6,3 +6,7 @@
 - License: SIL Open Font License 1.1 (see `OFL.txt`)
 
 The site self-hosts the Japanese WOFF2 build. The upstream TTF is not published.
+
+`tools/build.mjs` automatically derives `YujiSyuku-Tanzaku.woff2` from the
+current poem data. The full font remains the source asset and is not requested
+by the published tanzaku page.

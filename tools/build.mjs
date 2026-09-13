@@ -1,6 +1,7 @@
 import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import subsetFont from "subset-font";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const source = join(root, "src");
@@ -57,6 +58,9 @@ poemsDocument.items.forEach((poem) => {
   }
   poemIds.add(poem.id);
 });
+const tanzakuCharacters = poemsDocument.items
+  .flatMap((poem) => [...poem.text, poem.title || ""])
+  .join("") + "安妮俳句川柳縁";
 const weiboArchive = JSON.parse(await readFile(join(source, "data/weibo.json"), "utf8"));
 const bilibiliArchive = JSON.parse(await readFile(join(source, "data/bilibili.json"), "utf8"));
 const diaryById = Object.fromEntries(
@@ -176,6 +180,16 @@ await cp(join(root, "node_modules/framer-motion/dist/dom-mini.js"), join(dist, "
 await cp(join(source, "assets/icons/favicon.svg"), join(dist, "favicon.svg"));
 await cp(join(source, "assets"), join(dist, "assets"), { recursive: true });
 await cp(join(source, "data"), join(dist, "data"), { recursive: true });
+
+const tanzakuFontSources = [
+  ["yuji-syuku", "YujiSyuku-Regular.woff2", "YujiSyuku-Tanzaku.woff2"],
+  ["ma-shan-zheng", "MaShanZheng-Regular.woff2", "MaShanZheng-Tanzaku.woff2"],
+];
+await Promise.all(tanzakuFontSources.map(async ([directory, sourceName, outputName]) => {
+  const font = await readFile(join(source, "assets/fonts", directory, sourceName));
+  const subset = await subsetFont(font, tanzakuCharacters, { targetFormat: "woff2" });
+  await writeFile(join(dist, "assets/fonts", directory, outputName), subset);
+}));
 
 // Keep the complete Weibo archive in Git, but publish only fields the page may read.
 const visibleWeiboRecords = weiboArchive.records.filter((record) => record.display);
