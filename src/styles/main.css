@@ -578,9 +578,10 @@ img { display: block; max-width: 100%; }
 .tanzaku-card.is-summer .tanzaku-paper { background-color:#f2f3ea; }
 .tanzaku-card.is-autumn .tanzaku-paper { background-color:#f6f0e4; }
 .tanzaku-card.is-winter .tanzaku-paper { background-color:#f3f3f1; }
-.tanzaku-poem { height:100%; writing-mode:vertical-rl; text-orientation:mixed; font:400 25px/1 "Yuji Syuku","Ma Shan Zheng","Yu Mincho","Noto Serif JP",serif; letter-spacing:.1em; }
+.tanzaku-poem[lang="ja"] { height:100%; writing-mode:vertical-rl; text-orientation:mixed; font:400 25px/1 "Yuji Syuku","Ma Shan Zheng","Yu Mincho","Noto Serif JP",serif; font-feature-settings:normal; letter-spacing:.1em; }
 .tanzaku-poem .phrase { display:inline; }
 .tanzaku-poem .phrase:not(:last-child)::after { content:""; display:inline-block; inline-size:.72em; }
+.tanzaku-scroll-hint { display:none; }
 .tanzaku-caption { width:143px; min-height:34px; margin-top:11px; display:flex; align-items:baseline; justify-content:center; gap:8px; color:var(--faint); font:500 .62rem/1.35 var(--sans); letter-spacing:.12em; }
 .tanzaku-caption b { color:var(--muted); font-family:var(--sans-ja); font-weight:500; }
 .tanzaku-caption time { font-size:.55rem; letter-spacing:.04em; }
@@ -593,14 +594,25 @@ img { display: block; max-width: 100%; }
   .tanzaku-unit { width:100%; min-width:0; flex-direction:column; align-items:center; }
 }
 @media (max-width:699px) {
-  .literary-panel.short-form-panel { padding:18px 0 32px; }
+  .literary-panel.short-form-panel { position:relative; padding:18px 0 32px; }
   .short-form-panel > .work-meta { margin-inline:20px; }
-  .tanzaku-gallery { display:flex; flex-wrap:nowrap; justify-content:flex-start; gap:22px; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x mandatory; scrollbar-width:none; padding:4px max(24px,calc((100vw - min(86vw,300px))/2)) max(24px,env(safe-area-inset-bottom)); }
+  .tanzaku-scroll-hint { margin:8px 20px 0; display:flex; justify-content:center; align-items:center; gap:8px; color:var(--faint); font:600 .58rem/1 var(--sans); letter-spacing:.12em; }
+  .tanzaku-scroll-hint span { color:var(--active-soft); font-size:.8rem; animation:tanzaku-swipe-hint 1.8s ease-in-out infinite; }
+  .tanzaku-scroll-hint span:last-child { animation-direction:reverse; }
+  .tanzaku-gallery { display:flex; flex-wrap:nowrap; justify-content:flex-start; gap:18px; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x mandatory; scroll-padding-inline:16px; scrollbar-width:none; padding:8px 16px max(24px,env(safe-area-inset-bottom)); }
   .tanzaku-gallery::-webkit-scrollbar { display:none; }
-  .tanzaku-unit { flex:0 0 min(86vw,300px); scroll-snap-align:center; }
+  .tanzaku-unit { flex:0 0 calc(100vw - 32px); scroll-snap-align:center; scroll-snap-stop:always; }
   .tanzaku-paper { width:136px; height:520px; padding:38px 20px 24px; }
-  .tanzaku-poem { font-size:23px; }
+  .tanzaku-poem[lang="ja"] { font-size:23px; letter-spacing:.075em; }
+  .tanzaku-poem .phrase:not(:last-child)::after { inline-size:.58em; }
   .tanzaku-caption { width:136px; }
+}
+@keyframes tanzaku-swipe-hint {
+  0%,100% { transform:translateX(0); opacity:.55; }
+  50% { transform:translateX(3px); opacity:1; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .tanzaku-scroll-hint span { animation:none; }
 }
 .cheer-label small { display:block; margin-top:3px; font-size:.56rem; font-weight:500; opacity:.75; }
 .cheer-button { position: relative; overflow: hidden; width: 100%; min-height: 180px; margin-top: 34px; padding: 30px; display: flex; align-items: center; justify-content: center; gap: 24px; border: 1px solid color-mix(in srgb, var(--cream) 32%, transparent); color: var(--on-active); background: linear-gradient(110deg, var(--active) 0%, color-mix(in srgb, var(--active) 72%, #351c18) 52%, #5d2929 100%); box-shadow: 0 18px 50px color-mix(in srgb, var(--active) 20%, transparent); cursor: pointer; font-size: clamp(1.35rem,3vw,2.4rem); font-weight: 900; isolation: isolate; letter-spacing: .06em; }
