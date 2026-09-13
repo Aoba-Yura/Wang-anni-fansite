@@ -1,29 +1,4 @@
 const body = document.body;
-const themeButton = document.querySelector(".light-switch");
-const themeText = document.querySelector(".switch-text");
-
-const readStorage = (key, fallback = null) => {
-  try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; }
-};
-
-const writeStorage = (key, value) => {
-  try { localStorage.setItem(key, value); } catch { /* storage can be unavailable */ }
-};
-
-const applyTheme = (theme) => {
-  const matcha = theme === "matcha";
-  body.classList.toggle("matcha-mode", matcha);
-  if (themeButton) themeButton.setAttribute("aria-pressed", String(matcha));
-  if (themeText) themeText.innerHTML = matcha ? '<b>红豆模式</b><small lang="ja">小豆モード</small>' : '<b>抹茶模式</b><small lang="ja">抹茶モード</small>';
-};
-
-applyTheme(readStorage("annie-theme", "redbean"));
-
-themeButton?.addEventListener("click", () => {
-  const next = body.classList.contains("matcha-mode") ? "redbean" : "matcha";
-  applyTheme(next);
-  writeStorage("annie-theme", next);
-});
 
 const disclaimerDialog = document.querySelector("[data-disclaimer-dialog]");
 const disclaimerOpen = document.querySelector("[data-disclaimer-open]");

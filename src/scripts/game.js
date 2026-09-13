@@ -27,6 +27,7 @@ if (canvas) {
   const STORAGE_KEY = "annie-redbean-breakout-v2";
   const dogImage = new Image();
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const darkColorScheme = matchMedia("(prefers-color-scheme: dark)");
   dogImage.src = canvas.dataset.dogSrc;
 
   const LAYOUTS = {
@@ -405,7 +406,7 @@ if (canvas) {
     save.highScore = Math.max(save.highScore, score);
     save.bestCombo = Math.max(save.bestCombo, maxCombo);
     writeSave();
-    setOverlayText("GAME OVER", "再来一次？", LEVELS[currentLevel].name + " · 红豆等你把剩下的砖块打掉。");
+    setOverlayText("GAME OVER", "再来一次？", LEVELS[currentLevel].name);
     showSummary();
     ui.levels.hidden = true;
     ui.volumePanel.hidden = false;
@@ -810,7 +811,7 @@ if (canvas) {
     });
   }
   function drawPaddle() {
-    const matcha = document.body.classList.contains("matcha-mode");
+    const matcha = !darkColorScheme.matches;
     const base = matcha ? colors.green : colors.red;
     const light = matcha ? colors.greenLight : colors.redLight;
     ctx.save();
