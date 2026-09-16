@@ -716,40 +716,34 @@ img { display: block; max-width: 100%; }
 
 /* Footer */
 .site-footer {
-  min-height:230px;
+  min-height:0;
   border-top:1px solid var(--line);
 }
 .footer-inner {
   width:min(100%,1760px);
   margin-inline:auto;
-  padding:clamp(42px,4.5vw,62px) clamp(24px,2.5vw,48px) 28px;
+  padding:clamp(38px,3.8vw,54px) clamp(24px,2.5vw,48px) 26px;
   display:grid;
   grid-template-columns:minmax(0,1fr);
-  gap:clamp(28px,3.5vw,46px);
+  gap:clamp(22px,2.4vw,32px);
 }
-.footer-brand { display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
+.footer-main {
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(360px,.8fr);
+  align-items:end;
+  gap:clamp(60px,8vw,140px);
+  padding-bottom:clamp(26px,2.2vw,34px);
+  border-bottom:1px solid var(--line);
+}
+.footer-brand { display:flex; align-items:flex-start; }
 .footer-brand strong {
   color:transparent;
   -webkit-text-stroke:1px rgba(255,255,255,.23);
   font:400 clamp(2.4rem,4.8vw,5rem)/.88 var(--display);
   letter-spacing:-.055em;
 }
-.footer-brand p { margin:0; color:var(--muted); font-size:.78rem; letter-spacing:.1em; line-height:1.5; }
-.footer-brand small { display:block; margin-top:4px; color:var(--faint); font-size:.62rem; font-weight:500; letter-spacing:.06em; }
-.footer-directory {
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(320px,.82fr);
-  gap:clamp(48px,9vw,150px);
-  padding:clamp(20px,2.2vw,28px) 0;
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-}
-.footer-directory section { min-width:0; }
-.footer-eyebrow {
-  margin:0 0 15px;
-  color:var(--faint);
-  font:700 .61rem/1 var(--sans);
-  letter-spacing:.2em;
+.footer-collaboration {
+  min-width:0;
 }
 .disclaimer-trigger { padding: 0; border: 0; color: var(--faint); background: transparent; font: 700 .68rem/1.7 var(--sans); letter-spacing: .05em; text-align: left; cursor: pointer; transition: color .2s ease; }
 .disclaimer-trigger:hover { color: var(--active-soft); }
@@ -786,18 +780,21 @@ img { display: block; max-width: 100%; }
   opacity:.5;
   transition:width .45s cubic-bezier(.2,.8,.2,1),opacity .3s ease;
 }
-.footer-collaboration:hover .footer-credit-name::after { width:100%; opacity:.92; }
-.footer-colophon {
-  display:flex;
+.footer-credit-name:hover::after { width:100%; opacity:.92; }
+.footer-utility {
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
   align-items:baseline;
-  justify-content:space-between;
-  gap:28px;
+  gap:clamp(24px,4vw,64px);
   color:var(--faint);
   font-size:.59rem;
   font-weight:600;
   letter-spacing:.16em;
 }
+.footer-utility .disclaimer-trigger { font:600 .59rem/1.4 var(--sans); letter-spacing:.16em; white-space:nowrap; }
 .footer-copyright { margin:0; white-space:nowrap; }
+.footer-utility .footer-copyright { justify-self:center; }
+.footer-unofficial { justify-self:end; white-space:nowrap; }
 .disclaimer-dialog { width: min(760px,calc(100% - 32px)); height: min(86dvh,820px); max-height: calc(100dvh - 32px); padding: 0; overflow: hidden; border: 1px solid var(--line-strong); border-radius: 22px; color: var(--ink); background: color-mix(in srgb,var(--surface) 97%,#15110f); box-shadow: 0 28px 90px rgba(0,0,0,.52); }
 .disclaimer-dialog::backdrop { background: rgba(8,6,5,.72); backdrop-filter: blur(8px); }
 body.disclaimer-open { position: fixed; inset-inline: 0; width: 100%; overflow: hidden; overscroll-behavior: none; }
@@ -972,8 +969,10 @@ body.disclaimer-open { position: fixed; inset-inline: 0; width: 100%; overflow: 
   .cheer-button::after { top: 13px; right: 14px; font-size: .58rem; }
   .site-footer { min-height:0; }
   .footer-inner { padding:42px var(--page-padding) 104px; gap:32px; }
-  .footer-directory { grid-template-columns:minmax(0,1fr); gap:32px; padding:28px 0; }
-  .footer-colophon { align-items:flex-start; flex-direction:column; gap:8px; }
+  .footer-main { display:block; padding-bottom:0; border-bottom:0; }
+  .footer-collaboration { display:block; margin-top:32px; padding:30px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .footer-utility { display:flex; align-items:flex-start; flex-direction:column; gap:10px; }
+  .footer-utility .footer-copyright,.footer-unofficial { justify-self:auto; }
   .footer-copyright { white-space:normal; }
   .disclaimer-dialog { height: calc(100dvh - 32px); }
   .disclaimer-dialog-head { padding: 26px 20px 0; }
