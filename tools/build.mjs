@@ -104,6 +104,7 @@ redbeanLevelDocument.levels.forEach((level, index) => {
 });
 const redbeanLevelDataScript = '<script id="redbean-level-data" type="application/json">' + redbeanLevelData.replaceAll("<", "\\u003c") + "</script>";
 const hymnDataScript = `<script id="hymn-data" type="application/json">${hymnData.replaceAll("<", "\\u003c")}</script>`;
+const cloudflareAnalyticsScript = `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"a39eca370aeb4417b4c00712605b54ec"}'></script>`;
 
 const navigation = [
   { href: "index.html", label: "首页", japanese: "ホーム", mobileLabel: "首页", mobileJapanese: "ホーム", icon: "⌂" },
@@ -164,7 +165,8 @@ for (const file of await readdir(pages)) {
     .replaceAll("<!-- NOTICE_DATA -->", file === "notices.html" ? noticeDataScript : "")
     .replaceAll("<!-- HYMN_DATA -->", file === "hymn.html" ? hymnDataScript : "")
     .replaceAll("<!-- TANZAKU_DATA -->", file === "hymn.html" ? tanzakuDataScript : "")
-    .replaceAll("<!-- REDBEAN_LEVEL_DATA -->", file === "redbean-breakout.html" ? redbeanLevelDataScript : "");
+    .replaceAll("<!-- REDBEAN_LEVEL_DATA -->", file === "redbean-breakout.html" ? redbeanLevelDataScript : "")
+    .replace("</body>", `  ${cloudflareAnalyticsScript}\n</body>`);
   await writeFile(join(dist, file), html);
 }
 
