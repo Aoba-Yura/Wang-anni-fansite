@@ -2,6 +2,45 @@
   "schema_version": 2,
   "records": [
     {
+      "id": "5344900201054255",
+      "raw": {
+        "id": "5344900201054255",
+        "mid": "5344900201054255",
+        "bid": "RiQ3G4qg7",
+        "created_at": "Sat Sep 19 16:36:13 +0800 2026",
+        "text": "<a href=\"https://m.weibo.cn/search?containerid=231522type%3D1%26t%3D10%26q%3D%23%E5%AE%89%E5%A6%AE%E7%9A%84%E5%B0%8F%E6%97%A5%E8%AE%B0%E6%9C%AC%23\"><span class=\"surl-text\">#安妮的小日记本#</span></a><br />在合生汇的见面💌<br />好久不见的你<br />有因为今天的相见更加开心吗✨",
+        "raw_text": "#安妮的小日记本#\n在合生汇的见面💌\n好久不见的你\n有因为今天的相见更加开心吗✨",
+        "source_app": "AKB48TeamSH王安妮超话",
+        "region_name": "发布于 上海",
+        "pic_ids": [
+          "008bNUxAly1ih92dx8xyhj31hc1z4kgy",
+          "008bNUxAly1ih92e8jpooj31hc1z4qqv",
+          "008bNUxAly1ih92esosi2j31401hcajv",
+          "008bNUxAly1ih92f4zt2fj31hc1z4kds"
+        ],
+        "pic_num": 4,
+        "media_type": "livephoto",
+        "reposts_count": 0,
+        "comments_count": 24,
+        "attitudes_count": 71
+      },
+      "display": {
+        "date": "2026-09-19",
+        "platform": "weibo",
+        "tag": "安妮的小日记本",
+        "title": "在合生汇，和好久不见的你相见",
+        "excerpt": "有因为今天的相见更加开心吗✨",
+        "note": "王安妮分享在合生汇与大家见面后的四张实况照片，并用问句记录久别重逢的喜悦。",
+        "source": "https://m.weibo.cn/status/RiQ3G4qg7",
+        "kind": "粉丝互动",
+        "post_id": "5344900201054255",
+        "published_at": "Sat Sep 19 16:36:13 +0800 2026",
+        "related_posts": [],
+        "confidence": "high",
+        "review_status": "manually_reviewed"
+      }
+    },
+    {
       "id": "5338989692977981",
       "raw": {
         "visible": {

@@ -2,6 +2,65 @@
   "schema_version": 2,
   "records": [
     {
+      "id": "BV1kMeq6wEHR",
+      "raw": {
+        "id": "BV1kMeq6wEHR",
+        "platform": "bilibili",
+        "bvid": "BV1kMeq6wEHR",
+        "aid": null,
+        "title": "【安妮】不定期更新的周记③｜忙里偷闲的一周",
+        "description": "-",
+        "timestamp": 1789896015,
+        "upload_date": "20260920",
+        "duration": 332.566,
+        "source": "https://www.bilibili.com/video/BV1kMeq6wEHR",
+        "uploader": "王安妮-TSH48",
+        "uploader_id": "5517087",
+        "channel": null,
+        "channel_id": null,
+        "tags": [
+          "发现《Summer (Nature's Crescendo)》",
+          "寻找100个宝藏vlogger",
+          "安妮",
+          "生活记录",
+          "周记",
+          "必剪创作"
+        ],
+        "categories": [],
+        "thumbnail": "http://i0.hdslb.com/bfs/archive/27d6dab4aee4977d32a3042ebb61cddcdeb8e90b.jpg",
+        "view_count": 523,
+        "like_count": 76,
+        "comment_count": 19,
+        "favorite_count": null,
+        "repost_count": null,
+        "danmaku_count": null,
+        "availability": null,
+        "subtitle_languages": [
+          "danmaku"
+        ],
+        "automatic_caption_languages": [],
+        "transcript_files": [],
+        "parts": [],
+        "collection_status": "detail_collected",
+        "collector_id": "BV1kMeq6wEHR"
+      },
+      "display": {
+        "date": "2026-09-20",
+        "platform": "bilibili",
+        "tag": "系列节目",
+        "title": "忙里偷闲的一周",
+        "excerpt": "不定期更新的周记③｜忙里偷闲的一周",
+        "note": "王安妮以周记形式记录忙里偷闲的一周生活片段。",
+        "source": "https://www.bilibili.com/video/BV1kMeq6wEHR",
+        "kind": "个人日记",
+        "post_id": "BV1kMeq6wEHR",
+        "published_at": "2026-09-20T09:20:15.000Z",
+        "related_posts": [],
+        "confidence": "low",
+        "review_status": "needs_context"
+      }
+    },
+    {
       "id": "BV1dvbW6qECW",
       "raw": {
         "id": "BV1dvbW6qECW",
