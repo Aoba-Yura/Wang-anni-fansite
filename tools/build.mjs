@@ -183,6 +183,15 @@ await cp(join(source, "assets"), join(dist, "assets"), { recursive: true });
 await cp(join(source, "data"), join(dist, "data"), { recursive: true });
 await cp(games, join(dist, "games"), { recursive: true });
 
+// These source assets are retained for rebuilding or archival work, but no
+// published page references them. Keep them out of the deploy payload.
+await Promise.all([
+  "assets/fonts/yuji-syuku/YujiSyuku-Regular.woff2",
+  "assets/fonts/ma-shan-zheng/MaShanZheng-Regular.woff2",
+  "assets/images/wang-anni-profile.png",
+  "assets/images/profile.svg",
+].map((relativePath) => rm(join(dist, relativePath), { force: true })));
+
 const tanzakuFontSources = [
   ["yuji-syuku", "YujiSyuku-Regular.woff2", "YujiSyuku-Tanzaku.woff2"],
   ["ma-shan-zheng", "MaShanZheng-Regular.woff2", "MaShanZheng-Tanzaku.woff2"],
