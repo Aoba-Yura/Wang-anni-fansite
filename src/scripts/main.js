@@ -252,7 +252,18 @@ if (noticeList) {
     : fetch("../data/notices.json").then((response) => response.json());
 
   loadNotices.then((data) => {
-    const items = [...data.items].sort((a, b) => b.date.localeCompare(a.date));
+    const now = Date.now();
+    const publicationTimes = data.items
+      .filter((item) => item.publishAt)
+      .map((item) => Date.parse(item.publishAt))
+      .filter((time) => Number.isFinite(time) && time > now)
+      .sort((a, b) => a - b);
+    if (publicationTimes.length) {
+      setTimeout(() => window.location.reload(), Math.min(publicationTimes[0] - now, 2_147_483_647));
+    }
+    const items = data.items
+      .filter((item) => !item.publishAt || Date.parse(item.publishAt) <= now)
+      .sort((a, b) => b.date.localeCompare(a.date));
     const months = [...new Set(items.map((item) => item.date.slice(0, 7)))];
     monthList.innerHTML = `<button class="month-card active" type="button" data-notice-month="all" aria-label="全部月份" aria-pressed="true"><b>ALL</b></button>${months.map((month) => {
       const [year, number] = month.split("-");
@@ -262,7 +273,8 @@ if (noticeList) {
       const classes = ["notice-card", `notice-card--${item.theme || "paper"}`, item.tilt ? `notice-card--tilt-${item.tilt}` : ""].filter(Boolean).join(" ");
       return `<article class="${classes}" data-notice-card data-notice-month="${item.date.slice(0, 7)}"><i class="pushpin" aria-hidden="true"></i><div class="notice-card-top"><span class="notice-label">${escapeNotice(item.label)}${item.labelJa ? `<small lang="ja">${escapeNotice(item.labelJa)}</small>` : ""}</span><time datetime="${escapeNotice(item.date)}">${escapeNotice(item.displayDate || item.date.replaceAll("-", "."))}</time></div><h3>${escapeNotice(item.title)}</h3><p>${escapeNotice(item.body)}</p>${item.href ? `<a href="${escapeNotice(item.href)}"><span>${escapeNotice(item.linkLabel || "查看详情 ↗")}</span></a>` : ""}${item.signature ? `<span class="notice-signature">${escapeNotice(item.signature)}</span>` : ""}${item.stamp ? `<span class="notice-stamp">${escapeNotice(item.stamp)}</span>` : ""}${item.doodle ? `<span class="notice-doodle" aria-hidden="true">${escapeNotice(item.doodle)}</span>` : ""}</article>`;
     }).join("");
-    if (updated) updated.innerHTML = `最終更新：${String(data.updated || "").replaceAll("-", ".")}`;
+    const latestVisibleDate = items.reduce((latest, item) => item.date > latest ? item.date : latest, data.updated || "");
+    if (updated) updated.innerHTML = `最終更新：${latestVisibleDate.replaceAll("-", ".")}`;
     requestAnimationFrame(() => revealElements(noticeList.querySelectorAll(".notice-card"), { distance: 0 }));
 
     const buttons = [...document.querySelectorAll(".month-card[data-notice-month]")];

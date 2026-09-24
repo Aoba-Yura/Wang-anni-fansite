@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+  <meta name="theme-color" content="#314734" />
+  <title>豆城光辉游乐园 v1.9.3-P1</title>
+  <link rel="stylesheet" href="assets/css/game.css">
+</head>
+<body>
+  <main id="app">
+    <section id="menu" class="screen active" aria-label="主菜单">
+      <div class="card title-card">
+        <div class="eyebrow">DOULAND PARK</div>
+        <h1 class="sr-only">豆城光辉游乐园</h1>
+        <div class="logo-wrap"><img class="game-logo" src="assets/images/logo.svg" alt="豆城光辉游乐园"></div>
+        <div class="cover-hero">
+          <div class="cover-orbit" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="menu-mascot-wrap"><img class="menu-mascot" src="assets/images/menu-redbean.png" alt="红豆" /></div>
+        </div>
+        <div class="menu-actions">
+          <button id="startBtn" class="primary">进入游乐园</button>
+          <button id="helpBtn" class="ghost">游玩指南</button>
+          <button id="soundBtn" class="ghost" aria-pressed="true">♪ 音效 ON</button>
+          <button id="langBtn" class="ghost" type="button" aria-label="切换到日语">语言：中文</button>
+        </div><div class="version">v1.9.3-P1</div>
+      </div>
+    </section>
+
+    <section id="levels" class="screen" aria-label="路线选择">
+      <div class="card level-card">
+        <div class="panel-head">
+          <button class="ghost" id="backMenuBtn" aria-label="返回主菜单">←</button>
+          <h2 id="levelTitle">选择路线</h2>
+          <span></span>
+        </div>
+        <div id="levelGrid" class="level-grid"></div>
+      </div>
+    </section>
+
+    <section id="game" class="screen game-screen" aria-label="游戏">
+      <div class="game-shell">
+        <canvas id="gameCanvas" width="960" height="540" aria-label="豆城光辉游乐园游戏画面"></canvas>
+        <button id="fullscreenRestoreBtn" class="fullscreen-restore hidden" type="button" aria-label="返回全屏">⛶ <span id="fullscreenRestoreLabel">全屏</span></button>
+        <div id="rotateGate" class="rotate-gate hidden">
+          <div class="phone-icon">▯↻</div>
+          <div id="rotateHint">请横屏游玩</div>
+          <button id="rotateRestoreBtn" class="restore-action hidden" type="button">全屏继续</button>
+        </div>
+        <div id="tutorial" class="toast hidden" aria-live="polite"></div>
+
+      </div>
+    </section>
+
+    <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+      <div class="overlay-card">
+        <h3 id="overlayTitle"></h3>
+        <p id="overlaySub" class="overlay-sub"></p>
+        <div id="overlayButtons" class="overlay-actions"></div>
+      </div>
+    </div>
+  </main>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/geometry.js"></script>
+  <script src="assets/js/audio.js"></script>
+  <script src="assets/js/assets.js"></script>
+  <script src="assets/js/chain-system.js"></script>
+  <script src="assets/js/input.js"></script>
+  <script src="assets/js/renderer.js"></script>
+  <script src="assets/js/game.js"></script>
+</body>
+</html>

@@ -7,6 +7,7 @@ const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const source = join(root, "src");
 const pages = join(source, "pages");
 const partials = join(source, "partials");
+const games = join(source, "games");
 const dist = join(root, "dist");
 
 await rm(dist, { recursive: true, force: true });
@@ -104,7 +105,6 @@ redbeanLevelDocument.levels.forEach((level, index) => {
 });
 const redbeanLevelDataScript = '<script id="redbean-level-data" type="application/json">' + redbeanLevelData.replaceAll("<", "\\u003c") + "</script>";
 const hymnDataScript = `<script id="hymn-data" type="application/json">${hymnData.replaceAll("<", "\\u003c")}</script>`;
-const cloudflareAnalyticsScript = `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"a39eca370aeb4417b4c00712605b54ec"}'></script>`;
 
 const navigation = [
   { href: "index.html", label: "首页", japanese: "ホーム", mobileLabel: "首页", mobileJapanese: "ホーム", icon: "⌂" },
@@ -165,8 +165,7 @@ for (const file of await readdir(pages)) {
     .replaceAll("<!-- NOTICE_DATA -->", file === "notices.html" ? noticeDataScript : "")
     .replaceAll("<!-- HYMN_DATA -->", file === "hymn.html" ? hymnDataScript : "")
     .replaceAll("<!-- TANZAKU_DATA -->", file === "hymn.html" ? tanzakuDataScript : "")
-    .replaceAll("<!-- REDBEAN_LEVEL_DATA -->", file === "redbean-breakout.html" ? redbeanLevelDataScript : "")
-    .replace("</body>", `  ${cloudflareAnalyticsScript}\n</body>`);
+    .replaceAll("<!-- REDBEAN_LEVEL_DATA -->", file === "redbean-breakout.html" ? redbeanLevelDataScript : "");
   await writeFile(join(dist, file), html);
 }
 
@@ -182,6 +181,7 @@ await cp(join(root, "node_modules/framer-motion/dist/dom-mini.js"), join(dist, "
 await cp(join(source, "assets/icons/favicon.svg"), join(dist, "favicon.svg"));
 await cp(join(source, "assets"), join(dist, "assets"), { recursive: true });
 await cp(join(source, "data"), join(dist, "data"), { recursive: true });
+await cp(games, join(dist, "games"), { recursive: true });
 
 const tanzakuFontSources = [
   ["yuji-syuku", "YujiSyuku-Regular.woff2", "YujiSyuku-Tanzaku.woff2"],

@@ -10,6 +10,7 @@ src/
 ├─ partials/     构建时注入的共享片段
 ├─ styles/      样式源码
 ├─ scripts/     交互脚本
+├─ games/       独立小游戏及其私有资源
 ├─ assets/      图片、图标、字体等静态资源
 └─ data/        人物资料与日常动态数据
 dist/           GitHub Pages / Sites 发布文件
