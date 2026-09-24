@@ -8,7 +8,7 @@
       this.overlay=this.$('overlay');this.overlayTitle=this.$('overlayTitle');this.overlaySub=this.$('overlaySub');this.overlayButtons=this.$('overlayButtons');this.tutorial=this.$('tutorial');this.rotateGate=this.$('rotateGate');
       this.fullscreenRestoreBtn=this.$('fullscreenRestoreBtn');this.rotateRestoreBtn=this.$('rotateRestoreBtn');
       this.save=this.loadSave();this.assets=window.DC.assets.buildAssets();this.audio=new window.DC.AudioEngine(this.save.sound);this.state=null;this.acc=0;this.lastTs=performance.now();
-      this.fullscreenRecoveryPending=false;this.fullscreenCountdownPending=false;this.intentionalFullscreenExit=false;this.wasFullscreen=this.isFullscreenLike();
+      this.fullscreenRecoveryPending=false;this.fullscreenCountdownPending=false;this.lastFullscreenCountdownAt=0;this.intentionalFullscreenExit=false;this.wasFullscreen=this.isFullscreenLike();
       this.chain=new window.DC.ChainSystem(this);this.renderer=new window.DC.Renderer(this,this.canvas,this.assets);this.input=new window.DC.InputController(this,this.canvas);this.bindUI();this.syncViewport();
       requestAnimationFrame(t=>this.frame(t));
     }
@@ -97,6 +97,7 @@ PCはマウスで狙ってクリック。スマホはドラッグで狙い、指
     }
     async enterPlayMode(){
       if(!this.isTouchDevice())return true;
+      const wasFullscreen=this.isFullscreenLike();
       try{
         const root=document.documentElement;
         if(!this.fullscreenElement()&&!this.isStandalone()){
@@ -104,9 +105,11 @@ PCはマウスで狙ってクリック。スマホはドラッグで狙い、指
           else if(root.webkitRequestFullscreen)root.webkitRequestFullscreen();
         }
       }catch(_){}
-      try{if(screen.orientation?.lock&&this.isFullscreenLike())await screen.orientation.lock('landscape');}catch(_){}
+      const nowFullscreen=this.isFullscreenLike();
+      if(!wasFullscreen&&nowFullscreen){this.wasFullscreen=true;this.beginFullscreenCountdown();}
+      try{if(screen.orientation?.lock&&nowFullscreen)await screen.orientation.lock('landscape');}catch(_){}
       this.syncViewport();this.updateOrientationGate();this.updateFullscreenRecoveryUI();
-      return this.isFullscreenLike();
+      return nowFullscreen;
     }
     async restoreFullscreenFromGesture(resumeAfter=false){
       if(!this.isTouchDevice())return false;
@@ -131,7 +134,8 @@ PCはマウスで狙ってクリック。スマホはドラッグで狙い、指
     }
     beginFullscreenCountdown(){
       if(!this.state){this.fullscreenCountdownPending=true;return;}
-      this.fullscreenCountdownPending=false;this.state.fullscreenCountdownEndsAt=performance.now()+C.FULLSCREEN_COUNTDOWN_MS;this.state.fireBuffer=null;this.acc=0;this.lastTs=performance.now();
+      const now=performance.now();if(now-this.lastFullscreenCountdownAt<500)return;
+      this.lastFullscreenCountdownAt=now;this.fullscreenCountdownPending=false;this.state.fullscreenCountdownEndsAt=now+C.FULLSCREEN_COUNTDOWN_MS;this.state.fireBuffer=null;this.acc=0;this.lastTs=now;
     }
     fullscreenCountdownRemaining(){return Math.max(0,((this.state?.fullscreenCountdownEndsAt||0)-performance.now())/1000);}
     handleFullscreenChange(){
