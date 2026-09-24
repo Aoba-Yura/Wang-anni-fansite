@@ -70,6 +70,7 @@
       this.drawRedbean();
       this.drawPopups();
       this.drawHUD();
+      this.drawFullscreenCountdown();
     }
     drawGrass(g){
       for(let y=0;y<C.H;y+=C.TILE)for(let x=0;x<C.W;x+=C.TILE){
@@ -382,6 +383,13 @@
     drawPopups(){
       const g=this.ctx,s=this.game.state;g.font=this.uiFont(700,17);g.textAlign='center';g.textBaseline='middle';
       for(const p of s.popups){const t=p.t/p.duration;g.globalAlpha=Math.max(0,1-t);g.fillStyle=C.PALETTE.ink;g.fillText(p.text,Math.round(p.x+2),Math.round(p.y-17-t*18+2));g.fillStyle=C.PALETTE.cream;g.fillText(p.text,Math.round(p.x),Math.round(p.y-17-t*18));}g.globalAlpha=1;g.textAlign='left';
+    }
+    drawFullscreenCountdown(){
+      const remaining=this.game.fullscreenCountdownRemaining();if(remaining<=0)return;const g=this.ctx,n=Math.ceil(remaining),ja=this.game.save.lang==='ja';
+      g.fillStyle='rgba(35,50,42,.58)';g.fillRect(0,0,C.W,C.H);this.ticketPanel(g,390,158,180,220,C.PALETTE.gold);
+      g.textAlign='center';g.textBaseline='middle';g.fillStyle=C.PALETTE.ink2;g.font=this.uiFont(800,15);g.fillText(ja?'まもなくスタート':'准备开始',480,198);
+      g.fillStyle=C.PALETTE.pink;g.font=this.uiFont(900,112);g.fillText(String(n),480,280);
+      g.fillStyle=C.PALETTE.ink;g.font=this.uiFont(800,14);g.fillText(ja?'照準を合わせよう':'调整好瞄准方向',480,344);g.textAlign='left';
     }
     ticketPanel(g,x,y,w,h,accent=C.PALETTE.pink){
       g.fillStyle='rgba(52,54,74,.26)';g.fillRect(x+5,y+6,w,h);g.fillStyle=C.PALETTE.ink;g.fillRect(x,y,w,h);g.fillStyle=C.PALETTE.paper;g.fillRect(x+3,y+3,w-6,h-6);g.fillStyle=C.PALETTE.cream;g.fillRect(x+6,y+5,w-12,3);g.fillStyle=accent;g.fillRect(x+6,y+h-7,w-12,3);g.fillStyle=C.PALETTE.ink2;g.fillRect(x+13,y+12,3,3);g.fillRect(x+w-16,y+12,3,3);

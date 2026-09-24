@@ -8,7 +8,7 @@
       this.overlay=this.$('overlay');this.overlayTitle=this.$('overlayTitle');this.overlaySub=this.$('overlaySub');this.overlayButtons=this.$('overlayButtons');this.tutorial=this.$('tutorial');this.rotateGate=this.$('rotateGate');
       this.fullscreenRestoreBtn=this.$('fullscreenRestoreBtn');this.rotateRestoreBtn=this.$('rotateRestoreBtn');
       this.save=this.loadSave();this.assets=window.DC.assets.buildAssets();this.audio=new window.DC.AudioEngine(this.save.sound);this.state=null;this.acc=0;this.lastTs=performance.now();
-      this.fullscreenRecoveryPending=false;this.intentionalFullscreenExit=false;this.wasFullscreen=this.isFullscreenLike();
+      this.fullscreenRecoveryPending=false;this.fullscreenCountdownPending=false;this.intentionalFullscreenExit=false;this.wasFullscreen=this.isFullscreenLike();
       this.chain=new window.DC.ChainSystem(this);this.renderer=new window.DC.Renderer(this,this.canvas,this.assets);this.input=new window.DC.InputController(this,this.canvas);this.bindUI();this.syncViewport();
       requestAnimationFrame(t=>this.frame(t));
     }
@@ -129,9 +129,15 @@ PCはマウスで狙ってクリック。スマホはドラッグで狙い、指
       }catch(_){this.intentionalFullscreenExit=false;}
       this.syncViewport();this.updateOrientationGate();this.updateFullscreenRecoveryUI();
     }
+    beginFullscreenCountdown(){
+      if(!this.state){this.fullscreenCountdownPending=true;return;}
+      this.fullscreenCountdownPending=false;this.state.fullscreenCountdownEndsAt=performance.now()+C.FULLSCREEN_COUNTDOWN_MS;this.state.fireBuffer=null;this.acc=0;this.lastTs=performance.now();
+    }
+    fullscreenCountdownRemaining(){return Math.max(0,((this.state?.fullscreenCountdownEndsAt||0)-performance.now())/1000);}
     handleFullscreenChange(){
-      const now=this.isFullscreenLike(),lost=this.wasFullscreen&&!now;
+      const now=this.isFullscreenLike(),entered=!this.wasFullscreen&&now,lost=this.wasFullscreen&&!now;
       this.wasFullscreen=now;
+      if(entered)this.beginFullscreenCountdown();
       if(now){this.fullscreenRecoveryPending=false;if(this.state?.paused&&!this.overlay.classList.contains('hidden'))this.showPauseOverlay();return;}
       if(!lost)return;
       if(this.intentionalFullscreenExit){this.intentionalFullscreenExit=false;if(this.state?.paused)this.showPauseOverlay();this.updateFullscreenRecoveryUI();return;}
@@ -148,8 +154,9 @@ PCはマウスで狙ってクリック。スマホはドラッグで狙い、指
     }
     async returnToMenu(){this.state=null;this.input.touch=null;this.hideOverlay();await this.exitPlayMode();this.makeLevelButtons();this.showScreen(this.levelsScreen);this.updateOrientationGate();}
     async startLevel(n){
-      await this.assets.ready;const baseLevel=C.LEVELS[n-1],path=G.buildPath(baseLevel.path),road=new G.RoadGeometry(path,50),crossings=new G.CrossingSystem(path,road,{mode:baseLevel.crossingMode||'none',ballRadius:C.BALL_R}),level={...baseLevel,speed:path.total/baseLevel.pressureSec},redbeanGround=([2,3,6,8].includes(n)?{x:580,y:370}:n===7?{x:550,y:420}:[1,4].includes(n)?{x:380,y:440}:C.REDBEAN.idleGround);this.state={levelNo:n,level,path,road,crossings,redbeanGround,balls:[],generated:0,score:0,kouki:0,spawnClosed:false,streak:0,bestStreak:0,bombCharge:0,pendingBomb:0,current:null,next:null,projectile:null,ammoGenerated:0,phase:'play',paused:false,aim:-Math.PI/2,fireCooldown:0,fireBuffer:null,deferNextAmmo:false,insertAnim:null,retractAnim:null,pendingJoins:[],gapWindows:[],nextGapId:1,popups:[],effects:[],elapsed:0,spawnCd:0,redbean:{mode:'idle',x:redbeanGround.x,y:redbeanGround.y,visible:true,carriedPos:null,cargoBall:null,queuedSwap:false,travel:null}};
+      await this.assets.ready;const baseLevel=C.LEVELS[n-1],path=G.buildPath(baseLevel.path),road=new G.RoadGeometry(path,50),crossings=new G.CrossingSystem(path,road,{mode:baseLevel.crossingMode||'none',ballRadius:C.BALL_R}),level={...baseLevel,speed:path.total/baseLevel.pressureSec},redbeanGround=([2,3,6,8].includes(n)?{x:580,y:370}:n===7?{x:550,y:420}:[1,4].includes(n)?{x:380,y:440}:C.REDBEAN.idleGround);this.state={levelNo:n,level,path,road,crossings,redbeanGround,balls:[],generated:0,score:0,kouki:0,spawnClosed:false,streak:0,bestStreak:0,bombCharge:0,pendingBomb:0,current:null,next:null,projectile:null,ammoGenerated:0,phase:'play',paused:false,fullscreenCountdownEndsAt:0,aim:-Math.PI/2,fireCooldown:0,fireBuffer:null,deferNextAmmo:false,insertAnim:null,retractAnim:null,pendingJoins:[],gapWindows:[],nextGapId:1,popups:[],effects:[],elapsed:0,spawnCd:0,redbean:{mode:'idle',x:redbeanGround.x,y:redbeanGround.y,visible:true,carriedPos:null,cargoBall:null,queuedSwap:false,travel:null}};
       this.state.current=this.randAmmo();this.state.next=this.randAmmo();this.tutorial.style.setProperty('--hint-left',redbeanGround.x/C.W*100+'%');this.tutorial.style.setProperty('--hint-top',(redbeanGround.y+15)/C.H*100+'%');this.state.scene=this.renderer.buildStaticScene();this.state.upperRoadLayer=this.renderer.buildUpperRoadLayer();this.input.touch=null;this.hideOverlay();clearTimeout(this.showToast._t);this.tutorial.classList.add('hidden');this.showScreen(this.gameScreen);this.updateOrientationGate();this.acc=0;this.lastTs=performance.now();
+      if(this.fullscreenCountdownPending)this.beginFullscreenCountdown();
       if(this.save.tutorialVersion!==C.VERSION){this.showToast(this.isTouchDevice()?this.l('松开发射','離して発射'):this.l('点击发射','クリックで発射'),4500);this.save.tutorialVersion=C.VERSION;this.save.tutorialSeen=true;this.persist();}
 
     }
@@ -172,8 +179,8 @@ PCはマウスで狙ってクリック。スマホはドラッグで狙い、指
     isOccludedS(pos){return!!this.state?.crossings?.isOccluded(pos);}
     isOverpassS(pos){return!!this.state?.crossings?.isUpper(pos);}
     gameplayLocked(){return!!this.state?.insertAnim;}
-    canFire(){const s=this.state;return!!(s&&s.phase==='play'&&!s.paused&&!s.projectile&&!s.insertAnim&&!this.swapInProgress()&&s.fireCooldown<=0&&s.current);}
-    requestFire(angle=this.state?.aim){const s=this.state;if(!s||s.phase!=='play'||s.paused)return;if(this.canFire()){this.fire(angle);return;}s.fireBuffer={ttl:C.FIRE_BUFFER,angle};}
+    canFire(){const s=this.state;return!!(s&&s.phase==='play'&&!s.paused&&this.fullscreenCountdownRemaining()<=0&&!s.projectile&&!s.insertAnim&&!this.swapInProgress()&&s.fireCooldown<=0&&s.current);}
+    requestFire(angle=this.state?.aim){const s=this.state;if(!s||s.phase!=='play'||s.paused||this.fullscreenCountdownRemaining()>0)return;if(this.canFire()){this.fire(angle);return;}s.fireBuffer={ttl:C.FIRE_BUFFER,angle};}
     consumeFireBuffer(){const s=this.state,b=s?.fireBuffer;if(!b||b.ttl<=0||!this.canFire())return false;s.fireBuffer=null;this.fire(b.angle);return true;}
     redbeanGround(){return this.state?.redbeanGround||C.REDBEAN.idleGround;}
     redbeanIdleBall(){const p=this.redbeanGround();return{x:p.x+C.REDBEAN.idleBallOffset.x,y:p.y+C.REDBEAN.idleBallOffset.y};}
@@ -286,7 +293,7 @@ PCはマウスで狙ってクリック。スマホはドラッグで狙い、指
     }
     swapAmmo(){
       const s=this.state,rb=s?.redbean;
-      if(!s||s.phase!=='play'||s.paused||!rb||!s.current||!s.next||s.current.type==='bomb'||s.next.type==='bomb')return false;
+      if(!s||s.phase!=='play'||s.paused||this.fullscreenCountdownRemaining()>0||!rb||!s.current||!s.next||s.current.type==='bomb'||s.next.type==='bomb')return false;
       if(rb.travel){
         rb.queuedSwap=!rb.queuedSwap;
         this.sound('insert');
@@ -369,7 +376,7 @@ PCはマウスで狙ってクリック。スマホはドラッグで狙い、指
     addPopupAtS(pos,text){const p=G.pathPoint(this.state.path,pos);this.addPopupAtXY(p.x,p.y,text);}
     addPopupAtXY(x,y,text){this.state.popups.push({x,y,text,t:0,duration:.76});}
     update(dt){
-      const s=this.state;if(!s||s.phase!=='play'||s.paused||!this.rotateGate.classList.contains('hidden'))return;s.elapsed+=dt;s.fireCooldown=Math.max(0,s.fireCooldown-dt);if(s.fireBuffer){s.fireBuffer.ttl-=dt;if(s.fireBuffer.ttl<=0)s.fireBuffer=null;}this.updateRedbeanCourier(dt);this.updatePopups(dt);this.updateEffects(dt);this.updateGapWindows(dt);this.consumeFireBuffer();
+      const s=this.state;if(!s||s.phase!=='play'||s.paused||this.fullscreenCountdownRemaining()>0||!this.rotateGate.classList.contains('hidden'))return;s.elapsed+=dt;s.fireCooldown=Math.max(0,s.fireCooldown-dt);if(s.fireBuffer){s.fireBuffer.ttl-=dt;if(s.fireBuffer.ttl<=0)s.fireBuffer=null;}this.updateRedbeanCourier(dt);this.updatePopups(dt);this.updateEffects(dt);this.updateGapWindows(dt);this.consumeFireBuffer();
       if(s.insertAnim){this.chain.updateInsert(dt);if(s.insertAnim)return;}
       let motion,useVisual=false;
       if(s.retractAnim){motion=new Map(s.balls.map(b=>[b,this.chain.visualS(b)]));this.chain.updateRetraction(dt);useVisual=true;}else motion=this.chain.advance(dt);
