@@ -2,6 +2,100 @@
   "schema_version": 2,
   "records": [
     {
+      "id": "5347155768253514",
+      "raw": {
+        "id": "5347155768253514",
+        "mid": "5347155768253514",
+        "bid": "RjMJGyD7c",
+        "created_at": "Fri Sep 25 21:59:03 +0800 2026",
+        "text": "<a href=\"https://m.weibo.cn/search?containerid=231522type%3D1%26t%3D10%26q%3D%23%E5%AE%89%E5%A6%AE%E7%9A%84%E5%B0%8F%E6%97%A5%E8%AE%B0%E6%9C%AC%23\"><span class=\"surl-text\">#安妮的小日记本#</span></a><br />这个中秋<br />来和姐姐过吧<br />🥮💜🦋",
+        "raw_text": "#安妮的小日记本#\n这个中秋\n来和姐姐过吧\n🥮💜🦋",
+        "text_length": 78,
+        "source_app": "AKB48TeamSH王安妮超话",
+        "client_device": "iPhone 17",
+        "region_name": "发布于 上海",
+        "is_long_text": false,
+        "retweeted_status": null,
+        "pic_num": 9,
+        "pic_ids": [
+          "008bNUxAly1ihg9fltbu5j310g1c60zx",
+          "008bNUxAly1ihg9ftpx0gj32c0340npe",
+          "008bNUxAly1ihg9fyodouj31061bt7bw",
+          "008bNUxAly1ihg9g3w38gj31051ccaig",
+          "008bNUxAly1ihg9g98xugj32c0340u0x",
+          "008bNUxAly1ihg9gdlkvhj32c0340u0x",
+          "008bNUxAly1ihg9gmqg4rj31401hcdo7",
+          "008bNUxAly1ihg9gqiftrj30zt1dr130",
+          "008bNUxAly1ihg9gtgrsej31001caahw"
+        ],
+        "pics": [
+          {
+            "pid": "008bNUxAly1ihg9fltbu5j310g1c60zx",
+            "type": "livephoto",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAly1ihg9fltbu5j310g1c60zx.jpg"
+          },
+          {
+            "pid": "008bNUxAly1ihg9ftpx0gj32c0340npe",
+            "type": "livephoto",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAly1ihg9ftpx0gj32c0340npe.jpg"
+          },
+          {
+            "pid": "008bNUxAly1ihg9fyodouj31061bt7bw",
+            "type": "livephoto",
+            "url": "https://wx2.sinaimg.cn/mw2000/008bNUxAly1ihg9fyodouj31061bt7bw.jpg"
+          },
+          {
+            "pid": "008bNUxAly1ihg9g3w38gj31051ccaig",
+            "type": "livephoto",
+            "url": "https://wx2.sinaimg.cn/mw2000/008bNUxAly1ihg9g3w38gj31051ccaig.jpg"
+          },
+          {
+            "pid": "008bNUxAly1ihg9g98xugj32c0340u0x",
+            "type": "livephoto",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAly1ihg9g98xugj32c0340u0x.jpg"
+          },
+          {
+            "pid": "008bNUxAly1ihg9gdlkvhj32c0340u0x",
+            "type": "livephoto",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAly1ihg9gdlkvhj32c0340u0x.jpg"
+          },
+          {
+            "pid": "008bNUxAly1ihg9gmqg4rj31401hcdo7",
+            "type": "livephoto",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAly1ihg9gmqg4rj31401hcdo7.jpg"
+          },
+          {
+            "pid": "008bNUxAly1ihg9gqiftrj30zt1dr130",
+            "type": "livephoto",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAly1ihg9gqiftrj30zt1dr130.jpg"
+          },
+          {
+            "pid": "008bNUxAly1ihg9gtgrsej31001caahw",
+            "type": "livephoto",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAly1ihg9gtgrsej31001caahw.jpg"
+          }
+        ],
+        "reposts_count": 1,
+        "comments_count": 12,
+        "attitudes_count": 44
+      },
+      "display": {
+        "date": "2026-09-25",
+        "platform": "weibo",
+        "tag": "安妮的小日记本",
+        "title": "中秋夜的“姐姐”邀约",
+        "excerpt": "来和姐姐过吧",
+        "note": "王安妮在中秋夜分享九张 Live Photo，以“姐姐”的口吻邀请大家一起过节。",
+        "source": "https://m.weibo.cn/status/RjMJGyD7c",
+        "kind": "节日记录",
+        "post_id": "5347155768253514",
+        "published_at": "Fri Sep 25 21:59:03 +0800 2026",
+        "related_posts": [],
+        "confidence": "high",
+        "review_status": "manually_reviewed"
+      }
+    },
+    {
       "id": "5344900201054255",
       "raw": {
         "id": "5344900201054255",
