@@ -76,7 +76,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
 @media(orientation:landscape) and (pointer:coarse){.screen:not(.game-screen){padding:max(8px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}.title-card{width:min(780px,94vw);min-height:0;padding:24px 22px 18px}.title-card::before{top:58px;height:112px}.menu-actions{max-width:400px;gap:10px 12px}.primary{width:min(100%,310px);font-size:18px;padding:12px 16px}.ghost{padding:9px 12px;font-size:15px}.menu-mascot-wrap{right:18px;bottom:16px;width:112px;height:96px}.menu-mascot{width:78px;height:78px}.eyebrow{font-size:10px}.version{padding-top:16px}}
 @media (orientation:landscape) and (max-height:560px){.title-card{width:min(820px,95vw);padding:20px 20px 14px}.title-card::after{inset:7px}.title-card::before{top:48px;height:96px}.menu-actions{max-width:360px;gap:8px 10px;margin-bottom:4px}.primary{width:min(100%,278px);font-size:16px;padding:10px 14px}.ghost{font-size:14px;padding:8px 10px}.menu-mascot-wrap{right:8px;bottom:10px;width:98px;height:84px}.menu-mascot{width:68px;height:68px}.version{padding-top:10px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.primary:active,.ghost:active,.overlay-actions button:active{transform:none}}
-/* v1.2.1 mobile fullscreen recovery */
+/* Mobile fullscreen recovery */
 .fullscreen-restore{
   position:absolute;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));z-index:4;
   min-height:40px;padding:7px 11px;border:3px solid var(--ink);border-radius:3px;background:linear-gradient(#fff3d2,#eacb96);
@@ -95,7 +95,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
 @media(orientation:landscape) and (max-height:500px){#menu .title-card{padding:14px 20px 12px}.logo-wrap{width:min(100%,590px);margin:4px auto 6px}#menu .eyebrow{font-size:8px}#menu .menu-actions{gap:7px 9px}#menu .primary{font-size:15px;padding:8px 12px}#menu .ghost{font-size:12px;padding:6px 8px}#menu .menu-mascot-wrap{width:88px;height:76px}#menu .menu-mascot{width:62px;height:62px}}
 @media(prefers-reduced-motion:reduce){.screen.active,.menu-mascot{animation:none!important}}
 
-/* v1.4.0 hero cover redesign */
+/* Hero cover redesign */
 #menu{padding:0;background:linear-gradient(180deg,rgba(30,49,40,.02),rgba(30,49,40,.18)),var(--menu-bg,transparent)}
 #menu .title-card{width:min(100%,1180px);max-width:none;min-height:100%;height:100%;border:0;box-shadow:none;background:transparent;padding:clamp(24px,5vh,58px) clamp(18px,5vw,70px) max(24px,env(safe-area-inset-bottom));overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
 #menu .title-card::before{display:none}
@@ -157,7 +157,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
   overflow:visible;
 }
 
-/* v1.5.1 — unified park UI language
+/* Unified park UI language
    One visual grammar across cover, level select, and overlays:
    cream paper / warm wood / dark indigo / small candy accents.
 */
@@ -433,7 +433,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
 }
 
 
-/* v1.5.1 UI finetune: eyebrow contrast, smaller utility controls, single-line Japanese title */
+/* UI finetune: eyebrow contrast, smaller utility controls, single-line Japanese title */
 .eyebrow{
   color:rgba(255,244,219,.94)!important;
   background:rgba(255,248,232,.08)!important;
@@ -476,7 +476,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
 }
 
 
-/* v1.5.2 — 场景奢侈，UI克制 */
+/* 场景奢侈，UI克制 */
 #menu .title-card{
   background:transparent!important;
   border:0!important;

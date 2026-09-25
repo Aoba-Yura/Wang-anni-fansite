@@ -1,4 +1,4 @@
-/* 豆城光辉游乐园 v1.9.3-P1：球链移动、插入、消除与回缩 */
+/* 豆城光辉游乐园 v1.10.0：球链移动、插入、消除与回缩 */
 (() => {
   'use strict';
   const C=window.DC.cfg,G=window.DC.geo;

@@ -1,4 +1,4 @@
-/* 豆城光辉游乐园 v1.9.3-P1：版本、调色板、关卡路线与玩法常量 */
+/* 豆城光辉游乐园 v1.10.0：版本、调色板、关卡路线与玩法常量 */
 (() => {
   'use strict';
   const P = Object.freeze({
@@ -29,7 +29,7 @@
   ];
   window.DC = window.DC || {};
   window.DC.cfg = Object.freeze({
-    VERSION:'1.9.3-P1-SPLIT-PROJECT', W:960, H:540, TILE:32, BALL_R:14, BALL_DIAM:28, BALL_SPACING:29,
+    VERSION:'1.10.0', W:960, H:540, TILE:32, BALL_R:14, BALL_DIAM:28, BALL_SPACING:29,
     PROJECTILE_SPEED:720, INSERT_DURATION:.085, FULLSCREEN_COUNTDOWN_MS:5000,
     RETRACT_SPEED:520, RETRACT_MIN:.09, RETRACT_MAX:.24, RETRACT_PRE:.075, RETRACT_POST:.020,
     BOMB_RADIUS:64, FIRE_BUFFER:.55, FIRE_RECOVERY:.24, GAP_SAMPLE:8, SIM_DT:1/120, MAX_STEPS:5,

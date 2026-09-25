@@ -1,4 +1,4 @@
-/* 豆城光辉游乐园 v1.9.3-P1：图片资源加载与画布资源生成 */
+/* 豆城光辉游乐园 v1.10.0：图片资源加载与画布资源生成 */
 (() => {
   'use strict';
   function makeCanvas(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').imageSmoothingEnabled=false;return c;}

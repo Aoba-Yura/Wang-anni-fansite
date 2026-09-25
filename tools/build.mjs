@@ -9,6 +9,23 @@ const pages = join(source, "pages");
 const partials = join(source, "partials");
 const games = join(source, "games");
 const dist = join(root, "dist");
+const beanlandRoot = join(games, "beanland-amusement-park");
+
+const [beanlandIndex, beanlandConfig] = await Promise.all([
+  readFile(join(beanlandRoot, "index.html"), "utf8"),
+  readFile(join(beanlandRoot, "assets/js/config.js"), "utf8"),
+]);
+const beanlandVersion = beanlandConfig.match(/VERSION:\s*'([^']+)'/)?.[1];
+const beanlandAssetVersions = [...beanlandIndex.matchAll(/[?&]v=([0-9.]+)/g)].map((match) => match[1]);
+if (!beanlandVersion || !/^\d+\.\d+\.\d+$/.test(beanlandVersion)) {
+  throw new Error("Beanland VERSION must use MAJOR.MINOR.PATCH format.");
+}
+if (!beanlandIndex.includes(`<title>豆城光辉游乐园 v${beanlandVersion}</title>`)
+  || !beanlandIndex.includes(`<div class="version">v${beanlandVersion}</div>`)
+  || beanlandAssetVersions.length !== 9
+  || beanlandAssetVersions.some((version) => version !== beanlandVersion)) {
+  throw new Error(`Beanland page, runtime, and asset versions must all match ${beanlandVersion}.`);
+}
 
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
@@ -236,3 +253,4 @@ await writeFile(join(dist, "data/bilibili.json"), JSON.stringify(publicBilibili)
 console.log(`Bilibili archive: ${bilibiliStats.total} total, ${bilibiliStats.visible} visible, ${bilibiliStats.hidden} hidden`);
 
 console.log(`Built ${await readdir(dist).then(files => files.length)} files in dist/`);
+console.log(`Beanland game: v${beanlandVersion}`);
