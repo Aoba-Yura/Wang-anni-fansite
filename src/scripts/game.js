@@ -28,6 +28,9 @@ if (canvas) {
   const dogImage = new Image();
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const darkColorScheme = matchMedia("(prefers-color-scheme: dark)");
+  const assetLoader = document.querySelector("#breakoutAssetLoader");
+  const assetLoaderText = document.querySelector("#breakoutAssetLoaderText");
+  let assetsReady = false;
   dogImage.src = canvas.dataset.dogSrc;
 
   const LAYOUTS = {
@@ -343,6 +346,7 @@ if (canvas) {
     balls = [newBall()];
   }
   function startLevel(index) {
+    if (!assetsReady) return;
     initAudio();
     currentLevel = Math.max(0, Math.min(LEVELS.length - 1, index));
     resetRun();
@@ -1031,4 +1035,23 @@ if (canvas) {
   updateSoundUi();
   showMainMenu();
   requestAnimationFrame(frame);
+
+  function waitForImage(image) {
+    if (image.complete) return image.naturalWidth > 0 ? Promise.resolve() : Promise.reject(new Error("Redbean image failed to load."));
+    return new Promise(function (resolve, reject) {
+      image.addEventListener("load", resolve, { once: true });
+      image.addEventListener("error", function () { reject(new Error("Redbean image failed to load.")); }, { once: true });
+    });
+  }
+
+  Promise.all([waitForImage(dogImage), document.fonts ? document.fonts.ready : Promise.resolve()])
+    .then(function () {
+      assetsReady = true;
+      document.body.classList.remove("game-assets-loading");
+      if (assetLoader) assetLoader.hidden = true;
+    })
+    .catch(function (error) {
+      console.error(error);
+      if (assetLoaderText) assetLoaderText.textContent = "资源加载失败，请刷新页面重试";
+    });
 }

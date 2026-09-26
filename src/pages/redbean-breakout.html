@@ -6,6 +6,15 @@
   <meta name="theme-color" content="#110e0d">
   <meta name="description" content="移动挡板，接住红豆，挑战 18 个纯街机式打砖块关卡。">
   <title>红豆打砖块 | Anni Suki</title>
+  <style>
+    body.game-assets-loading { overflow:hidden; background:#110e0d; }
+    body.game-assets-loading > *:not(.game-asset-loader):not(script) { visibility:hidden; }
+    .game-asset-loader { position:fixed; z-index:10000; inset:0; display:grid; place-items:center; background:#110e0d; color:#f8e7d5; font:700 14px/1.6 sans-serif; letter-spacing:.16em; text-align:center; }
+    .game-asset-loader::before { content:""; position:absolute; width:40px; height:40px; margin-top:-66px; border:3px solid rgba(248,231,213,.18); border-top-color:#d9565b; border-radius:50%; animation:game-loader-spin .8s linear infinite; }
+    .game-asset-loader[hidden] { display:none; }
+    @keyframes game-loader-spin { to { transform:rotate(360deg); } }
+    @media (prefers-reduced-motion:reduce) { .game-asset-loader::before { animation:none; border-top-color:rgba(248,231,213,.18); } }
+  </style>
   <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="../assets/fonts/syne/logo-800.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +23,8 @@
   <link rel="stylesheet" href="../styles/main.css">
   <link rel="stylesheet" href="../styles/game.css">
 </head>
-<body data-page="redbean-breakout">
+<body class="game-assets-loading" data-page="redbean-breakout">
+  <div class="game-asset-loader" id="breakoutAssetLoader" role="status" aria-live="polite"><span id="breakoutAssetLoaderText">正在准备游戏…</span></div>
   <div class="cursor-glow" aria-hidden="true"></div><div class="noise" aria-hidden="true"></div>
   <!-- SITE_HEADER -->
 

@@ -5,11 +5,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#f7f7f7">
   <meta name="description" content="和白色博美红豆玩一局60秒的打地豆小游戏。">
-  <title>打地豆 v1.0.1</title>
+  <title>打地豆 v1.1.0</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='35' r='22' fill='%23f7f7f7' stroke='%23161616' stroke-width='5'/%3E%3Cpath d='M13 22 19 7l12 12M51 22 45 7 33 19' fill='%23f7f7f7' stroke='%23161616' stroke-width='5' stroke-linejoin='round'/%3E%3Ccircle cx='25' cy='33' r='3' fill='%23161616'/%3E%3Ccircle cx='39' cy='33' r='3' fill='%23161616'/%3E%3Cpath d='M29 41q3 4 6 0' fill='none' stroke='%23161616' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="./styles.css?v=1.0.1">
+  <style>
+    body.is-loading { background:#e5e4df; }
+    body.is-loading .game-shell { visibility:hidden; }
+    .asset-loader { position:fixed; z-index:1000; inset:0; display:grid; place-items:center; background:#e5e4df; color:#303030; font:700 14px/1.6 sans-serif; letter-spacing:.18em; text-align:center; }
+    .asset-loader::before { content:""; position:absolute; width:42px; height:42px; margin-top:-68px; border:3px solid rgba(48,48,48,.18); border-top-color:#303030; border-radius:50%; animation:asset-spin .8s linear infinite; }
+    .asset-loader[hidden] { display:none; }
+    @keyframes asset-spin { to { transform:rotate(360deg); } }
+    @media (prefers-reduced-motion:reduce) { .asset-loader::before { animation:none; border-top-color:rgba(48,48,48,.18); } }
+  </style>
+  <link rel="stylesheet" href="./styles.css?v=1.1.0">
 </head>
-<body>
+<body class="is-loading">
+  <div class="asset-loader" id="assetLoader" role="status" aria-live="polite"><span id="assetLoaderText">正在铺开画卷…</span></div>
   <main class="game-shell" id="gameShell">
     <div class="paper-wash" aria-hidden="true"></div>
     <svg class="filter-defs" aria-hidden="true">
@@ -58,7 +68,7 @@
 
       <div class="redbean-stage" id="redbeanStage">
         <button class="redbean-target" id="redbeanTarget" type="button" aria-label="敲红豆" disabled>
-          <img src="./assets/redbean-puppy-ink-v5.png?v=1.0.1" alt="">
+          <img src="./assets/redbean-puppy-ink-v5.png?v=1.1.0" alt="">
         </button>
       </div>
       <div class="feedback-layer" id="feedbackLayer" aria-hidden="true"></div>
@@ -67,11 +77,11 @@
     <section class="scene start-scene is-visible" id="startPanel" aria-labelledby="startTitle">
       <div class="start-title">
         <h1 id="startTitle"><span>打</span><span>地</span><span>豆</span></h1>
-        <small class="game-version">v1.0.1</small>
+        <small class="game-version">v1.1.0</small>
       </div>
-      <img class="start-redbean" src="./assets/redbean-puppy-ink-v5.png?v=1.0.1" alt="白色博美犬红豆从园中探出">
+      <img class="start-redbean" src="./assets/redbean-puppy-ink-v5.png?v=1.1.0" alt="白色博美犬红豆从园中探出">
       <div class="scene-action">
-        <button class="brush-button" id="startButton">开始游戏</button>
+        <button class="brush-button" id="startButton" disabled>开始游戏</button>
         <svg viewBox="0 0 180 22" aria-hidden="true"><path d="M6 13C55 4 116 19 174 8"/><path d="M30 17c48-6 91-3 126-7"/></svg>
         <small>支持触屏、鼠标和数字键</small>
       </div>
@@ -105,6 +115,6 @@
     </div>
     <div class="sr-only" id="liveRegion" aria-live="polite"></div>
   </main>
-  <script src="./game.js?v=1.0.1"></script>
+  <script src="./game.js?v=1.1.0"></script>
 </body>
 </html>

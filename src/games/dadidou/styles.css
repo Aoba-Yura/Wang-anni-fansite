@@ -32,7 +32,7 @@ button { color: inherit; font: inherit; }
   height: 100dvh;
   margin: 0 auto;
   overflow: hidden;
-  background: var(--纸白) url("./assets/ink-garden-monochrome.png?v=1.0.1") center / cover no-repeat;
+  background: var(--纸白) url("./assets/ink-garden-monochrome.png?v=1.1.0") center / cover no-repeat;
   box-shadow: 0 0 44px rgba(0,0,0,.2);
   user-select: none;
   -webkit-user-select: none;
@@ -358,7 +358,7 @@ button { color: inherit; font: inherit; }
   opacity: 0;
   background:
     linear-gradient(180deg, rgba(255,255,255,.93), rgba(247,247,247,.78)),
-    url("./assets/ink-garden-monochrome.png?v=1.0.1") center / cover no-repeat;
+    url("./assets/ink-garden-monochrome.png?v=1.1.0") center / cover no-repeat;
   transition: opacity 220ms ease, visibility 220ms;
 }
 

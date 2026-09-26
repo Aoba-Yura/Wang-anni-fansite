@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const GAME_VERSION = "1.0.1";
+  const GAME_VERSION = "1.1.0";
   const DURATION = 60000;
   const EXIT_MS = 150;
   const HIT_MS = 190;
@@ -30,7 +30,10 @@
   const scoreValue = document.getElementById("scoreValue");
   const comboText = document.getElementById("comboText");
   const liveRegion = document.getElementById("liveRegion");
+  const assetLoader = document.getElementById("assetLoader");
+  const assetLoaderText = document.getElementById("assetLoaderText");
 
+  let assetsReady = false;
   let audioContext = null;
   let phase = "ready";
   let runToken = 0;
@@ -289,6 +292,7 @@
   }
 
   async function beginCountdown() {
+    if (!assetsReady) return;
     const token = ++runToken;
     ensureAudio();
     startPanel.classList.remove("is-visible");
@@ -465,4 +469,35 @@
   pauseButton.addEventListener("click", () => setPaused(true));
   resumeButton.addEventListener("click", () => setPaused(false));
   quitButton.addEventListener("click", quitToStart);
+
+  function waitForImage(image) {
+    if (image.complete) {
+      return image.naturalWidth > 0 ? Promise.resolve() : Promise.reject(new Error(`Image failed: ${image.currentSrc || image.src}`));
+    }
+    return new Promise((resolve, reject) => {
+      image.addEventListener("load", resolve, { once: true });
+      image.addEventListener("error", () => reject(new Error(`Image failed: ${image.currentSrc || image.src}`)), { once: true });
+    });
+  }
+
+  async function loadRequiredAssets() {
+    const background = new Image();
+    background.src = `./assets/ink-garden-monochrome.png?v=${GAME_VERSION}`;
+    try {
+      await Promise.all([
+        ...[...document.images].map(waitForImage),
+        waitForImage(background),
+        document.fonts?.ready || Promise.resolve(),
+      ]);
+      assetsReady = true;
+      startButton.disabled = false;
+      document.body.classList.remove("is-loading");
+      assetLoader.hidden = true;
+    } catch (error) {
+      console.error(error);
+      assetLoaderText.textContent = "资源加载失败，请刷新页面重试";
+    }
+  }
+
+  loadRequiredAssets();
 })();

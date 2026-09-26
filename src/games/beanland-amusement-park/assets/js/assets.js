@@ -1,9 +1,9 @@
-/* 豆城光辉游乐园 v1.10.0：图片资源加载与画布资源生成 */
+/* 豆城光辉游乐园 v1.11.0：图片资源加载与画布资源生成 */
 (() => {
   'use strict';
   function makeCanvas(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').imageSmoothingEnabled=false;return c;}
   function loadImage(src){const i=new Image();i.decoding='async';i.src=src;return i;}
-  function imageReady(i){return i.complete&&i.naturalWidth?Promise.resolve(i):new Promise(resolve=>{i.addEventListener('load',()=>resolve(i),{once:true});i.addEventListener('error',()=>resolve(i),{once:true});});}
+  function imageReady(i){if(i.complete)return i.naturalWidth?Promise.resolve(i):Promise.reject(new Error(`Image failed: ${i.src}`));return new Promise((resolve,reject)=>{i.addEventListener('load',()=>resolve(i),{once:true});i.addEventListener('error',()=>reject(new Error(`Image failed: ${i.src}`)),{once:true});});}
   function buildAssets(){
     const a={
       balls:['assets/images/ball-pink.png','assets/images/ball-orange.png','assets/images/ball-blue.png','assets/images/ball-green.png','assets/images/ball-purple.png'].map(loadImage),

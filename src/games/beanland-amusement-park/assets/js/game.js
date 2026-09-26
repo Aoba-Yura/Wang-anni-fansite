@@ -1,17 +1,21 @@
-/* 豆城光辉游乐园 v1.10.0：游戏状态、规则、界面和主循环 */
+/* 豆城光辉游乐园 v1.11.0：游戏状态、规则、界面和主循环 */
 (() => {
   'use strict';
   const C=window.DC.cfg,G=window.DC.geo;
   class Game{
     constructor(){
       this.$=id=>document.getElementById(id);this.menu=this.$('menu');this.levelsScreen=this.$('levels');this.gameScreen=this.$('game');this.canvas=this.$('gameCanvas');
+      this.assetLoader=this.$('assetLoader');this.assetLoaderText=this.$('assetLoaderText');this.assetsReady=false;
       this.overlay=this.$('overlay');this.overlayTitle=this.$('overlayTitle');this.overlaySub=this.$('overlaySub');this.overlayButtons=this.$('overlayButtons');this.tutorial=this.$('tutorial');this.rotateGate=this.$('rotateGate');
       this.fullscreenRestoreBtn=this.$('fullscreenRestoreBtn');this.rotateRestoreBtn=this.$('rotateRestoreBtn');
       this.save=this.loadSave();this.assets=window.DC.assets.buildAssets();this.audio=new window.DC.AudioEngine(this.save.sound);this.state=null;this.acc=0;this.lastTs=performance.now();
       this.fullscreenRecoveryPending=false;this.fullscreenCountdownPending=false;this.lastFullscreenCountdownAt=0;this.intentionalFullscreenExit=false;this.wasFullscreen=this.isFullscreenLike();
       this.chain=new window.DC.ChainSystem(this);this.renderer=new window.DC.Renderer(this,this.canvas,this.assets);this.input=new window.DC.InputController(this,this.canvas);this.bindUI();this.syncViewport();
+      this.prepareAssets();
       requestAnimationFrame(t=>this.frame(t));
     }
+    waitForImage(image){if(image.complete)return image.naturalWidth?Promise.resolve():Promise.reject(new Error(`Image failed: ${image.currentSrc||image.src}`));return new Promise((resolve,reject)=>{image.addEventListener('load',resolve,{once:true});image.addEventListener('error',()=>reject(new Error(`Image failed: ${image.currentSrc||image.src}`)),{once:true});});}
+    async prepareAssets(){try{await Promise.all([this.assets.ready,...[...document.images].map(image=>this.waitForImage(image)),document.fonts?.ready||Promise.resolve()]);this.assetsReady=true;this.$('startBtn').disabled=false;document.body.classList.remove('is-loading');this.assetLoader.hidden=true;}catch(error){console.error(error);this.assetLoaderText.textContent='资源加载失败，请刷新页面重试';}}
     defaultSave(){return{progressLevel:1,scores:{},tutorialSeen:false,bombTutorialSeen:false,tunnelTutorialSeen:false,sound:true,lang:'zh'};}
     loadSave(){try{let raw=localStorage.getItem(C.STORAGE_KEY);if(!raw)for(const k of C.LEGACY_KEYS){const v=localStorage.getItem(k);if(v){raw=v;break;}}const prior=raw?JSON.parse(raw):{},save=Object.assign(this.defaultSave(),prior);if(!Number.isInteger(prior.progressLevel)){let next=1;while(next<C.LEVELS.length&&Object.prototype.hasOwnProperty.call(save.scores,next))next++;save.progressLevel=next;}save.progressLevel=Math.max(1,Math.min(C.LEVELS.length,save.progressLevel));return save;}catch(_){return this.defaultSave();}}
     persist(){try{localStorage.setItem(C.STORAGE_KEY,JSON.stringify(this.save));}catch(_){}}

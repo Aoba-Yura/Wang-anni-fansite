@@ -4,10 +4,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
   <meta name="theme-color" content="#314734" />
-  <title>豆城光辉游乐园 v1.10.0</title>
-  <link rel="stylesheet" href="assets/css/game.css?v=1.10.0">
+  <title>豆城光辉游乐园 v1.11.0</title>
+  <style>
+    body.is-loading { margin:0; background:#314734; }
+    body.is-loading #app { visibility:hidden; }
+    .asset-loader { position:fixed; z-index:1000; inset:0; display:grid; place-items:center; background:#314734; color:#fff0c8; font:800 14px/1.6 sans-serif; letter-spacing:.16em; text-align:center; }
+    .asset-loader::before { content:""; position:absolute; width:40px; height:40px; margin-top:-66px; border:4px solid rgba(255,240,200,.18); border-top-color:#f3c55f; image-rendering:pixelated; animation:asset-spin .75s steps(8) infinite; }
+    .asset-loader[hidden] { display:none; }
+    @keyframes asset-spin { to { transform:rotate(360deg); } }
+    @media (prefers-reduced-motion:reduce) { .asset-loader::before { animation:none; border-top-color:rgba(255,240,200,.18); } }
+  </style>
+  <link rel="stylesheet" href="assets/css/game.css?v=1.11.0">
 </head>
-<body>
+<body class="is-loading">
+  <div class="asset-loader" id="assetLoader" role="status" aria-live="polite"><span id="assetLoaderText">正在开放游乐园…</span></div>
   <main id="app">
     <section id="menu" class="screen active" aria-label="主菜单">
       <div class="card title-card">
@@ -19,11 +29,11 @@
           <div class="menu-mascot-wrap"><img class="menu-mascot" src="assets/images/menu-redbean.png" alt="红豆" /></div>
         </div>
         <div class="menu-actions">
-          <button id="startBtn" class="primary">进入游乐园</button>
+          <button id="startBtn" class="primary" disabled>进入游乐园</button>
           <button id="helpBtn" class="ghost">游玩指南</button>
           <button id="soundBtn" class="ghost" aria-pressed="true">♪ 音效 ON</button>
           <button id="langBtn" class="ghost" type="button" aria-label="切换到日语">语言：中文</button>
-        </div><div class="version">v1.10.0</div>
+        </div><div class="version">v1.11.0</div>
       </div>
     </section>
 
@@ -60,13 +70,13 @@
       </div>
     </div>
   </main>
-  <script src="assets/js/config.js?v=1.10.0"></script>
-  <script src="assets/js/geometry.js?v=1.10.0"></script>
-  <script src="assets/js/audio.js?v=1.10.0"></script>
-  <script src="assets/js/assets.js?v=1.10.0"></script>
-  <script src="assets/js/chain-system.js?v=1.10.0"></script>
-  <script src="assets/js/input.js?v=1.10.0"></script>
-  <script src="assets/js/renderer.js?v=1.10.0"></script>
-  <script src="assets/js/game.js?v=1.10.0"></script>
+  <script src="assets/js/config.js?v=1.11.0"></script>
+  <script src="assets/js/geometry.js?v=1.11.0"></script>
+  <script src="assets/js/audio.js?v=1.11.0"></script>
+  <script src="assets/js/assets.js?v=1.11.0"></script>
+  <script src="assets/js/chain-system.js?v=1.11.0"></script>
+  <script src="assets/js/input.js?v=1.11.0"></script>
+  <script src="assets/js/renderer.js?v=1.11.0"></script>
+  <script src="assets/js/game.js?v=1.11.0"></script>
 </body>
 </html>

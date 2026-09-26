@@ -15,7 +15,6 @@
 .game-cover-card:hover .game-cover-media--amusement img { transform: translateY(-5px) scale(1.025); }
 .game-cover-media--dadidou { background: radial-gradient(circle at 72% 42%, rgba(255,255,255,.94), rgba(236,234,226,.72) 29%, transparent 30%), linear-gradient(145deg, #d8d4c9, #8f918d 58%, #303330); }
 .game-cover-media--dadidou::before { inset: 12% 7%; background: repeating-linear-gradient(172deg, transparent 0 26px, rgba(20,20,18,.16) 27px 29px), radial-gradient(ellipse at 42% 72%, rgba(20,20,18,.28), transparent 46%); opacity: .74; transform: none; }
-.game-cover-media--dadidou span { color: #211f1c; text-shadow: 0 2px 14px rgba(255,255,255,.82); }
 .game-cover-media--dadidou img { right: -2%; bottom: -17%; width: 61%; height: auto; transform: rotate(-3deg); filter: grayscale(1) contrast(1.12) drop-shadow(0 15px 18px rgba(0,0,0,.3)); }
 .game-cover-card:hover .game-cover-media--dadidou img { transform: translateY(-5px) rotate(-1deg) scale(1.025); }
 .game-cover-info { min-height: 116px; padding: 22px 24px; display: flex; align-items: end; justify-content: space-between; gap: 20px; }

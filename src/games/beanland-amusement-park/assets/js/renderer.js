@@ -1,4 +1,4 @@
-/* 豆城光辉游乐园 v1.10.0：场景、道路、角色、球链与 HUD 绘制 */
+/* 豆城光辉游乐园 v1.11.0：场景、道路、角色、球链与 HUD 绘制 */
 (() => {
   'use strict';
   const C=window.DC.cfg,G=window.DC.geo,A=window.DC.assets;
