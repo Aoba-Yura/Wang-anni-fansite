@@ -158,7 +158,7 @@ function renderHomeNav() {
   return navigation.slice(1).map(({ href, label, japanese, artwork }, index) => {
     const cardClass = href.replace(".html", "");
     const artworkSlot = artwork
-      ? `<span class="bento-artwork" aria-hidden="true"><img src="./${artwork}" width="1448" height="1086" alt="" loading="lazy" decoding="async"></span>`
+      ? `<span class="bento-artwork" style="--bento-artwork:url('./${artwork}')" aria-hidden="true"></span>`
       : "";
     return `<a class="bento-card bento-${cardClass}" href="./${href}"><span>${String(index + 1).padStart(2, "0")}</span>${artworkSlot}<div><small lang="ja">${japanese}</small><strong>${label}</strong></div><b>↗</b></a>`;
   }).join("\n      ");
