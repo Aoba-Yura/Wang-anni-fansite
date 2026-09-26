@@ -41,6 +41,7 @@ jobs:
         run: |
           node --check dist/script.js
           node --check dist/game.js
+          find dist/games -type f -name '*.js' -print0 | xargs -0 -n1 node --check
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5

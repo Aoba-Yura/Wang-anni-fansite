@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f7f7">
+  <meta name="description" content="和白色博美红豆玩一局60秒的打地豆小游戏。">
+  <title>打地豆 v1.0.1</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='35' r='22' fill='%23f7f7f7' stroke='%23161616' stroke-width='5'/%3E%3Cpath d='M13 22 19 7l12 12M51 22 45 7 33 19' fill='%23f7f7f7' stroke='%23161616' stroke-width='5' stroke-linejoin='round'/%3E%3Ccircle cx='25' cy='33' r='3' fill='%23161616'/%3E%3Ccircle cx='39' cy='33' r='3' fill='%23161616'/%3E%3Cpath d='M29 41q3 4 6 0' fill='none' stroke='%23161616' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css?v=1.0.1">
+</head>
+<body>
+  <main class="game-shell" id="gameShell">
+    <div class="paper-wash" aria-hidden="true"></div>
+    <svg class="filter-defs" aria-hidden="true">
+      <defs>
+        <filter id="vermilionInk" color-interpolation-filters="sRGB">
+          <feColorMatrix type="matrix" values="
+            .255 0 0 0 .745
+            0 .824 0 0 .176
+            0 0 .863 0 .137
+            0 0 0 1 0"/>
+        </filter>
+        <symbol id="burrowLip" viewBox="0 0 220 100">
+          <path class="bank-wash" d="M8 58C39 46 67 52 91 56c29 5 61-7 121 2l-5 31c-44 7-74-2-109 0-35 3-61 7-92-1Z"/>
+          <path class="bank-line" d="M8 60c30-14 58-4 82-1 31 4 65-11 122 0M15 72c31-5 50 5 76 2 35-4 63-7 111 1"/>
+          <path class="grass-line" d="M25 59c-2-13-7-21-14-28m17 27c3-13 8-20 15-26m129 24c4-13 9-21 17-28m-13 29c0-16-3-25-8-34"/>
+        </symbol>
+      </defs>
+    </svg>
+
+    <header class="hud" aria-label="游戏状态">
+      <div class="hud-reading timer-reading">
+        <span>余时</span><strong id="timeValue">60</strong>
+        <svg class="hud-stroke" viewBox="0 0 96 14" aria-hidden="true"><path d="M3 8C28 2 60 12 93 5"/><path d="M17 11C43 8 65 9 84 7"/></svg>
+      </div>
+      <div class="hud-right">
+        <div class="hud-reading score-reading"><span>得分</span><strong id="scoreValue">0</strong></div>
+        <button class="icon-button" id="pauseButton" aria-label="暂停游戏">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M15 12c3-2 6-2 8 0v24c-3 2-6 2-8 0zM27 12c3-2 6-2 8 0v24c-3 2-6 2-8 0z"/></svg>
+        </button>
+        <span class="combo-note" id="comboText" aria-live="polite"></span>
+      </div>
+    </header>
+
+    <section class="playfield" id="playfield" aria-label="红豆园林">
+      <div class="burrow-map" id="burrowGrid">
+        <button class="burrow p1" data-index="0" aria-label="左上位置，数字键7"><svg class="burrow-lip" viewBox="0 0 220 100" aria-hidden="true"><use href="#burrowLip"/></svg></button>
+        <button class="burrow p2" data-index="1" aria-label="上方位置，数字键8"><svg class="burrow-lip" viewBox="0 0 220 100" aria-hidden="true"><use href="#burrowLip"/></svg></button>
+        <button class="burrow p3" data-index="2" aria-label="右上位置，数字键9"><svg class="burrow-lip" viewBox="0 0 220 100" aria-hidden="true"><use href="#burrowLip"/></svg></button>
+        <button class="burrow p4" data-index="3" aria-label="左侧位置，数字键4"><svg class="burrow-lip" viewBox="0 0 220 100" aria-hidden="true"><use href="#burrowLip"/></svg></button>
+        <button class="burrow p5" data-index="4" aria-label="中央位置，数字键5"><svg class="burrow-lip" viewBox="0 0 220 100" aria-hidden="true"><use href="#burrowLip"/></svg></button>
+        <button class="burrow p6" data-index="5" aria-label="右侧位置，数字键6"><svg class="burrow-lip" viewBox="0 0 220 100" aria-hidden="true"><use href="#burrowLip"/></svg></button>
+        <button class="burrow p7" data-index="6" aria-label="左下位置，数字键1"><svg class="burrow-lip" viewBox="0 0 220 100" aria-hidden="true"><use href="#burrowLip"/></svg></button>
+        <button class="burrow p8" data-index="7" aria-label="下方位置，数字键2"><svg class="burrow-lip" viewBox="0 0 220 100" aria-hidden="true"><use href="#burrowLip"/></svg></button>
+        <button class="burrow p9" data-index="8" aria-label="右下位置，数字键3"><svg class="burrow-lip" viewBox="0 0 220 100" aria-hidden="true"><use href="#burrowLip"/></svg></button>
+      </div>
+
+      <div class="redbean-stage" id="redbeanStage">
+        <button class="redbean-target" id="redbeanTarget" type="button" aria-label="敲红豆" disabled>
+          <img src="./assets/redbean-puppy-ink-v5.png?v=1.0.1" alt="">
+        </button>
+      </div>
+      <div class="feedback-layer" id="feedbackLayer" aria-hidden="true"></div>
+    </section>
+
+    <section class="scene start-scene is-visible" id="startPanel" aria-labelledby="startTitle">
+      <div class="start-title">
+        <h1 id="startTitle"><span>打</span><span>地</span><span>豆</span></h1>
+        <small class="game-version">v1.0.1</small>
+      </div>
+      <img class="start-redbean" src="./assets/redbean-puppy-ink-v5.png?v=1.0.1" alt="白色博美犬红豆从园中探出">
+      <div class="scene-action">
+        <button class="brush-button" id="startButton">开始游戏</button>
+        <svg viewBox="0 0 180 22" aria-hidden="true"><path d="M6 13C55 4 116 19 174 8"/><path d="M30 17c48-6 91-3 126-7"/></svg>
+        <small>支持触屏、鼠标和数字键</small>
+      </div>
+    </section>
+
+    <section class="scene result-scene" id="resultPanel" aria-labelledby="resultTitle">
+      <p class="result-caption" id="resultTitle">本局结束</p>
+      <div class="result-score"><strong id="finalScore">0</strong><span>分</span></div>
+      <dl class="result-stats">
+        <div><dt>命中次数</dt><dd id="foundValue">0 / 0</dd></div>
+        <div><dt>敲击准确</dt><dd id="accuracyValue">0%</dd></div>
+        <div><dt>最高连击</dt><dd id="maxComboValue">0</dd></div>
+      </dl>
+      <p class="best-note">最高分　<span id="bestScoreValue">0</span></p>
+      <div class="scene-action">
+        <button class="brush-button" id="replayButton">再玩一次</button>
+        <svg viewBox="0 0 180 22" aria-hidden="true"><path d="M6 13C55 4 116 19 174 8"/><path d="M30 17c48-6 91-3 126-7"/></svg>
+      </div>
+    </section>
+
+    <div class="countdown" id="countdown" aria-live="assertive"></div>
+
+    <section class="pause-veil" id="pauseVeil" aria-labelledby="pauseTitle">
+      <h2 id="pauseTitle">暂停</h2>
+      <button class="brush-button" id="resumeButton">继续游戏</button>
+      <button class="text-button" id="quitButton">退出本局</button>
+    </section>
+
+    <div class="toy-hammer" id="toyHammer" aria-hidden="true">
+      <svg viewBox="0 0 64 82"><path class="hammer-head" d="M7 8C20 4 42 5 55 10l-2 24c-15 5-31 4-45-1z"/><path class="hammer-end" d="M3 13l8-2-1 17-8 2z"/><path class="hammer-handle" d="M31 32l10 1-7 44-10-2z"/></svg>
+    </div>
+    <div class="sr-only" id="liveRegion" aria-live="polite"></div>
+  </main>
+  <script src="./game.js?v=1.0.1"></script>
+</body>
+</html>

@@ -10,6 +10,18 @@ const partials = join(source, "partials");
 const games = join(source, "games");
 const dist = join(root, "dist");
 const beanlandRoot = join(games, "beanland-amusement-park");
+const dadidouRoot = join(games, "dadidou");
+
+function validateStandaloneGame({ label, version, index, assetVersions, expectedAssetVersions, markers }) {
+  if (!version || !/^\d+\.\d+\.\d+$/.test(version)) {
+    throw new Error(`${label} VERSION must use MAJOR.MINOR.PATCH format.`);
+  }
+  if (markers.some((marker) => !index.includes(marker.replace("{version}", version)))
+    || assetVersions.length !== expectedAssetVersions
+    || assetVersions.some((assetVersion) => assetVersion !== version)) {
+    throw new Error(`${label} page, runtime, and asset versions must all match ${version}.`);
+  }
+}
 
 const [beanlandIndex, beanlandConfig] = await Promise.all([
   readFile(join(beanlandRoot, "index.html"), "utf8"),
@@ -17,15 +29,30 @@ const [beanlandIndex, beanlandConfig] = await Promise.all([
 ]);
 const beanlandVersion = beanlandConfig.match(/VERSION:\s*'([^']+)'/)?.[1];
 const beanlandAssetVersions = [...beanlandIndex.matchAll(/[?&]v=([0-9.]+)/g)].map((match) => match[1]);
-if (!beanlandVersion || !/^\d+\.\d+\.\d+$/.test(beanlandVersion)) {
-  throw new Error("Beanland VERSION must use MAJOR.MINOR.PATCH format.");
-}
-if (!beanlandIndex.includes(`<title>豆城光辉游乐园 v${beanlandVersion}</title>`)
-  || !beanlandIndex.includes(`<div class="version">v${beanlandVersion}</div>`)
-  || beanlandAssetVersions.length !== 9
-  || beanlandAssetVersions.some((version) => version !== beanlandVersion)) {
-  throw new Error(`Beanland page, runtime, and asset versions must all match ${beanlandVersion}.`);
-}
+validateStandaloneGame({
+  label: "Beanland",
+  version: beanlandVersion,
+  index: beanlandIndex,
+  assetVersions: beanlandAssetVersions,
+  expectedAssetVersions: 9,
+  markers: ["<title>豆城光辉游乐园 v{version}</title>", "<div class=\"version\">v{version}</div>"],
+});
+
+const [dadidouIndex, dadidouScript, dadidouStyles] = await Promise.all([
+  readFile(join(dadidouRoot, "index.html"), "utf8"),
+  readFile(join(dadidouRoot, "game.js"), "utf8"),
+  readFile(join(dadidouRoot, "styles.css"), "utf8"),
+]);
+const dadidouVersion = dadidouScript.match(/GAME_VERSION\s*=\s*"([^"]+)"/)?.[1];
+const dadidouAssetVersions = [...`${dadidouIndex}\n${dadidouStyles}`.matchAll(/[?&]v=([0-9.]+)/g)].map((match) => match[1]);
+validateStandaloneGame({
+  label: "Dadidou",
+  version: dadidouVersion,
+  index: dadidouIndex,
+  assetVersions: dadidouAssetVersions,
+  expectedAssetVersions: 6,
+  markers: ["<title>打地豆 v{version}</title>", "<small class=\"game-version\">v{version}</small>"],
+});
 
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
@@ -257,3 +284,4 @@ console.log(`Bilibili archive: ${bilibiliStats.total} total, ${bilibiliStats.vis
 
 console.log(`Built ${await readdir(dist).then(files => files.length)} files in dist/`);
 console.log(`Beanland game: v${beanlandVersion}`);
+console.log(`Dadidou game: v${dadidouVersion}`);

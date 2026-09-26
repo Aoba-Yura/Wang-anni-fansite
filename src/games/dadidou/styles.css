@@ -1,0 +1,592 @@
+:root {
+  color-scheme: light;
+  --焦墨: #111111;
+  --浓墨: #303030;
+  --重墨: #595959;
+  --淡墨: #929292;
+  --清墨: #c9c9c9;
+  --纸白: #f7f7f7;
+  --亮纸: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: #d7d7d7;
+  color: var(--焦墨);
+  font-family: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", serif;
+}
+
+button { color: inherit; font: inherit; }
+
+.game-shell {
+  position: relative;
+  isolation: isolate;
+  width: min(100vw, 600px);
+  height: 100dvh;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--纸白) url("./assets/ink-garden-monochrome.png?v=1.0.1") center / cover no-repeat;
+  box-shadow: 0 0 44px rgba(0,0,0,.2);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.game-shell::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.58) 0 12%, rgba(255,255,255,.16) 28% 72%, rgba(255,255,255,.42)),
+    radial-gradient(ellipse at 51% 47%, rgba(255,255,255,.46), transparent 58%);
+  pointer-events: none;
+}
+
+.paper-wash {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  opacity: .055;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(7deg, transparent 0 13px, rgba(0,0,0,.1) 14px, transparent 15px 31px),
+    repeating-linear-gradient(92deg, transparent 0 27px, rgba(0,0,0,.07) 28px, transparent 30px 55px);
+  mix-blend-mode: multiply;
+}
+
+.filter-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.hud {
+  position: absolute;
+  z-index: 30;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 92px;
+  padding:
+    max(14px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    8px
+    max(16px, env(safe-area-inset-left));
+  pointer-events: none;
+}
+
+.hud-reading {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  text-shadow: 0 1px 0 rgba(255,255,255,.86);
+}
+
+.hud-reading span {
+  color: var(--重墨);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  writing-mode: vertical-rl;
+}
+
+.hud-reading strong {
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2rem, 9vw, 3rem);
+  font-weight: 850;
+  line-height: .96;
+}
+
+.hud-stroke {
+  position: absolute;
+  left: 18px;
+  top: 43px;
+  width: 78px;
+  height: 14px;
+  overflow: visible;
+}
+
+.hud-stroke path,
+.scene-action svg path {
+  fill: none;
+  stroke: var(--焦墨);
+  stroke-linecap: round;
+}
+
+.hud-stroke path:first-child { stroke-width: 2.5; }
+.hud-stroke path:last-child { stroke-width: .8; opacity: .38; }
+
+.hud-right {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 48px;
+  grid-template-rows: auto auto;
+  align-items: start;
+  column-gap: 8px;
+  pointer-events: auto;
+}
+
+.score-reading { justify-self: end; }
+.score-reading strong { font-size: clamp(1.6rem, 7vw, 2.35rem); }
+
+.icon-button {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  padding: 9px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.icon-button svg { width: 100%; height: 100%; fill: var(--浓墨); }
+.icon-button:focus-visible { outline: 2px solid var(--焦墨); outline-offset: -3px; }
+
+.combo-note {
+  grid-column: 1 / -1;
+  min-height: 18px;
+  margin-top: -4px;
+  color: var(--重墨);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-align: right;
+}
+
+.playfield {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  padding:
+    calc(max(82px, env(safe-area-inset-top) + 70px))
+    max(10px, env(safe-area-inset-right))
+    max(20px, env(safe-area-inset-bottom))
+    max(10px, env(safe-area-inset-left));
+}
+
+.burrow-map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  touch-action: manipulation;
+}
+
+.burrow {
+  position: absolute;
+  width: 30%;
+  height: 21%;
+  min-width: 72px;
+  min-height: 72px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  cursor: none;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.burrow::before {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  left: 12%;
+  right: 12%;
+  bottom: 8%;
+  height: 34%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 58%, rgba(15,15,15,.74) 0 36%, rgba(46,46,46,.42) 54%, transparent 72%);
+  filter: blur(.3px);
+}
+
+.burrow.p1 { left: 3%; top: 4%; }
+.burrow.p2 { left: 36%; top: 1%; }
+.burrow.p3 { right: 1%; top: 8%; }
+.burrow.p4 { left: 0; top: 31%; }
+.burrow.p5 { left: 35%; top: 27%; }
+.burrow.p6 { right: 0; top: 35%; }
+.burrow.p7 { left: 6%; top: 61%; }
+.burrow.p8 { left: 38%; top: 57%; }
+.burrow.p9 { right: 2%; top: 66%; }
+
+.burrow-lip {
+  position: absolute;
+  z-index: 16;
+  left: -5%;
+  bottom: -2%;
+  width: 110%;
+  height: 68%;
+  overflow: visible;
+  opacity: .62;
+  transition: opacity 90ms ease, transform 140ms ease;
+}
+
+.burrow-lip .bank-wash { fill: rgba(202,202,202,.86); }
+.burrow-lip .bank-line,
+.burrow-lip .grass-line {
+  fill: none;
+  stroke: var(--浓墨);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.burrow-lip .bank-line { stroke-width: 2.4; opacity: .82; }
+.burrow-lip .grass-line { stroke-width: 2; opacity: .72; }
+.burrow:nth-child(2n) .burrow-lip { transform: rotate(1.5deg) scaleX(.96); }
+.burrow:nth-child(3n) .burrow-lip { transform: rotate(-1.5deg) scaleX(1.04); }
+.burrow.current .burrow-lip { opacity: .88; transform: scale(1.03) rotate(0); }
+.burrow:focus-visible { outline: 2px solid var(--焦墨); outline-offset: -6px; }
+
+.redbean-stage {
+  position: absolute;
+  z-index: 12;
+  left: var(--stage-x, 50%);
+  top: var(--stage-y, 50%);
+  width: clamp(130px, 33vw, 176px);
+  height: clamp(140px, 35vw, 188px);
+  overflow: hidden;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+}
+
+.redbean-target {
+  position: absolute;
+  left: 50%;
+  bottom: -66%;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  opacity: 1;
+  pointer-events: none;
+  transform: translateX(-50%) scale(.9);
+  transform-origin: 50% 88%;
+}
+
+.redbean-target.hittable {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.redbean-target:focus-visible {
+  outline: 2px solid var(--焦墨);
+  outline-offset: 3px;
+}
+
+.redbean-target img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+.redbean-target:not(.vermilion) img,
+.start-redbean { filter: grayscale(1) contrast(1.05); }
+
+.redbean-target.vermilion img { filter: url("#vermilionInk"); }
+
+.redbean-target.entering {
+  bottom: -9%;
+  transform: translateX(-50%) scale(1);
+  transition: bottom 145ms cubic-bezier(.16,.8,.3,1), transform 145ms cubic-bezier(.16,.8,.3,1);
+}
+
+.redbean-target.hit {
+  opacity: 1;
+  animation: inkBonk 190ms ease-out both;
+}
+
+.redbean-target.exiting {
+  bottom: -66%;
+  transform: translateX(-50%) scale(.92);
+  transition: bottom 150ms ease-in, transform 150ms ease-in;
+}
+
+.feedback-layer { position: absolute; z-index: 24; inset: 0; pointer-events: none; }
+
+.ink-feedback,
+.float-score {
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.ink-feedback {
+  width: 74px;
+  height: 48px;
+  animation: inkWave 280ms ease-out forwards;
+}
+
+.ink-feedback path {
+  fill: none;
+  stroke: var(--焦墨);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.ink-feedback path:first-child { stroke-width: 3; stroke-dasharray: 27 6 14 8; }
+.ink-feedback path:last-child { stroke-width: 1; opacity: .48; stroke-dasharray: 10 6 22 5; }
+.ink-feedback.miss { width: 44px; height: 32px; opacity: .45; }
+
+.float-score {
+  color: var(--焦墨);
+  font-size: 1rem;
+  font-weight: 850;
+  animation: scoreFloat 420ms ease-out forwards;
+}
+
+.scene {
+  position: absolute;
+  z-index: 60;
+  inset: 0;
+  visibility: hidden;
+  opacity: 0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.93), rgba(247,247,247,.78)),
+    url("./assets/ink-garden-monochrome.png?v=1.0.1") center / cover no-repeat;
+  transition: opacity 220ms ease, visibility 220ms;
+}
+
+.scene.is-visible { visibility: visible; opacity: 1; }
+
+.start-title {
+  position: absolute;
+  top: max(7%, env(safe-area-inset-top));
+  left: max(8%, env(safe-area-inset-left));
+}
+
+.start-title p {
+  margin: 0 0 11px;
+  color: var(--重墨);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .3em;
+}
+
+.start-title h1 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  font-family: "STKaiti", "KaiTi", serif;
+  font-size: clamp(3.3rem, 15vw, 5.5rem);
+  font-weight: 800;
+  line-height: .9;
+  letter-spacing: 0;
+}
+
+.start-title h1 span:nth-child(2) { margin-left: .08em; }
+.start-title h1 span:nth-child(3) { margin-left: -.04em; }
+.game-version { display: block; margin-top: 9px; color: var(--重墨); font: 700 .68rem/1 sans-serif; letter-spacing: .14em; }
+
+.start-redbean {
+  position: absolute;
+  z-index: 1;
+  right: -4%;
+  bottom: 19%;
+  width: min(44vw, 220px);
+  max-height: 41%;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+.intro {
+  position: absolute;
+  left: 26%;
+  top: 46%;
+  margin: 0;
+  color: var(--浓墨);
+  font-size: clamp(.93rem, 3.8vw, 1.08rem);
+  font-weight: 650;
+  line-height: 1.9;
+  text-shadow: 0 1px 0 rgba(255,255,255,.92);
+}
+
+.scene-action {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: max(5.5%, env(safe-area-inset-bottom));
+  display: grid;
+  place-items: center;
+  transform: translateX(-50%);
+}
+
+.brush-button {
+  position: relative;
+  z-index: 2;
+  min-width: 132px;
+  min-height: 48px;
+  padding: 8px 22px;
+  border: 0;
+  background: transparent;
+  color: var(--焦墨);
+  font-weight: 850;
+  letter-spacing: .24em;
+  cursor: pointer;
+}
+
+.scene-action svg {
+  width: 164px;
+  height: 20px;
+  margin-top: -14px;
+  overflow: visible;
+}
+
+.scene-action svg path:first-child { stroke-width: 3.5; stroke-dasharray: 53 5 31 8; }
+.scene-action svg path:last-child { stroke-width: 1; opacity: .45; }
+.scene-action small { margin-top: 13px; color: var(--重墨); font-size: .72rem; white-space: nowrap; }
+.brush-button:focus-visible,
+.text-button:focus-visible { outline: 2px solid var(--焦墨); outline-offset: 2px; }
+
+.result-scene { padding: max(9%, env(safe-area-inset-top)) 10% max(8%, env(safe-area-inset-bottom)); }
+.result-caption { margin: 7% 0 0; color: var(--浓墨); font-size: 1rem; font-weight: 750; letter-spacing: .08em; }
+.result-score { display: flex; align-items: baseline; gap: 8px; margin: 5% 0 8%; }
+.result-score strong { font-size: clamp(4.4rem, 20vw, 7rem); font-weight: 850; line-height: .9; }
+.result-score span { color: var(--重墨); font-weight: 700; }
+
+.result-stats { display: grid; gap: 14px; width: min(86%, 350px); margin: 0; }
+.result-stats div { display: grid; grid-template-columns: 1fr auto; align-items: baseline; }
+.result-stats dt { color: var(--重墨); font-size: .9rem; font-weight: 650; letter-spacing: .12em; }
+.result-stats dd { margin: 0; font-size: 1.15rem; font-weight: 850; }
+.best-note { position: absolute; right: 10%; bottom: 25%; margin: 0; color: var(--重墨); font-size: .78rem; letter-spacing: .1em; }
+
+.countdown {
+  position: absolute;
+  z-index: 80;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  visibility: hidden;
+  color: var(--焦墨);
+  font-family: "STKaiti", "KaiTi", serif;
+  font-size: clamp(6rem, 29vw, 10rem);
+  font-weight: 850;
+  pointer-events: none;
+}
+
+.countdown.show { visibility: visible; animation: countInk 650ms ease both; }
+
+.pause-veil {
+  position: absolute;
+  z-index: 90;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 20px;
+  visibility: hidden;
+  opacity: 0;
+  padding: 18%;
+  background: rgba(247,247,247,.91);
+  transition: opacity 160ms ease, visibility 160ms;
+}
+
+.pause-veil.show { visibility: visible; opacity: 1; }
+.pause-veil h2 { margin: 0 0 28px; font-family: "STKaiti","KaiTi",serif; font-size: 2.4rem; letter-spacing: .24em; }
+.text-button { min-height: 44px; border: 0; background: transparent; color: var(--重墨); font-size: .86rem; cursor: pointer; }
+
+.toy-hammer {
+  position: fixed;
+  z-index: 110;
+  top: 0;
+  left: 0;
+  width: 52px;
+  height: 67px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-48%, -78%) rotate(-22deg);
+}
+
+.toy-hammer svg { width: 100%; height: 100%; overflow: visible; }
+.hammer-head { fill: var(--焦墨); }
+.hammer-end { fill: var(--亮纸); stroke: var(--焦墨); stroke-width: 2; }
+.hammer-handle { fill: var(--淡墨); stroke: var(--焦墨); stroke-width: 2; }
+.toy-hammer.visible { opacity: 1; }
+.toy-hammer.bonk { animation: hammerBonk 170ms ease-out; }
+.game-shell.rush .timer-reading strong { animation: timePulse 420ms ease-in-out infinite alternate; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+@keyframes inkBonk {
+  0% { bottom: -9%; transform: translateX(-50%) scale(1); opacity: 1; }
+  45% { bottom: -5%; transform: translateX(-50%) scale(1.04,.88) rotate(-2deg); opacity: 1; }
+  100% { bottom: -66%; transform: translateX(-50%) scale(.9); opacity: .3; }
+}
+@keyframes inkWave { from { opacity: .85; transform: translate(-50%,-50%) scale(.65); } to { opacity: 0; transform: translate(-50%,-50%) scale(1.35); } }
+@keyframes scoreFloat { to { opacity: 0; transform: translate(-50%,calc(-50% - 28px)); } }
+@keyframes countInk { 0% { opacity: 0; transform: scale(.75); } 38% { opacity: 1; transform: scale(1.03); } 100% { opacity: 0; transform: scale(.94); } }
+@keyframes hammerBonk { 0% { transform: translate(-48%,-78%) rotate(-22deg); } 58% { transform: translate(-34%,-48%) rotate(15deg); } 100% { transform: translate(-48%,-78%) rotate(-22deg); } }
+@keyframes timePulse { to { transform: scale(1.1); } }
+
+@media (hover: hover) and (pointer: fine) {
+  .game-shell,
+  .burrow { cursor: none; }
+  .brush-button,
+  .text-button,
+  .icon-button { cursor: pointer; }
+}
+
+@media (max-height: 650px) {
+  .hud { min-height: 76px; padding-top: max(8px, env(safe-area-inset-top)); }
+  .playfield { padding-top: calc(max(66px, env(safe-area-inset-top) + 56px)); padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+  .redbean-stage { width: clamp(118px, 30vw, 150px); height: clamp(128px, 32vw, 160px); }
+  .start-redbean { width: min(42vw, 220px); bottom: 16%; }
+  .intro { top: 43%; }
+  .scene-action { bottom: max(3%, env(safe-area-inset-bottom)); }
+  .scene-action small { display: none; }
+  .result-caption { margin-top: 1%; }
+  .result-score { margin: 3% 0 4%; }
+  .result-stats { gap: 7px; }
+}
+
+@media (min-width: 700px) {
+  body { display: grid; place-items: center; background: linear-gradient(135deg,#cacaca,#eeeeee); }
+  .game-shell { height: min(930px, 96dvh); border: 6px solid rgba(255,255,255,.74); }
+}
+
+@media (orientation: landscape) and (max-height: 520px) and (pointer: coarse) {
+  .game-shell::after {
+    content: "请竖持画卷";
+    position: absolute;
+    z-index: 200;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(247,247,247,.96);
+    color: var(--浓墨);
+    font-size: 1.2rem;
+    font-weight: 750;
+    letter-spacing: .24em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
