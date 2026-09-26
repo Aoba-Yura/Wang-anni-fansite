@@ -125,7 +125,7 @@ const hymnDataScript = `<script id="hymn-data" type="application/json">${hymnDat
 
 const navigation = [
   { href: "index.html", label: "首页", japanese: "ホーム", mobileLabel: "首页", mobileJapanese: "ホーム", icon: "⌂" },
-  { href: "profile.html", label: "人物档案", japanese: "プロフィール", mobileLabel: "档案", mobileJapanese: "プロフィール", icon: "✦" },
+  { href: "profile.html", label: "人物档案", japanese: "プロフィール", mobileLabel: "档案", mobileJapanese: "プロフィール", icon: "✦", artwork: "assets/images/anni_6th_anniversary.svg" },
   { href: "diary.html", label: "安妮日常", japanese: "ダイアリー", mobileLabel: "日常", mobileJapanese: "ダイアリー", icon: "✎" },
   { href: "notices.html", label: "公告栏", japanese: "お知らせ", mobileLabel: "公告", mobileJapanese: "お知らせ", icon: "♡" },
   { href: "hymn.html", label: "安妮颂", japanese: "賛歌", mobileLabel: "安妮颂", mobileJapanese: "賛歌", icon: "✿" },
@@ -155,9 +155,12 @@ function renderMobileNav(file) {
 }
 
 function renderHomeNav() {
-  return navigation.slice(1).map(({ href, label, japanese }, index) => {
+  return navigation.slice(1).map(({ href, label, japanese, artwork }, index) => {
     const cardClass = href.replace(".html", "");
-    return `<a class="bento-card bento-${cardClass}" href="./${href}"><span>${String(index + 1).padStart(2, "0")}</span><div><small lang="ja">${japanese}</small><strong>${label}</strong></div><b>↗</b></a>`;
+    const artworkSlot = artwork
+      ? `<span class="bento-artwork" aria-hidden="true"><img src="./${artwork}" width="1448" height="1086" alt="" loading="lazy" decoding="async"></span>`
+      : "";
+    return `<a class="bento-card bento-${cardClass}" href="./${href}"><span>${String(index + 1).padStart(2, "0")}</span>${artworkSlot}<div><small lang="ja">${japanese}</small><strong>${label}</strong></div><b>↗</b></a>`;
   }).join("\n      ");
 }
 
