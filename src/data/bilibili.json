@@ -2,6 +2,65 @@
   "schema_version": 2,
   "records": [
     {
+      "id": "BV17Gaa6TEqG",
+      "raw": {
+        "id": "BV17Gaa6TEqG",
+        "platform": "bilibili",
+        "bvid": "BV17Gaa6TEqG",
+        "aid": null,
+        "title": "【安妮】不定期更新的周记④｜中秋快乐🌜",
+        "description": "-",
+        "timestamp": 1790517504,
+        "upload_date": "20260927",
+        "duration": 251.733,
+        "source": "https://www.bilibili.com/video/BV17Gaa6TEqG",
+        "uploader": "王安妮-TSH48",
+        "uploader_id": "5517087",
+        "channel": null,
+        "channel_id": null,
+        "tags": [
+          "发现《Summer (Nature's Crescendo)》",
+          "寻找100个宝藏vlogger",
+          "生活记录",
+          "TSH48",
+          "周记",
+          "必剪创作"
+        ],
+        "categories": [],
+        "thumbnail": "http://i1.hdslb.com/bfs/archive/fa2acae2fbeae483f5ff025f797a7a35ec6282ff.jpg",
+        "view_count": 518,
+        "like_count": 65,
+        "comment_count": 12,
+        "favorite_count": null,
+        "repost_count": null,
+        "danmaku_count": null,
+        "availability": null,
+        "subtitle_languages": [
+          "danmaku"
+        ],
+        "automatic_caption_languages": [],
+        "transcript_files": [],
+        "parts": [],
+        "collection_status": "detail_collected",
+        "collector_id": "BV17Gaa6TEqG"
+      },
+      "display": {
+        "date": "2026-09-27",
+        "platform": "bilibili",
+        "tag": "系列节目",
+        "title": "中秋快乐",
+        "excerpt": "不定期更新的周记④｜中秋快乐🌜",
+        "note": "王安妮以周记形式分享中秋前后的一周生活片段。",
+        "source": "https://www.bilibili.com/video/BV17Gaa6TEqG",
+        "kind": "个人日记",
+        "post_id": "BV17Gaa6TEqG",
+        "published_at": "2026-09-27T13:58:24.000Z",
+        "related_posts": [],
+        "confidence": "low",
+        "review_status": "needs_context"
+      }
+    },
+    {
       "id": "BV1kMeq6wEHR",
       "raw": {
         "id": "BV1kMeq6wEHR",
