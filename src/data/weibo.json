@@ -2,6 +2,139 @@
   "schema_version": 2,
   "records": [
     {
+      "id": "5350022348280709",
+      "raw": {
+        "created_at": "Sat Oct 03 19:49:49 +0800 2026",
+        "id": "5350022348280709",
+        "mid": "5350022348280709",
+        "bid": "RkZjcyKbP",
+        "text": "来见证origin走向璀璨未来吧✨",
+        "raw_text": "来见证origin走向璀璨未来吧✨",
+        "source": "iPhone 17",
+        "region_name": "发布于 上海",
+        "pic_ids": [],
+        "reposts_count": 1,
+        "comments_count": 4,
+        "attitudes_count": 19,
+        "retweeted_status": {
+          "created_at": "Sat Oct 03 18:00:00 +0800 2026",
+          "id": "5349994714366135",
+          "mid": "5349994714366135",
+          "bid": "RkYADijPx",
+          "user": {
+            "id": "7566226055",
+            "screen_name": "星梦偶像计划官方"
+          },
+          "text": "#星梦偶像计划#\nOrigin出道单曲《Starlight nova》首发\n原作：《星梦偶像计划》\n作者：烟头Hstone、白熊\nPV制作：云图\n表演者：程安子-TSH48、桂楚楚-TSH48、王安妮-TSH48、王晓阳-OG成员、韦筱雅-TSH48\n作词：白熊\n作曲：苏哈\n编曲：施慕珺\n混音：期见\n录音：杨培育\n艺人统筹：闫霖琪、骆骆、北北\n艺人经纪：hina\n宣传推广：校长、娜娜、元元\n版权方：杭州籍火文化创意有限公司\n联合出品方：上海恩斯艺文化传媒有限公司\n#PV# #星梦origin# #TSH48# #二次元#",
+          "source": "星梦偶像计划超话",
+          "region_name": "发布于 浙江",
+          "isLongText": true,
+          "reposts_count": 37,
+          "comments_count": 23,
+          "attitudes_count": 131,
+          "page_info": {
+            "type": "video",
+            "object_id": "1034:5349597124689948",
+            "page_url": "https://video.weibo.com/show?fid=1034%3A5349597124689948",
+            "page_title": "星梦偶像计划官方的微博视频",
+            "url_ori": "http://t.cn/AXWTDC7z",
+            "cover": "https://wx1.sinaimg.cn/orj480/008g3727gy1iho1vb4m78j30u00gvjtn.jpg",
+            "duration": 198.066,
+            "video_orientation": "horizontal"
+          }
+        }
+      },
+      "display": {
+        "date": "2026-10-03",
+        "platform": "weibo",
+        "tag": "《Starlight nova》",
+        "title": "见证 Origin 走向璀璨未来",
+        "excerpt": "来见证origin走向璀璨未来吧✨",
+        "note": "王安妮转发《星梦偶像计划》Origin出道单曲《Starlight nova》首发PV，并表达了对组合未来发展的期待。",
+        "source": "https://m.weibo.cn/status/RkZjcyKbP",
+        "kind": "作品发布",
+        "post_id": "5350022348280709",
+        "published_at": "Sat Oct 03 19:49:49 +0800 2026",
+        "related_posts": [
+          "5349994714366135"
+        ],
+        "confidence": "high",
+        "review_status": "manually_reviewed"
+      }
+    },
+    {
+      "id": "5349320754989709",
+      "raw": {
+        "created_at": "Thu Oct 01 21:21:56 +0800 2026",
+        "id": "5349320754989709",
+        "mid": "5349320754989709",
+        "bid": "RkH3BkW3b",
+        "text": "#安妮的小日记本#\n在武汉和大家度过的国庆\n虽然错过了看烟花的时间\n但是和你的见面比烟花还绚烂多彩🎆💕\n#AKB48TeamSH王安妮#",
+        "source": "AKB48TeamSH王安妮超话",
+        "client_source": "iPhone 17",
+        "region_name": "发布于 湖北",
+        "isLongText": false,
+        "reposts_count": 4,
+        "comments_count": 30,
+        "attitudes_count": 95,
+        "pic_ids": [
+          "008bNUxAgy1ihn63r3d5uj33s02u0qv7",
+          "008bNUxAgy1ihn63vafb4j31sc2ds1kx",
+          "008bNUxAgy1ihn63ubd86j33s02u04qs",
+          "008bNUxAgy1ihn640xk0cj33b04eo1l0",
+          "008bNUxAgy1ihn63wgbm4j31401hc17q",
+          "008bNUxAgy1ihn6443o9bj33b04eo1l0"
+        ],
+        "pics": [
+          {
+            "pid": "008bNUxAgy1ihn63r3d5uj33s02u0qv7",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAgy1ihn63r3d5uj33s02u0qv7.jpg",
+            "type": "livephoto"
+          },
+          {
+            "pid": "008bNUxAgy1ihn63vafb4j31sc2ds1kx",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1ihn63vafb4j31sc2ds1kx.jpg",
+            "type": "livephoto"
+          },
+          {
+            "pid": "008bNUxAgy1ihn63ubd86j33s02u04qs",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAgy1ihn63ubd86j33s02u04qs.jpg",
+            "type": "livephoto"
+          },
+          {
+            "pid": "008bNUxAgy1ihn640xk0cj33b04eo1l0",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAgy1ihn640xk0cj33b04eo1l0.jpg",
+            "type": "livephoto"
+          },
+          {
+            "pid": "008bNUxAgy1ihn63wgbm4j31401hc17q",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAgy1ihn63wgbm4j31401hc17q.jpg",
+            "type": "livephoto"
+          },
+          {
+            "pid": "008bNUxAgy1ihn6443o9bj33b04eo1l0",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAgy1ihn6443o9bj33b04eo1l0.jpg",
+            "type": "livephoto"
+          }
+        ]
+      },
+      "display": {
+        "date": "2026-10-01",
+        "platform": "weibo",
+        "tag": "安妮的小日记本",
+        "title": "武汉国庆，比烟花更绚烂的见面",
+        "excerpt": "但是和你的见面比烟花还绚烂多彩🎆💕",
+        "note": "王安妮记录在武汉与大家度过的国庆活动，并分享后台休息、个人自拍及现场应援物照片。虽然错过了烟花，她把这次见面写成了更加绚烂的节日记忆。",
+        "source": "https://m.weibo.cn/status/RkH3BkW3b",
+        "kind": "个人日记",
+        "post_id": "5349320754989709",
+        "published_at": "Thu Oct 01 21:21:56 +0800 2026",
+        "related_posts": [],
+        "confidence": "high",
+        "review_status": "manually_reviewed"
+      }
+    },
+    {
       "id": "5349124973004567",
       "raw": {
         "created_at": "Thu Oct 01 08:23:58 +0800 2026",
