@@ -2,6 +2,106 @@
   "schema_version": 2,
   "records": [
     {
+      "id": "5352168118813604",
+      "raw": {
+        "created_at": "Fri Oct 09 17:56:21 +0800 2026",
+        "id": "5352168118813604",
+        "mid": "5352168118813604",
+        "bid": "RlT87AYOU",
+        "text": "<a href=\"https://m.weibo.cn/search?containerid=231522type%3D1%26t%3D10%26q%3D%23%E5%AE%89%E5%A6%AE%E7%9A%84%E5%B0%8F%E6%97%A5%E8%AE%B0%E6%9C%AC%23\"><span class=\"surl-text\">#安妮的小日记本#</span></a><br />妮的假日与豆🐶<br /><a href=\"https://m.weibo.cn/p/index?extparam=AKB48TeamSH%E7%8E%8B%E5%AE%89%E5%A6%AE\"><span class=\"surl-text\">AKB48TeamSH王安妮</span></a>",
+        "raw_text": "#安妮的小日记本#\n妮的假日与豆🐶\n#AKB48TeamSH王安妮#",
+        "text_length": 60,
+        "source": "AKB48TeamSH王安妮超话",
+        "client_device": "iPhone 17",
+        "region_name": "发布于 上海",
+        "is_long_text": false,
+        "retweeted_status": null,
+        "pic_num": 9,
+        "pic_ids": [
+          "008bNUxAgy1ihw93sc6ndj33b04eoe84",
+          "008bNUxAgy1ihw9439vjtj33b04eou0z",
+          "008bNUxAgy1ihw93t8tjrj32c03407wi",
+          "008bNUxAgy1ihw93umungj33b04eo7wk",
+          "008bNUxAgy1ihw94ehed0j324h31i4qp",
+          "008bNUxAgy1ihw93xp276j33b04eo1l0",
+          "008bNUxAgy1ihw940j615j33b04eou0z",
+          "008bNUxAgy1ihw946aknoj33b04eo7wk",
+          "008bNUxAgy1ihw948jonyj33b04eou10"
+        ],
+        "pics": [
+          {
+            "pid": "008bNUxAgy1ihw93sc6ndj33b04eoe84",
+            "type": "image",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAgy1ihw93sc6ndj33b04eoe84.jpg"
+          },
+          {
+            "pid": "008bNUxAgy1ihw9439vjtj33b04eou0z",
+            "type": "livephoto",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1ihw9439vjtj33b04eou0z.jpg",
+            "video_url": "https://video.weibo.com/media/play?livephoto=https%3A%2F%2Flivephoto.us.sinaimg.cn%2F002IuIA1gx08BrcqUwF20f0f0100nSRo0k01.mov"
+          },
+          {
+            "pid": "008bNUxAgy1ihw93t8tjrj32c03407wi",
+            "type": "image",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAgy1ihw93t8tjrj32c03407wi.jpg"
+          },
+          {
+            "pid": "008bNUxAgy1ihw93umungj33b04eo7wk",
+            "type": "livephoto",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAgy1ihw93umungj33b04eo7wk.jpg",
+            "video_url": "https://video.weibo.com/media/play?livephoto=https%3A%2F%2Flivephoto.us.sinaimg.cn%2F001w10DRgx08BrcpWws00f0f0100kEJ00k01.mov"
+          },
+          {
+            "pid": "008bNUxAgy1ihw94ehed0j324h31i4qp",
+            "type": "image",
+            "url": "https://wx2.sinaimg.cn/mw2000/008bNUxAgy1ihw94ehed0j324h31i4qp.jpg"
+          },
+          {
+            "pid": "008bNUxAgy1ihw93xp276j33b04eo1l0",
+            "type": "livephoto",
+            "url": "https://wx2.sinaimg.cn/mw2000/008bNUxAgy1ihw93xp276j33b04eo1l0.jpg",
+            "video_url": "https://video.weibo.com/media/play?livephoto=https%3A%2F%2Flivephoto.us.sinaimg.cn%2F000Nk08Wgx08Brcqi5ja0f0f0100nUSx0k01.mov"
+          },
+          {
+            "pid": "008bNUxAgy1ihw940j615j33b04eou0z",
+            "type": "livephoto",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAgy1ihw940j615j33b04eou0z.jpg",
+            "video_url": "https://video.weibo.com/media/play?livephoto=https%3A%2F%2Flivephoto.us.sinaimg.cn%2F000LZp1Ggx08Brcqzs870f0f0100iAgm0k01.mov"
+          },
+          {
+            "pid": "008bNUxAgy1ihw946aknoj33b04eo7wk",
+            "type": "livephoto",
+            "url": "https://wx2.sinaimg.cn/mw2000/008bNUxAgy1ihw946aknoj33b04eo7wk.jpg",
+            "video_url": "https://video.weibo.com/media/play?livephoto=https%3A%2F%2Flivephoto.us.sinaimg.cn%2F002saaa2gx08BrcplvUX0f0f0100hALs0k01.mov"
+          },
+          {
+            "pid": "008bNUxAgy1ihw948jonyj33b04eou10",
+            "type": "livephoto",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAgy1ihw948jonyj33b04eou10.jpg",
+            "video_url": "https://video.weibo.com/media/play?livephoto=https%3A%2F%2Flivephoto.us.sinaimg.cn%2F0010Aj6Ugx08Brcrxgne0f0f0100khfY0k01.mov"
+          }
+        ],
+        "reposts_count": 2,
+        "comments_count": 40,
+        "attitudes_count": 149
+      },
+      "display": {
+        "date": "2026-10-09",
+        "platform": "weibo",
+        "tag": "安妮的小日记本",
+        "title": "林间假日，与红豆相伴",
+        "excerpt": "妮的假日与豆🐶",
+        "note": "王安妮分享九张户外假日照片，在林木环绕的休憩区与博美犬红豆相伴，其中六张为 Live Photo。",
+        "source": "https://m.weibo.cn/status/RlT87AYOU",
+        "kind": "个人日记",
+        "post_id": "5352168118813604",
+        "published_at": "Fri Oct 09 17:56:21 +0800 2026",
+        "related_posts": [],
+        "confidence": "high",
+        "review_status": "manually_reviewed"
+      }
+    },
+    {
       "id": "5350022348280709",
       "raw": {
         "created_at": "Sat Oct 03 19:49:49 +0800 2026",

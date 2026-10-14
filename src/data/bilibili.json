@@ -2,6 +2,66 @@
   "schema_version": 2,
   "records": [
     {
+      "id": "BV18epJ6cEpM",
+      "raw": {
+        "id": "BV18epJ6cEpM",
+        "platform": "bilibili",
+        "bvid": "BV18epJ6cEpM",
+        "aid": null,
+        "title": "【安妮】不定期更新的周记⑤｜国庆七天乐",
+        "description": "-",
+        "timestamp": 1791737391,
+        "upload_date": "20261011",
+        "duration": 398.533,
+        "source": "https://www.bilibili.com/video/BV18epJ6cEpM",
+        "uploader": "王安妮-TSH48",
+        "uploader_id": "5517087",
+        "channel": null,
+        "channel_id": null,
+        "tags": [
+          "发现《Summer (Nature's Crescendo)》",
+          "寻找100个宝藏vlogger",
+          "生活记录",
+          "TSH48",
+          "TSH48王安妮",
+          "国庆"
+        ],
+        "categories": [],
+        "thumbnail": "http://i1.hdslb.com/bfs/archive/f5f89684e7490b35636bf0702621c2f7c91f4760.jpg",
+        "view_count": 544,
+        "like_count": 60,
+        "comment_count": 12,
+        "favorite_count": null,
+        "repost_count": null,
+        "danmaku_count": null,
+        "availability": null,
+        "subtitle_languages": [
+          "ai-zh",
+          "danmaku"
+        ],
+        "automatic_caption_languages": [],
+        "transcript_files": [],
+        "parts": [],
+        "collection_status": "detail_collected",
+        "collector_id": "BV18epJ6cEpM"
+      },
+      "display": {
+        "date": "2026-10-11",
+        "platform": "bilibili",
+        "tag": "系列节目",
+        "title": "国庆七天乐",
+        "excerpt": "不定期更新的周记⑤｜国庆七天乐",
+        "note": "王安妮以周记形式记录国庆七天的生活片段。",
+        "source": "https://www.bilibili.com/video/BV18epJ6cEpM",
+        "kind": "个人日记",
+        "post_id": "BV18epJ6cEpM",
+        "published_at": "2026-10-11T16:49:51.000Z",
+        "related_posts": [],
+        "confidence": "low",
+        "review_status": "needs_context"
+      }
+    },
+    {
       "id": "BV17Gaa6TEqG",
       "raw": {
         "id": "BV17Gaa6TEqG",
