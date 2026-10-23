@@ -2,6 +2,73 @@
   "schema_version": 2,
   "records": [
     {
+      "id": "5356161899167755",
+      "raw": {
+        "created_at": "Tue Oct 20 18:26:11 +0800 2026",
+        "id": "5356161899167755",
+        "mid": "5356161899167755",
+        "bid": "Rnz1HCsX1",
+        "text": "<a href=\"https://m.weibo.cn/search?containerid=231522type%3D1%26t%3D10%26q%3D%23%E6%A8%AA%E5%BA%97%E5%BE%AE%E7%9F%AD%E5%89%A7%E4%B9%8B%E5%A4%9C%23\"><span class=\"surl-text\">#横店微短剧之夜#</span></a> 开启新地图🗺️💕",
+        "raw_text": "#横店微短剧之夜# 开启新地图🗺️💕",
+        "source": "iPhone 17",
+        "region_name": "发布于 上海",
+        "is_long_text": false,
+        "pic_num": 0,
+        "pic_ids": [],
+        "reposts_count": 0,
+        "comments_count": 6,
+        "attitudes_count": 21,
+        "retweeted_status": {
+          "created_at": "Tue Oct 20 18:02:08 +0800 2026",
+          "id": "5356155846263282",
+          "mid": "5356155846263282",
+          "bid": "RnyRWqhmG",
+          "user": {
+            "id": "6395178860",
+            "screen_name": "TSH48"
+          },
+          "text": "#TSH48组合# #AKB48TeamSH#\n短剧不落幕，主角请登场。@横店影视节，我们是TSH48，很高兴能够参与2026#横店微短剧之夜#，10月25日相聚横店，共赴微短剧星光之约。2026#横店影视节#",
+          "raw_text": "#TSH48组合# #AKB48TeamSH#\n短剧不落幕，主角请登场。@横店影视节，我们是TSH48，很高兴能够参与2026#横店微短剧之夜#，10月25日相聚横店，共赴微短剧星光之约。2026#横店影视节#",
+          "source": "AKB48TeamSH超话",
+          "region_name": "发布于 上海",
+          "is_long_text": false,
+          "pic_num": 1,
+          "pic_ids": [
+            "006YNwa8gy1ii90btm7yij30yi1pc4fd"
+          ],
+          "pics": [
+            {
+              "pid": "006YNwa8gy1ii90btm7yij30yi1pc4fd",
+              "type": "image",
+              "url": "https://wx4.sinaimg.cn/mw2000/006YNwa8gy1ii90btm7yij30yi1pc4fd.jpg",
+              "width": 1242,
+              "height": 2208
+            }
+          ],
+          "reposts_count": 48,
+          "comments_count": 77,
+          "attitudes_count": 384
+        }
+      },
+      "display": {
+        "date": "2026-10-20",
+        "platform": "weibo",
+        "tag": "横店微短剧之夜",
+        "title": "开启新地图，赴约横店微短剧之夜",
+        "excerpt": "开启新地图🗺️💕",
+        "note": "王安妮转发TSH48参加2026横店微短剧之夜的活动预告。官方海报将她列入表演嘉宾阵容，活动定于10月25日在横店举行。",
+        "source": "https://m.weibo.cn/status/Rnz1HCsX1",
+        "kind": "活动记录",
+        "post_id": "5356161899167755",
+        "published_at": "Tue Oct 20 18:26:11 +0800 2026",
+        "related_posts": [
+          "5356155846263282"
+        ],
+        "confidence": "high",
+        "review_status": "manually_reviewed"
+      }
+    },
+    {
       "id": "5352168118813604",
       "raw": {
         "created_at": "Fri Oct 09 17:56:21 +0800 2026",
