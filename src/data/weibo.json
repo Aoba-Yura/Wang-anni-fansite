@@ -2,6 +2,319 @@
   "schema_version": 2,
   "records": [
     {
+      "id": "5362754548139476",
+      "raw": {
+        "id": "5362754548139476",
+        "mid": "5362754548139476",
+        "bid": "Rqkx0y9rS",
+        "created_at": "Sat Nov 07 23:03:02 +0800 2026",
+        "edit_at": "Sat Nov 07 23:12:37 +0800 2026",
+        "edit_count": 1,
+        "text": "#安妮的小日记本#\n第一次以国风组的身份和大家见面了！\n很开心能来到美丽的西塘\n被许许多多次热情地回应了\n很幸福呢！\n\n明天的《绝世名伶 夜未央》首演见！\n也希望国风组可以去往更多更多更多美丽的地方与你相见💕\n#AKB48TeamSH王安妮[超话]# 嘉兴·西塘古镇景区",
+        "raw_text": "#安妮的小日记本#\n第一次以国风组的身份和大家见面了！\n很开心能来到美丽的西塘\n被许许多多次热情地回应了\n很幸福呢！\n\n明天的《绝世名伶 夜未央》首演见！\n也希望国风组可以去往更多更多更多美丽的地方与你相见💕",
+        "source": "AKB48TeamSH王安妮超话",
+        "client_source": "iPhone 17",
+        "region_name": "发布于 上海",
+        "location": "嘉兴·西塘古镇景区",
+        "pic_num": 12,
+        "media_summary": "十二张配图记录西塘国风活动，包括灯笼、龙形装饰、水乡游船、舞台演出和夜间莲灯。王安妮身穿红白国风演出服；后三张为实况照片，其中一张横向图片带有微博的AI辅助创作标记。",
+        "pics": [
+          {
+            "pid": "008bNUxAgy1iiu0ut9gakj32dc35sx6q",
+            "type": "image",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAgy1iiu0ut9gakj32dc35sx6q.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iiu0uuc4uxj32dc35sb2b",
+            "type": "image",
+            "url": "https://wx2.sinaimg.cn/mw2000/008bNUxAgy1iiu0uuc4uxj32dc35sb2b.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iiu0uvjanjj32dc35s7wj",
+            "type": "image",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1iiu0uvjanjj32dc35s7wj.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iiu0uxr6xnj32dc35s4qr",
+            "type": "image",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAgy1iiu0uxr6xnj32dc35s4qr.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iiu0uzbk4aj32dc35sx6q",
+            "type": "image",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1iiu0uzbk4aj32dc35sx6q.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iiu0v0bw2gj32dc35s1kz",
+            "type": "image",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1iiu0v0bw2gj32dc35s1kz.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iiu0urjbh6j33402c07wp",
+            "type": "image",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1iiu0urjbh6j33402c07wp.jpg",
+            "width": 2048,
+            "height": 1536,
+            "ai_assisted": true,
+            "ai_notice": "该内容使用AI技术辅助创作"
+          },
+          {
+            "pid": "008bNUxAgy1iiu0v470rsj32c03407wh",
+            "type": "image",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1iiu0v470rsj32c03407wh.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iiu0v2l3s4j3223334npe",
+            "type": "image",
+            "url": "https://wx2.sinaimg.cn/mw2000/008bNUxAgy1iiu0v2l3s4j3223334npe.jpg",
+            "width": 2048,
+            "height": 3071
+          },
+          {
+            "pid": "008bNUxAgy1iiu0ui1zihj31qt2ksb29",
+            "type": "livephoto",
+            "url": "https://wx2.sinaimg.cn/mw2000/008bNUxAgy1iiu0ui1zihj31qt2ksb29.jpg",
+            "width": 2048,
+            "height": 3025,
+            "video": "https://livephoto.us.sinaimg.cn/001NLIzqgx08CbN7uDEH0f0f0100cGWt0k01.mov"
+          },
+          {
+            "pid": "008bNUxAgy1iiu18oe44sj32c03404qq",
+            "type": "livephoto",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAgy1iiu18oe44sj32c03404qq.jpg",
+            "width": 2048,
+            "height": 2730,
+            "video": "https://livephoto.us.sinaimg.cn/004o9Up1gx08CbO0Z03B0f0f0100n1aE0k01.mov"
+          },
+          {
+            "pid": "008bNUxAgy1iiu0v565qfj32c03407wi",
+            "type": "livephoto",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1iiu0v565qfj32c03407wi.jpg",
+            "width": 2048,
+            "height": 2730,
+            "video": "https://livephoto.us.sinaimg.cn/000fu8xfgx08CbN7Pj6o0f0f0100ggBx0k01.mov"
+          }
+        ]
+      },
+      "display": {
+        "date": "2026-11-07",
+        "platform": "weibo",
+        "tag": "安妮的小日记本",
+        "title": "国风组初见，在西塘收获回应",
+        "excerpt": "也希望国风组可以去往更多更多更多美丽的地方与你相见💕",
+        "note": "王安妮首次以国风组成员身份在西塘与观众见面，分享活动舞台与水乡夜景，并预告次日《绝世名伶 夜未央》首演。",
+        "source": "https://m.weibo.cn/status/Rqkx0y9rS",
+        "kind": "舞台演出",
+        "post_id": "5362754548139476",
+        "published_at": "Sat Nov 07 23:03:02 +0800 2026",
+        "related_posts": [
+          "5359817166424580"
+        ],
+        "confidence": "high",
+        "review_status": "manually_reviewed"
+      }
+    },
+    {
+      "id": "5362399605165053",
+      "raw": {
+        "id": "5362399605165053",
+        "mid": "5362399605165053",
+        "bid": "RqbiwlFFj",
+        "created_at": "Fri Nov 06 23:32:37 +0800 2026",
+        "text": "#安妮的小日记本#\n今日闪现Disney｜PHANTACI联名快闪✨\n萌与酷碰撞的样子很令人着迷吧💕\n\n今天做梦都会梦抽到限量款这件事的！\n亲眼见证了队友和老师抽到了限量款！\n好羡慕！！！\n#phantaci##JAYCHOU##Disney##Pixar##PHANTALAND##AKB48TeamSH王安妮[超话]#",
+        "raw_text": "#安妮的小日记本#\n今日闪现Disney｜PHANTACI联名快闪✨\n萌与酷碰撞的样子很令人着迷吧💕\n\n今天做梦都会梦抽到限量款这件事的！\n亲眼见证了队友和老师抽到了限量款！\n好羡慕！！！\n#phantaci##JAYCHOU##Disney##Pixar##PHANTALAND##AKB48TeamSH王安妮[超话]#",
+        "source": "AKB48TeamSH王安妮超话",
+        "client_source": "iPhone 17",
+        "region_name": "发布于 浙江",
+        "pic_num": 9,
+        "media_summary": "九张照片均拍摄于Disney｜PHANTACI联名快闪空间。王安妮身穿白粉配色服装，在主题球池、巨型玩偶、星形眼镜装置、品牌标识及其他陈列前留影。",
+        "pics": [
+          {
+            "pid": "008bNUxAgy1iisvzlf68kj32c0340u12",
+            "type": "image",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1iisvzlf68kj32c0340u12.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iisw1p5dmtj33b04eo1la",
+            "type": "image",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1iisw1p5dmtj33b04eo1la.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iisw2huwikj33b04eob2j",
+            "type": "image",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAgy1iisw2huwikj33b04eob2j.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iisw2l3ap4j33yf2yte82",
+            "type": "image",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAgy1iisw2l3ap4j33yf2yte82.jpg",
+            "width": 2048,
+            "height": 1535
+          },
+          {
+            "pid": "008bNUxAgy1iisw2tx1p1j31sc2dsqv8",
+            "type": "image",
+            "url": "https://wx2.sinaimg.cn/mw2000/008bNUxAgy1iisw2tx1p1j31sc2dsqv8.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iisw3ipgn4j34eo3b0kjw",
+            "type": "image",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAgy1iisw3ipgn4j34eo3b0kjw.jpg",
+            "width": 2048,
+            "height": 1536
+          },
+          {
+            "pid": "008bNUxAgy1iisw455yryj34eo3b0u15",
+            "type": "image",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1iisw455yryj34eo3b0u15.jpg",
+            "width": 2048,
+            "height": 1536
+          },
+          {
+            "pid": "008bNUxAgy1iisw5uqd99j33344monpo",
+            "type": "image",
+            "url": "https://wx1.sinaimg.cn/mw2000/008bNUxAgy1iisw5uqd99j33344monpo.jpg",
+            "width": 2048,
+            "height": 3072
+          },
+          {
+            "pid": "008bNUxAgy1iisw76ja85j33b04eox6z",
+            "type": "image",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1iisw76ja85j33b04eox6z.jpg",
+            "width": 2048,
+            "height": 2730
+          }
+        ]
+      },
+      "display": {
+        "date": "2026-11-06",
+        "platform": "weibo",
+        "tag": "安妮的小日记本",
+        "title": "在萌与酷的碰撞里闪现",
+        "excerpt": "萌与酷碰撞的样子很令人着迷吧💕",
+        "note": "王安妮到访Disney｜PHANTACI联名快闪空间，分享九张主题装置留影，并记录目睹队友和老师抽中限量款后的羡慕。",
+        "source": "https://m.weibo.cn/status/RqbiwlFFj",
+        "kind": "个人日记",
+        "post_id": "5362399605165053",
+        "published_at": "Fri Nov 06 23:32:37 +0800 2026",
+        "related_posts": [],
+        "confidence": "high",
+        "review_status": "manually_reviewed"
+      }
+    },
+    {
+      "id": "5361632754532695",
+      "raw": {
+        "id": "5361632754532695",
+        "mid": "5361632754532695",
+        "bid": "RpRlFj19Z",
+        "created_at": "Wed Nov 04 20:45:25 +0800 2026",
+        "text": "在北京见面吧！//@TSH48:11月29日，让我们开启奇妙的旅程吧⭐️",
+        "raw_text": "在北京见面吧！//@TSH48:11月29日，让我们开启奇妙的旅程吧⭐️",
+        "author_text": "在北京见面吧！",
+        "source": "iPhone 17",
+        "region_name": "发布于 上海",
+        "pic_num": 0,
+        "retweeted_status": {
+          "id": "5361576061962388",
+          "mid": "5361576061962388",
+          "bid": "RpPSe8evq",
+          "created_at": "Wed Nov 04 17:00:09 +0800 2026",
+          "edit_at": "Wed Nov 04 18:42:53 +0800 2026",
+          "edit_count": 1,
+          "user": {
+            "id": "3497429740",
+            "screen_name": "梦次元动漫展"
+          },
+          "source": "微博网页版",
+          "region_name": "发布于 北京",
+          "raw_text": "[星星]次元幻旅·奇妙游园会[星星]\n11月28日-29日 让我们相约【凯德MALL·大兴站】！\n\n[羞嗒嗒]卷➕关，啾2个小伙伴分别获得【随机嘉宾签名】*1\n\n[心]作者/偶像/COSER/签售/走秀/宅舞/市集...等超多内容等你来！\n\n【嘉宾阵容】\n|11月28日|\n华文天下@华文天下 《#我在盛夏遇见雪#》专场签售会\n[星星]漫画编剧 若叶菌@-若叶菌-\n[星星]漫画主笔 niaoniao@-niaoniao-\n\n墨狸@墨狸_READING 《#我可不去苞米地#》专场签售会\n[星星]漫画作者 王圆脸@会画天才王圆脸\n[星星]漫画编剧 蜗蜗@爱吃苞米蜗蜗子\n\n|11月29日|\n[心]TSH48@TSH48 【次元幻旅·奇妙游园会】特别见面会！\n[星星]桂楚楚@桂楚楚-TSH48-\n[星星]王安妮@王安妮-TSH48\n[星星]黄桢璇@黄桢璇-TSH48\n\n【特邀COSER】※排名不分先后\n安楚楚、达芙涅、茶九幽、西罗、夏芈、小小壳、远心微、韵云、小噫、汐汐\n\n↓↓↓活动情报↓↓↓\n《#我在盛夏遇见雪#》专场签售会\n出席日期：11月28日\n签售时间：13:30-活动结束\n截排时间：15:00\n\n《#我可不去苞米地#》专场签售会\n出席日期：11月28日\n签售时间：12:00-活动结束\n\nTSH48@TSH48 【次元幻旅·奇妙游园会】特别见面会\n出席日期：11月29日\n舞台时间：13:30-14:15\n签售时间：14:30-16:30\n\n【特殊企划】\n《#重生之女将星#》肖珏生贺活动\n饮尽流光清秋意，再历湖山醉春时。\n\n《#狐妖小红娘#》新年许愿祈福\n现场会有新年祈福打卡活动，惊喜福袋，还有超值好礼。\n\n[打call]更多情报 敬请期待！！#带着微博逛漫展#",
+          "pic_num": 6,
+          "pics": [
+            {
+              "pid": "d0768aecly1iiq6d4ynwjj21ww2pgu0x",
+              "type": "image",
+              "url": "https://wx1.sinaimg.cn/mw2000/d0768aecly1iiq6d4ynwjj21ww2pgu0x.jpg",
+              "width": 2048,
+              "height": 2896
+            },
+            {
+              "pid": "d0768aecly1iiq6d4tdufj20qe2304qp",
+              "type": "image",
+              "url": "https://wx2.sinaimg.cn/mw2000/d0768aecly1iiq6d4tdufj20qe2304qp.jpg",
+              "width": 950,
+              "height": 2700
+            },
+            {
+              "pid": "d0768aecly1iiq6d4q0p3j20ee35s7gm",
+              "type": "image",
+              "url": "https://wx4.sinaimg.cn/mw2000/d0768aecly1iiq6d4q0p3j20ee35s7gm.jpg",
+              "width": 518,
+              "height": 4096
+            },
+            {
+              "pid": "d0768aecly1iiq6d4sfrbj20qe1f41av",
+              "type": "image",
+              "url": "https://wx1.sinaimg.cn/mw2000/d0768aecly1iiq6d4sfrbj20qe1f41av.jpg",
+              "width": 950,
+              "height": 1840
+            },
+            {
+              "pid": "d0768aecly1iiq6d4t12oj20qe0xe18y",
+              "type": "image",
+              "url": "https://wx4.sinaimg.cn/mw2000/d0768aecly1iiq6d4t12oj20qe0xe18y.jpg",
+              "width": 950,
+              "height": 1202
+            },
+            {
+              "pid": "d0768aecly1iiq6dqmmgtj27ps4w9b2j",
+              "type": "image",
+              "url": "https://wx1.sinaimg.cn/mw2000/d0768aecly1iiq6dqmmgtj27ps4w9b2j.jpg",
+              "width": 2048,
+              "height": 1299
+            }
+          ]
+        }
+      },
+      "display": {
+        "date": "2026-11-04",
+        "platform": "weibo",
+        "tag": "次元幻旅·奇妙游园会",
+        "title": "相约北京次元幻旅游园会",
+        "excerpt": "在北京见面吧！",
+        "note": "王安妮转发北京“次元幻旅·奇妙游园会”预告。她将与桂楚楚、黄桢璇于11月29日在凯德MALL大兴站参加TSH48特别见面会，包括舞台和签售环节。",
+        "source": "https://m.weibo.cn/status/RpRlFj19Z",
+        "kind": "活动预告",
+        "post_id": "5361632754532695",
+        "published_at": "Wed Nov 04 20:45:25 +0800 2026",
+        "related_posts": [],
+        "confidence": "high",
+        "review_status": "manually_reviewed"
+      }
+    },
+    {
       "id": "5359817166424580",
       "raw": {
         "id": "5359817166424580",
