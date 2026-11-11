@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#110e0d">
+  <meta name="description" content="王安妮应援信息站">
+  <title>王安妮应援站・王安妮応援サイト | Anni Suki</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="./assets/fonts/syne/logo-800.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./assets/fonts/ma-shan-zheng/home-hero.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./assets/fonts/klee-one/home-hero-ja.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Klee+One:wght@600&family=Ma+Shan+Zheng&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="home">
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="site-header home-header">
+  <a class="logo" href="./index.html" aria-label="王安妮应援信息站首页 / ホーム">
+    <span class="logo-type"><strong>ANNI SUKI</strong><small>王安妮应援站 · 応援サイト</small></span>
+  </a>
+
+</header>
+
+
+  <main class="home-main">
+    <section class="love-hero" aria-labelledby="home-title">
+      <div class="love-orbit love-orbit-one" aria-hidden="true"></div>
+      <div class="love-orbit love-orbit-two" aria-hidden="true"></div>
+      <span class="love-spark spark-one" aria-hidden="true">✦</span>
+      <span class="love-spark spark-two" aria-hidden="true">♡</span>
+      <h1 id="home-title">
+        <span>今天爱妮，明天爱妮，</span>
+        <span>每天都要爱妮爱妮<span class="love-wave">~</span></span>
+        <small lang="ja">今日も、明日も、毎日貴女が大好き</small>
+      </h1>
+      <a class="love-scroll" href="#explore" aria-label="查看站内栏目 / コンテンツを見る"><span></span></a>
+    </section>
+
+    <nav class="home-bento content-width" id="explore" aria-label="站内栏目 / サイトコンテンツ">
+      <a class="bento-card bento-profile" href="./profile.html"><span>01</span><span class="bento-artwork" style="--bento-artwork:url('./assets/images/anni_6th_anniversary.svg')" aria-hidden="true"></span><div><small lang="ja">プロフィール</small><strong>人物档案</strong></div><b>↗</b></a>
+      <a class="bento-card bento-diary" href="./diary.html"><span>02</span><div><small lang="ja">ダイアリー</small><strong>安妮日常</strong></div><b>↗</b></a>
+      <a class="bento-card bento-notices" href="./notices.html"><span>03</span><div><small lang="ja">お知らせ</small><strong>公告栏</strong></div><b>↗</b></a>
+      <a class="bento-card bento-hymn" href="./hymn.html"><span>04</span><div><small lang="ja">賛歌</small><strong>安妮颂</strong></div><b>↗</b></a>
+      <a class="bento-card bento-game" href="./game.html"><span>05</span><div><small lang="ja">ミニゲーム</small><strong>小游戏</strong></div><b>↗</b></a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <strong>ANNI SUKI</strong>
+      </div>
+      <section class="footer-collaboration" aria-labelledby="footer-credit-label">
+        <p class="footer-credit-label" id="footer-credit-label" lang="ja">技術協力</p>
+        <p class="footer-credit-name">曾经跟鲑鱼一起看蒋公逆流而上</p>
+      </section>
+    </div>
+    <div class="footer-utility">
+      <button class="disclaimer-trigger" type="button" data-disclaimer-open aria-haspopup="dialog" aria-label="免责声明 / 免責事項 / Disclaimer"><span>DISCLAIMER</span> <b aria-hidden="true">↗</b></button>
+      <p class="footer-copyright">© 2026 ANNI SUKI</p>
+      <span class="footer-unofficial">UNOFFICIAL FAN SITE</span>
+    </div>
+  </div>
+</footer>
+
+<dialog class="disclaimer-dialog" data-disclaimer-dialog aria-labelledby="disclaimer-title" aria-modal="true">
+  <div class="disclaimer-dialog-inner">
+    <header class="disclaimer-dialog-head">
+      <button class="disclaimer-close" type="button" data-disclaimer-close aria-label="关闭 / 閉じる / Close">×</button>
+      <p class="disclaimer-kicker">免责声明 · 免責事項 · Disclaimer</p>
+      <h2 id="disclaimer-title" data-disclaimer-title>免责声明</h2>
+      <div class="disclaimer-tabs" role="tablist" aria-label="免责声明语言 / 免責事項の言語 / Disclaimer language">
+        <button class="active" type="button" role="tab" aria-selected="true" aria-controls="disclaimer-zh" id="disclaimer-tab-zh" data-disclaimer-tab="zh">中文</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="disclaimer-ja" id="disclaimer-tab-ja" data-disclaimer-tab="ja" tabindex="-1">日本語</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="disclaimer-en" id="disclaimer-tab-en" data-disclaimer-tab="en" tabindex="-1">English</button>
+      </div>
+    </header>
+    <div class="disclaimer-content">
+      <section class="disclaimer-panel" id="disclaimer-zh" role="tabpanel" aria-labelledby="disclaimer-tab-zh" data-disclaimer-panel="zh" lang="zh-CN" tabindex="0">
+        <h3>关于本站</h3>
+        <p>Anni Suki 是由粉丝个人制作并维护的非官方、非商业应援网站，仅用于资料整理、粉丝创作与交流。</p>
+        <p>本站与王安妮本人、TSH48（原 AKB48 Team SH）、其所属及运营机构，以及其他相关权利主体之间不存在官方隶属、授权、代理、赞助或合作关系。本站所刊载的内容亦不代表上述个人或机构的立场。</p>
+        <h3>内容与相关权利</h3>
+        <p>本站自行创作的文字、设计及其他原创内容，其相应权利归创作者所有。</p>
+        <p>本站涉及的姓名、艺名、肖像、商标，以及来自第三方的文字、图片、影音、社交媒体内容和其他材料，其相关权利仍归各自权利人所有。本站不对第三方内容主张所有权。</p>
+        <p>“安妮日常”等栏目可能根据公开发布的信息进行整理、摘要、引用或评论。由本站撰写的标题、摘要、感想、说明及其他编辑性内容属于粉丝整理与表达，不代表原发布者的原意、观点或正式表述。</p>
+        <p>如需确认活动安排、成员信息、作品信息及其他正式资料，请以 TSH48 官方渠道、王安妮本人公开渠道以及相应原始来源为准。</p>
+        <h3>信息与外部链接</h3>
+        <p>本站会尽力维护资料的准确性和时效性，但无法保证所有内容始终完整、准确或保持最新状态。</p>
+        <p>本站可能提供前往官方社交媒体、影音平台及其他第三方网站的链接。相关网站和服务由相应第三方独立运营，其内容及服务不受本站控制。</p>
+        <h3>权利与内容调整</h3>
+        <p>本站尊重著作权、肖像权、姓名相关权益及其他合法权益。</p>
+        <p>如发现本站内容存在来源标注、权利归属、事实准确性或展示方式方面的问题，本站可能根据具体情况进行核查、修正、补充来源、调整展示方式或停止展示相关内容。</p>
+      </section>
+      <section class="disclaimer-panel" id="disclaimer-ja" role="tabpanel" aria-labelledby="disclaimer-tab-ja" data-disclaimer-panel="ja" lang="ja" tabindex="0" hidden>
+        <h3>当サイトについて</h3>
+        <p>Anni Suki は、ファン個人が制作・運営する非公式・非営利の応援ファンサイトです。資料の整理、ファンによる創作および交流を目的としています。</p>
+        <p>王安妮さんご本人、TSH48（旧称：AKB48 Team SH）、所属・運営関係者、その他の関係各所とは一切の公式な関係はなく、承認・提携・代理・協賛等を受けたものではありません。当サイトに掲載される内容は、ご本人または関係各所の見解を示すものでもありません。</p>
+        <h3>著作権・肖像権等について</h3>
+        <p>当サイトが独自に制作した文章・デザインその他のコンテンツに関する権利は、それぞれの制作者に帰属します。</p>
+        <p>当サイトで言及または掲載する氏名、芸名、肖像、商標、文章、画像、映像、SNS投稿その他の第三者コンテンツに関する権利は、それぞれの権利者に帰属します。当サイトが第三者コンテンツの権利を主張するものではありません。</p>
+        <p>「安妮日常」等では、公開された情報をもとに整理・要約・引用・感想等を掲載する場合があります。当サイト独自のタイトル、要約、感想、説明その他の編集表現はファンによる整理・表現であり、元の投稿者による正式な発言や見解を示すものではありません。</p>
+        <p>活動予定、メンバー情報、作品情報その他の正式な情報については、TSH48公式情報、王安妮さんご本人の公開情報および各出典をご確認ください。</p>
+        <h3>掲載情報・外部リンクについて</h3>
+        <p>掲載内容については可能な限り正確かつ新しい情報を提供するよう努めていますが、その完全性・正確性・最新性を保証するものではありません。</p>
+        <p>当サイトからリンクしている外部サイト、SNS、動画サービス等は、それぞれの運営者によって管理されています。当サイトがリンク先の内容やサービスを管理するものではありません。</p>
+        <h3>権利への配慮</h3>
+        <p>当サイトでは、著作権、肖像権、氏名に関する権利その他の正当な権利を尊重しています。</p>
+        <p>掲載内容について、出典表記、権利関係、事実関係または表示方法に問題があることを確認した場合、必要に応じて内容の確認、修正、出典の追記、表示方法の変更または掲載停止等を行う場合があります。</p>
+      </section>
+      <section class="disclaimer-panel" id="disclaimer-en" role="tabpanel" aria-labelledby="disclaimer-tab-en" data-disclaimer-panel="en" lang="en" tabindex="0" hidden>
+        <h3>About This Site</h3>
+        <p>Anni Suki is an independent, unofficial, non-commercial fan site created and maintained by a fan for archival, creative, and fan-community purposes.</p>
+        <p>This site is not affiliated with, endorsed by, sponsored by, authorized by, or officially connected with Wang Anni, TSH48 (formerly AKB48 Team SH), its management or operating organizations, or any other related rights holder. Content published on this site does not represent the views of those individuals or organizations.</p>
+        <h3>Content and Third-Party Rights</h3>
+        <p>Original writing, design, and other material created specifically for this site remain the work of their respective creators.</p>
+        <p>Names, stage names, likenesses, trademarks, text, photographs, videos, social-media posts, and other third-party materials referenced or displayed on this site remain subject to the rights of their respective owners. Anni Suki does not claim ownership of third-party material.</p>
+        <p>Sections may organize, summarize, quote, or comment on publicly available information. Titles, summaries, commentary, notes, and other editorial material written for this site are fan-created expressions and should not be understood as official statements or views of the original publisher.</p>
+        <p>For authoritative information about schedules, members, releases, and other official matters, please refer to official TSH48 channels, Wang Anni’s public channels, and the original source.</p>
+        <h3>Accuracy and External Links</h3>
+        <p>Reasonable efforts are made to keep information accurate and current, but no guarantee is made regarding its completeness, accuracy, or currency.</p>
+        <p>This site may contain links to official social-media accounts, media platforms, and other third-party websites. Those services are independently operated, and Anni Suki does not control their content or services.</p>
+        <h3>Rights and Content Review</h3>
+        <p>Anni Suki respects copyright, likeness and publicity rights, naming rights, trademarks, and other legitimate rights.</p>
+        <p>If an issue concerning attribution, rights ownership, factual accuracy, or the presentation of material becomes known, the site may review the relevant material and, where appropriate, correct it, add source information, change how it is displayed, or discontinue its display.</p>
+      </section>
+    </div>
+  </div>
+</dialog>
+<script src="./motion.js"></script>
+
+  <script src="./script.js"></script>
+</body>
+</html>

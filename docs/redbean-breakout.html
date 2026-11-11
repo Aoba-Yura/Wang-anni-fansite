@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#110e0d">
+  <meta name="description" content="移动挡板，接住红豆，挑战 18 个纯街机式打砖块关卡。">
+  <title>红豆打砖块 | Anni Suki</title>
+  <style>
+    body.game-assets-loading { overflow:hidden; background:#110e0d; }
+    body.game-assets-loading > *:not(.game-asset-loader):not(script) { visibility:hidden; }
+    .game-asset-loader { position:fixed; z-index:10000; inset:0; display:grid; place-items:center; background:#110e0d; color:#f8e7d5; font:700 14px/1.6 sans-serif; letter-spacing:.16em; text-align:center; }
+    .game-asset-loader::before { content:""; position:absolute; width:40px; height:40px; margin-top:-66px; border:3px solid rgba(248,231,213,.18); border-top-color:#d9565b; border-radius:50%; animation:game-loader-spin .8s linear infinite; }
+    .game-asset-loader[hidden] { display:none; }
+    @keyframes game-loader-spin { to { transform:rotate(360deg); } }
+    @media (prefers-reduced-motion:reduce) { .game-asset-loader::before { animation:none; border-top-color:rgba(248,231,213,.18); } }
+  </style>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="./assets/fonts/syne/logo-800.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./game.css">
+</head>
+<body class="game-assets-loading" data-page="redbean-breakout">
+  <div class="game-asset-loader" id="breakoutAssetLoader" role="status" aria-live="polite"><span id="breakoutAssetLoaderText">正在准备游戏…</span></div>
+  <div class="cursor-glow" aria-hidden="true"></div><div class="noise" aria-hidden="true"></div>
+  <header class="site-header">
+  <a class="logo" href="./index.html" aria-label="王安妮应援信息站首页 / ホーム">
+    <span class="logo-type"><strong>ANNI SUKI</strong><small>王安妮应援站 · 応援サイト</small></span>
+  </a>
+  <nav class="desktop-nav" aria-label="主导航 / メインナビゲーション"><a href="./index.html"><span>首页</span><small lang="ja">ホーム</small></a><a href="./profile.html"><span>人物档案</span><small lang="ja">プロフィール</small></a><a href="./diary.html"><span>安妮日常</span><small lang="ja">ダイアリー</small></a><a href="./notices.html"><span>公告栏</span><small lang="ja">お知らせ</small></a><a href="./hymn.html"><span>安妮颂</span><small lang="ja">賛歌</small></a><a class="active" aria-current="page" href="./game.html"><span>小游戏</span><small lang="ja">ミニゲーム</small></a></nav>
+</header>
+
+
+  <main class="game-shell">
+    <a class="games-back" href="./game.html">← <span>返回小游戏</span><small lang="ja">ゲーム一覧へ</small></a>
+    <div class="game-layout">
+      <section class="game-board-wrap breakout-game" aria-label="红豆打砖块">
+        <div class="game-hud" aria-label="游戏状态 / ゲーム状況">
+          <div class="game-hud-title"><span>红豆打砖块</span><small data-game-level>LEVEL 01</small></div>
+          <div class="game-hud-stats">
+            <span class="hud-life">机会<small lang="ja">ライフ</small> <b data-game-lives aria-label="剩余三次机会 / 残り3回">♥ ♥ ♥</b></span>
+            <span>得分<small lang="ja">スコア</small> <b data-game-score>0000</b></span>
+            <span class="hud-best">最高<small lang="ja">ベスト</small> <b data-game-best>0000</b></span>
+          </div>
+          <div class="game-hud-actions">
+            <button type="button" class="hud-icon-button hud-sound" data-game-sound aria-label="关闭音效" title="关闭音效"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4z"/><path class="sound-wave" d="M16 9c1.3 1.7 1.3 4.3 0 6M18.7 6.5c3 3 3 8 0 11"/><path class="sound-slash" d="M5 4l14 16"/></svg></button>
+            <button type="button" class="hud-icon-button hud-pause" data-game-pause disabled aria-label="暂停游戏 / 一時停止" title="暂停游戏 / 一時停止"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="pause-bars" d="M7 6h3v12H7zm7 0h3v12h-3z"/><path class="play-mark" d="M8 5l11 7-11 7z"/></svg></button>
+          </div>
+        </div>
+        <canvas id="breakout-game" width="900" height="600" data-dog-src="./assets/images/pomeranian-ball.png" aria-label="红豆打砖块游戏区域 / ゲーム画面">你的浏览器需要支持 Canvas 才能运行这个小游戏。Canvas 対応ブラウザーをご利用ください。</canvas>
+        <div class="game-float-message" data-game-message aria-live="polite" hidden></div>
+        <div class="game-overlay" data-game-overlay>
+          <p data-overlay-kicker>READY?</p>
+          <h2 data-overlay-title>红豆打砖块</h2>
+          <p data-overlay-copy>移动挡板，接住红豆，把砖块全部打掉。</p>
+          <div class="game-summary" data-game-summary hidden></div>
+          <div class="level-select" data-level-select hidden aria-label="选择关卡"></div>
+          <div class="game-overlay-actions">
+            <button type="button" data-game-primary><span>开始游戏<small lang="ja">スタート</small></span><b aria-hidden="true">→</b></button>
+            <button type="button" class="overlay-secondary" data-game-secondary><span>选择关卡<small lang="ja">レベル選択</small></span></button>
+            <button type="button" class="overlay-tertiary" data-game-tertiary hidden></button>
+          </div>
+          <div class="game-volume" data-game-volume-panel>
+            <label for="game-volume">音量 <small lang="ja">ボリューム</small></label>
+            <input id="game-volume" data-game-volume type="range" min="0" max="1" step="0.05" value="0.7">
+          </div>
+        </div>
+      </section>
+    </div>
+    <p class="game-status" data-game-status aria-live="polite">等待开始<small lang="ja">スタート待機</small></p>
+  </main>
+
+  <footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <strong>ANNI SUKI</strong>
+      </div>
+      <section class="footer-collaboration" aria-labelledby="footer-credit-label">
+        <p class="footer-credit-label" id="footer-credit-label" lang="ja">技術協力</p>
+        <p class="footer-credit-name">曾经跟鲑鱼一起看蒋公逆流而上</p>
+      </section>
+    </div>
+    <div class="footer-utility">
+      <button class="disclaimer-trigger" type="button" data-disclaimer-open aria-haspopup="dialog" aria-label="免责声明 / 免責事項 / Disclaimer"><span>DISCLAIMER</span> <b aria-hidden="true">↗</b></button>
+      <p class="footer-copyright">© 2026 ANNI SUKI</p>
+      <span class="footer-unofficial">UNOFFICIAL FAN SITE</span>
+    </div>
+  </div>
+</footer>
+
+<dialog class="disclaimer-dialog" data-disclaimer-dialog aria-labelledby="disclaimer-title" aria-modal="true">
+  <div class="disclaimer-dialog-inner">
+    <header class="disclaimer-dialog-head">
+      <button class="disclaimer-close" type="button" data-disclaimer-close aria-label="关闭 / 閉じる / Close">×</button>
+      <p class="disclaimer-kicker">免责声明 · 免責事項 · Disclaimer</p>
+      <h2 id="disclaimer-title" data-disclaimer-title>免责声明</h2>
+      <div class="disclaimer-tabs" role="tablist" aria-label="免责声明语言 / 免責事項の言語 / Disclaimer language">
+        <button class="active" type="button" role="tab" aria-selected="true" aria-controls="disclaimer-zh" id="disclaimer-tab-zh" data-disclaimer-tab="zh">中文</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="disclaimer-ja" id="disclaimer-tab-ja" data-disclaimer-tab="ja" tabindex="-1">日本語</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="disclaimer-en" id="disclaimer-tab-en" data-disclaimer-tab="en" tabindex="-1">English</button>
+      </div>
+    </header>
+    <div class="disclaimer-content">
+      <section class="disclaimer-panel" id="disclaimer-zh" role="tabpanel" aria-labelledby="disclaimer-tab-zh" data-disclaimer-panel="zh" lang="zh-CN" tabindex="0">
+        <h3>关于本站</h3>
+        <p>Anni Suki 是由粉丝个人制作并维护的非官方、非商业应援网站，仅用于资料整理、粉丝创作与交流。</p>
+        <p>本站与王安妮本人、TSH48（原 AKB48 Team SH）、其所属及运营机构，以及其他相关权利主体之间不存在官方隶属、授权、代理、赞助或合作关系。本站所刊载的内容亦不代表上述个人或机构的立场。</p>
+        <h3>内容与相关权利</h3>
+        <p>本站自行创作的文字、设计及其他原创内容，其相应权利归创作者所有。</p>
+        <p>本站涉及的姓名、艺名、肖像、商标，以及来自第三方的文字、图片、影音、社交媒体内容和其他材料，其相关权利仍归各自权利人所有。本站不对第三方内容主张所有权。</p>
+        <p>“安妮日常”等栏目可能根据公开发布的信息进行整理、摘要、引用或评论。由本站撰写的标题、摘要、感想、说明及其他编辑性内容属于粉丝整理与表达，不代表原发布者的原意、观点或正式表述。</p>
+        <p>如需确认活动安排、成员信息、作品信息及其他正式资料，请以 TSH48 官方渠道、王安妮本人公开渠道以及相应原始来源为准。</p>
+        <h3>信息与外部链接</h3>
+        <p>本站会尽力维护资料的准确性和时效性，但无法保证所有内容始终完整、准确或保持最新状态。</p>
+        <p>本站可能提供前往官方社交媒体、影音平台及其他第三方网站的链接。相关网站和服务由相应第三方独立运营，其内容及服务不受本站控制。</p>
+        <h3>权利与内容调整</h3>
+        <p>本站尊重著作权、肖像权、姓名相关权益及其他合法权益。</p>
+        <p>如发现本站内容存在来源标注、权利归属、事实准确性或展示方式方面的问题，本站可能根据具体情况进行核查、修正、补充来源、调整展示方式或停止展示相关内容。</p>
+      </section>
+      <section class="disclaimer-panel" id="disclaimer-ja" role="tabpanel" aria-labelledby="disclaimer-tab-ja" data-disclaimer-panel="ja" lang="ja" tabindex="0" hidden>
+        <h3>当サイトについて</h3>
+        <p>Anni Suki は、ファン個人が制作・運営する非公式・非営利の応援ファンサイトです。資料の整理、ファンによる創作および交流を目的としています。</p>
+        <p>王安妮さんご本人、TSH48（旧称：AKB48 Team SH）、所属・運営関係者、その他の関係各所とは一切の公式な関係はなく、承認・提携・代理・協賛等を受けたものではありません。当サイトに掲載される内容は、ご本人または関係各所の見解を示すものでもありません。</p>
+        <h3>著作権・肖像権等について</h3>
+        <p>当サイトが独自に制作した文章・デザインその他のコンテンツに関する権利は、それぞれの制作者に帰属します。</p>
+        <p>当サイトで言及または掲載する氏名、芸名、肖像、商標、文章、画像、映像、SNS投稿その他の第三者コンテンツに関する権利は、それぞれの権利者に帰属します。当サイトが第三者コンテンツの権利を主張するものではありません。</p>
+        <p>「安妮日常」等では、公開された情報をもとに整理・要約・引用・感想等を掲載する場合があります。当サイト独自のタイトル、要約、感想、説明その他の編集表現はファンによる整理・表現であり、元の投稿者による正式な発言や見解を示すものではありません。</p>
+        <p>活動予定、メンバー情報、作品情報その他の正式な情報については、TSH48公式情報、王安妮さんご本人の公開情報および各出典をご確認ください。</p>
+        <h3>掲載情報・外部リンクについて</h3>
+        <p>掲載内容については可能な限り正確かつ新しい情報を提供するよう努めていますが、その完全性・正確性・最新性を保証するものではありません。</p>
+        <p>当サイトからリンクしている外部サイト、SNS、動画サービス等は、それぞれの運営者によって管理されています。当サイトがリンク先の内容やサービスを管理するものではありません。</p>
+        <h3>権利への配慮</h3>
+        <p>当サイトでは、著作権、肖像権、氏名に関する権利その他の正当な権利を尊重しています。</p>
+        <p>掲載内容について、出典表記、権利関係、事実関係または表示方法に問題があることを確認した場合、必要に応じて内容の確認、修正、出典の追記、表示方法の変更または掲載停止等を行う場合があります。</p>
+      </section>
+      <section class="disclaimer-panel" id="disclaimer-en" role="tabpanel" aria-labelledby="disclaimer-tab-en" data-disclaimer-panel="en" lang="en" tabindex="0" hidden>
+        <h3>About This Site</h3>
+        <p>Anni Suki is an independent, unofficial, non-commercial fan site created and maintained by a fan for archival, creative, and fan-community purposes.</p>
+        <p>This site is not affiliated with, endorsed by, sponsored by, authorized by, or officially connected with Wang Anni, TSH48 (formerly AKB48 Team SH), its management or operating organizations, or any other related rights holder. Content published on this site does not represent the views of those individuals or organizations.</p>
+        <h3>Content and Third-Party Rights</h3>
+        <p>Original writing, design, and other material created specifically for this site remain the work of their respective creators.</p>
+        <p>Names, stage names, likenesses, trademarks, text, photographs, videos, social-media posts, and other third-party materials referenced or displayed on this site remain subject to the rights of their respective owners. Anni Suki does not claim ownership of third-party material.</p>
+        <p>Sections may organize, summarize, quote, or comment on publicly available information. Titles, summaries, commentary, notes, and other editorial material written for this site are fan-created expressions and should not be understood as official statements or views of the original publisher.</p>
+        <p>For authoritative information about schedules, members, releases, and other official matters, please refer to official TSH48 channels, Wang Anni’s public channels, and the original source.</p>
+        <h3>Accuracy and External Links</h3>
+        <p>Reasonable efforts are made to keep information accurate and current, but no guarantee is made regarding its completeness, accuracy, or currency.</p>
+        <p>This site may contain links to official social-media accounts, media platforms, and other third-party websites. Those services are independently operated, and Anni Suki does not control their content or services.</p>
+        <h3>Rights and Content Review</h3>
+        <p>Anni Suki respects copyright, likeness and publicity rights, naming rights, trademarks, and other legitimate rights.</p>
+        <p>If an issue concerning attribution, rights ownership, factual accuracy, or the presentation of material becomes known, the site may review the relevant material and, where appropriate, correct it, add source information, change how it is displayed, or discontinue its display.</p>
+      </section>
+    </div>
+  </div>
+</dialog>
+<script src="./motion.js"></script>
+
+  <nav class="mobile-nav" aria-label="手机端主导航 / モバイルナビゲーション"><a href="./index.html"><b aria-hidden="true">⌂</b><span>首页<small lang="ja">ホーム</small></span></a><a href="./profile.html"><b aria-hidden="true">✦</b><span>档案<small lang="ja">プロフィール</small></span></a><a href="./diary.html"><b aria-hidden="true">✎</b><span>日常<small lang="ja">ダイアリー</small></span></a><a href="./notices.html"><b aria-hidden="true">♡</b><span>公告<small lang="ja">お知らせ</small></span></a><a href="./hymn.html"><b aria-hidden="true">✿</b><span>安妮颂<small lang="ja">賛歌</small></span></a><a class="active" aria-current="page" href="./game.html"><b aria-hidden="true">▦</b><span>游戏<small lang="ja">ミニゲーム</small></span></a></nav>
+  <script id="redbean-level-data" type="application/json">{
+  "schemaVersion": 1,
+  "levels": [
+    { "name": "初次弹跳", "rows": 4, "cols": 10, "mobileCols": 5, "pattern": "full", "speed": 0.88, "powerEvery": 8 },
+    { "name": "红豆条纹", "rows": 5, "cols": 10, "mobileCols": 5, "pattern": "stripes", "speed": 0.91, "strong": 0.1, "powerEvery": 9 },
+    { "name": "粉笔阶梯", "rows": 6, "cols": 11, "mobileCols": 6, "pattern": "steps", "speed": 0.94, "strong": 0.16, "powerEvery": 10 },
+    { "name": "双扉", "rows": 6, "cols": 12, "mobileCols": 6, "pattern": "gates", "speed": 0.97, "strong": 0.18, "powerEvery": 9 },
+    { "name": "菱形练习", "rows": 7, "cols": 11, "mobileCols": 7, "pattern": "diamond", "speed": 1, "strong": 0.22, "powerEvery": 10 },
+    { "name": "慢速列车", "rows": 5, "cols": 10, "mobileCols": 5, "pattern": "stripes", "speed": 1.01, "strong": 0.16, "moving": 0.2, "powerEvery": 9 },
+    { "name": "环形球场", "rows": 8, "cols": 12, "mobileCols": 7, "pattern": "ring", "speed": 1.03, "strong": 0.2, "moving": 0.12, "powerEvery": 10 },
+    { "name": "绿茶回廊", "rows": 7, "cols": 12, "mobileCols": 6, "pattern": "tunnel", "speed": 1.04, "strong": 0.25, "obstacles": [{ "x": 0.38, "y": 0.52, "w": 0.24, "h": 0.025 }], "powerEvery": 10 },
+    { "name": "交错阵列", "rows": 8, "cols": 12, "mobileCols": 6, "pattern": "checker", "speed": 1.06, "strong": 0.24, "moving": 0.18, "powerEvery": 11 },
+    { "name": "中央壁垒", "rows": 7, "cols": 11, "mobileCols": 7, "pattern": "fortress", "speed": 1.07, "strong": 0.32, "obstacles": [{ "x": 0.45, "y": 0.48, "w": 0.1, "h": 0.09 }], "powerEvery": 10 },
+    { "name": "红豆之心", "rows": 8, "cols": 13, "mobileCols": 7, "pattern": "heart", "speed": 1.08, "strong": 0.25, "moving": 0.1, "powerEvery": 10 },
+    { "name": "窄门", "rows": 8, "cols": 12, "mobileCols": 6, "pattern": "gates", "speed": 1.1, "strong": 0.32, "obstacles": [{ "x": 0.12, "y": 0.49, "w": 0.28, "h": 0.024 }, { "x": 0.6, "y": 0.49, "w": 0.28, "h": 0.024 }], "powerEvery": 11 },
+    { "name": "移动城墙", "rows": 7, "cols": 12, "mobileCols": 6, "pattern": "full", "speed": 1.11, "strong": 0.28, "moving": 0.3, "powerEvery": 11 },
+    { "name": "回旋通道", "rows": 9, "cols": 13, "mobileCols": 7, "pattern": "zigzag", "speed": 1.12, "strong": 0.35, "moving": 0.15, "obstacles": [{ "x": 0.08, "y": 0.52, "w": 0.26, "h": 0.022 }, { "x": 0.66, "y": 0.62, "w": 0.26, "h": 0.022 }], "powerEvery": 11 },
+    { "name": "双层防线", "rows": 8, "cols": 12, "mobileCols": 6, "pattern": "shield", "speed": 1.14, "strong": 0.42, "obstacles": [{ "x": 0.32, "y": 0.56, "w": 0.36, "h": 0.024 }], "powerEvery": 12 },
+    { "name": "风车阵", "rows": 9, "cols": 13, "mobileCols": 7, "pattern": "pinwheel", "speed": 1.15, "strong": 0.34, "moving": 0.25, "powerEvery": 11 },
+    { "name": "核心突破", "rows": 9, "cols": 13, "mobileCols": 7, "pattern": "core", "speed": 1.17, "strong": 0.48, "moving": 0.16, "obstacles": [{ "x": 0.22, "y": 0.51, "w": 0.18, "h": 0.022 }, { "x": 0.6, "y": 0.51, "w": 0.18, "h": 0.022 }], "powerEvery": 12 },
+    { "name": "FINAL", "rows": 9, "cols": 14, "mobileCols": 7, "pattern": "final", "speed": 1.18, "strong": 0.48, "moving": 0.24, "obstacles": [{ "x": 0.1, "y": 0.5, "w": 0.22, "h": 0.022 }, { "x": 0.68, "y": 0.5, "w": 0.22, "h": 0.022 }, { "x": 0.42, "y": 0.6, "w": 0.16, "h": 0.022 }], "powerEvery": 12 }
+  ]
+}
+</script>
+  <script src="./script.js"></script>
+  <script src="./game.js"></script>
+</body>
+</html>

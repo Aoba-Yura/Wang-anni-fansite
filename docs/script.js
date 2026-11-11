@@ -1,0 +1,589 @@
+const body = document.body;
+
+const disclaimerDialog = document.querySelector("[data-disclaimer-dialog]");
+const disclaimerOpen = document.querySelector("[data-disclaimer-open]");
+const disclaimerClose = document.querySelector("[data-disclaimer-close]");
+const disclaimerTitle = document.querySelector("[data-disclaimer-title]");
+const disclaimerTabs = [...document.querySelectorAll("[data-disclaimer-tab]")];
+const disclaimerPanels = [...document.querySelectorAll("[data-disclaimer-panel]")];
+const disclaimerTitles = { zh: "免责声明", ja: "免責事項", en: "Disclaimer" };
+let disclaimerReturnFocus = null;
+let disclaimerPageScroll = 0;
+
+const selectDisclaimerLanguage = (language, focus = false) => {
+  if (disclaimerTitle) disclaimerTitle.textContent = disclaimerTitles[language] ?? disclaimerTitles.zh;
+  disclaimerTabs.forEach((tab) => {
+    const selected = tab.dataset.disclaimerTab === language;
+    tab.classList.toggle("active", selected);
+    tab.setAttribute("aria-selected", String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    if (selected && focus) tab.focus();
+  });
+  disclaimerPanels.forEach((panel) => {
+    panel.hidden = panel.dataset.disclaimerPanel !== language;
+  });
+};
+
+disclaimerOpen?.addEventListener("click", () => {
+  if (typeof disclaimerDialog?.showModal !== "function") return;
+  disclaimerReturnFocus = document.activeElement;
+  const documentLanguage = document.documentElement.lang.toLowerCase();
+  selectDisclaimerLanguage(documentLanguage.startsWith("ja") ? "ja" : documentLanguage.startsWith("en") ? "en" : "zh");
+  disclaimerDialog.showModal();
+  disclaimerPageScroll = window.scrollY;
+  body.style.top = `-${disclaimerPageScroll}px`;
+  body.classList.add("disclaimer-open");
+  disclaimerClose?.focus();
+});
+
+disclaimerClose?.addEventListener("click", () => disclaimerDialog?.close());
+disclaimerDialog?.addEventListener("close", () => {
+  body.classList.remove("disclaimer-open");
+  body.style.top = "";
+  window.scrollTo(0, disclaimerPageScroll);
+  if (disclaimerReturnFocus instanceof HTMLElement) disclaimerReturnFocus.focus();
+  disclaimerReturnFocus = null;
+});
+disclaimerDialog?.addEventListener("click", (event) => {
+  if (event.target === disclaimerDialog) disclaimerDialog.close();
+});
+
+disclaimerTabs.forEach((tab) => {
+  tab.addEventListener("click", () => selectDisclaimerLanguage(tab.dataset.disclaimerTab));
+  tab.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const current = disclaimerTabs.indexOf(tab);
+    const next = event.key === "Home" ? 0
+      : event.key === "End" ? disclaimerTabs.length - 1
+      : (current + (event.key === "ArrowRight" ? 1 : -1) + disclaimerTabs.length) % disclaimerTabs.length;
+    selectDisclaimerLanguage(disclaimerTabs[next].dataset.disclaimerTab, true);
+  });
+});
+
+document.querySelectorAll(".oshi-photo").forEach((photo) => {
+  photo.addEventListener("error", () => {
+    photo.hidden = true;
+    photo.parentElement?.classList.add("no-photo");
+  });
+});
+
+const motion = window.Motion;
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (motion && !reduceMotion) document.documentElement.classList.add("motion-enhanced");
+
+const revealElements = (elements, { distance = 10, step = .045 } = {}) => {
+  const targets = [...elements];
+  if (!motion || reduceMotion || !targets.length) return;
+  targets.forEach((element) => {
+    element.style.opacity = "0";
+    if (distance) element.style.translate = `0 ${distance}px`;
+  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      const index = targets.indexOf(entry.target);
+      const animation = motion.animate(entry.target, {
+        opacity: [0, 1],
+        ...(distance ? { translate: [`0 ${distance}px`, "0 0"] } : {}),
+      }, {
+        duration: .4,
+        delay: Math.min(index * step, .18),
+        ease: [.22, 1, .36, 1],
+      });
+      animation.finished.then(() => {
+        entry.target.style.removeProperty("opacity");
+        entry.target.style.removeProperty("translate");
+      });
+    });
+  }, { threshold: .12, rootMargin: "0px 0px -24px" });
+  targets.forEach((element) => observer.observe(element));
+};
+
+if (matchMedia("(pointer: fine)").matches) {
+  window.addEventListener("pointermove", (event) => {
+    document.documentElement.style.setProperty("--mouse-x", event.clientX + "px");
+    document.documentElement.style.setProperty("--mouse-y", event.clientY + "px");
+  }, { passive: true });
+}
+
+const diaryList = document.querySelector("[data-diary-list]");
+if (diaryList) {
+  const countLabel = document.querySelector("[data-diary-count]");
+  const filterBar = document.querySelector(".filter-bar");
+  const filterSummary = filterBar?.querySelector(":scope > summary");
+  const filterPanel = filterBar?.querySelector(":scope > .filter-panel");
+  const filterPanelInner = filterPanel?.querySelector(":scope > .filter-panel-inner");
+  let filterBarAnimation = null;
+  filterSummary?.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (filterBarAnimation) return;
+    if (reduceMotion || typeof filterPanel?.animate !== "function") {
+      filterBar.toggleAttribute("open");
+      return;
+    }
+    const opening = !filterBar.open;
+    filterBar.classList.add("is-animating");
+    if (opening) filterBar.open = true;
+    void filterBar.offsetWidth;
+    const panelStyle = getComputedStyle(filterPanel);
+    const filterGroups = [...filterPanelInner.children];
+    const firstGroupTop = filterGroups[0]?.getBoundingClientRect().top || 0;
+    const lastGroupBottom = filterGroups.at(-1)?.getBoundingClientRect().bottom || firstGroupTop;
+    const expandedHeight = lastGroupBottom - firstGroupTop
+      + parseFloat(panelStyle.paddingTop) + parseFloat(panelStyle.paddingBottom)
+      + parseFloat(panelStyle.borderTopWidth) + parseFloat(panelStyle.borderBottomWidth);
+    filterBarAnimation = filterPanel.animate(
+      opening ? {
+        height: ["0px", expandedHeight + "px"],
+        paddingTop: ["0px", panelStyle.paddingTop],
+        paddingBottom: ["0px", panelStyle.paddingBottom],
+        opacity: [0, 1],
+        transform: ["translateY(-7px)", "translateY(0)"]
+      } : {
+        height: [expandedHeight + "px", "0px"],
+        paddingTop: [panelStyle.paddingTop, "0px"],
+        paddingBottom: [panelStyle.paddingBottom, "0px"],
+        opacity: [1, 0],
+        transform: ["translateY(0)", "translateY(-7px)"]
+      },
+      { duration: opening ? 620 : 440, easing: opening ? "cubic-bezier(.22, 1, .36, 1)" : "cubic-bezier(.4, 0, .2, 1)" }
+    );
+    filterBarAnimation.addEventListener("finish", () => {
+      if (!opening) filterBar.open = false;
+      filterBar.classList.remove("is-animating");
+      filterBarAnimation = null;
+    }, { once: true });
+  });
+  const platforms = [
+    { id: "all", label: "全部" },
+    { id: "weibo", label: "微博" },
+    { id: "bilibili", label: "B 站" },
+  ];
+  const diaryKindDocument = JSON.parse(document.querySelector("#diary-kind-data")?.textContent || '{"categories":[]}');
+  const diaryKinds = diaryKindDocument.categories.map(({ id, label }) => ({ id, label }));
+  const escapeHtml = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
+  const filterState = { platform: "all", year: "all", kind: "all" };
+  const diaryPageSize = 6;
+  let visibleLimit = diaryPageSize;
+  let filteredRecords = [];
+  const makeFilterButton = (group, value, label, active = false) => `<button class="${active ? "active" : ""}" type="button" data-filter-group-name="${group}" data-filter-value="${escapeHtml(value)}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
+  const fillFilters = (items) => {
+    const choices = {
+      platform: platforms.map(({ id, label }) => [id, label]),
+      year: [...new Set(items.map((item) => item.date.slice(0, 4)))].map((year) => [year, year]),
+      kind: diaryKinds.filter(({ id }) => items.some((item) => item.kindGroup === id)).map(({ id, label }) => [id, label]),
+    };
+    Object.entries(choices).forEach(([group, values]) => {
+      const container = document.querySelector(`[data-filter-group="${group}"]`);
+      if (container) container.innerHTML = makeFilterButton(group, "all", "全部", true) + values.filter(([value]) => value !== "all").map(([value, label]) => makeFilterButton(group, value, label)).join("");
+    });
+  };
+  const renderDiary = (items) => {
+    countLabel.textContent = items.length;
+    if (!items.length) {
+      diaryList.innerHTML = '<p class="source-note">没有符合筛选条件的事件。</p>';
+      return;
+    }
+    const shownItems = items.slice(0, visibleLimit);
+    const years = [...new Set(shownItems.map((item) => item.date.slice(0, 4)))];
+    diaryList.innerHTML = years.map((year) => `<section class="diary-year" aria-labelledby="diary-year-${year}">
+      <h2 class="year-divider" id="diary-year-${year}"><span>${year}</span><small>YEAR</small></h2>
+      <div class="year-events">${shownItems.filter((item) => item.date.startsWith(year)).map((item) => {
+        const monthDay = item.date.slice(5).replace("-", ".");
+        const isBilibili = item.platform === "bilibili";
+        const platformLabel = isBilibili ? "B站" : "微博";
+        const sourceLabel = isBilibili ? "查看原视频" : "查看原微博";
+        return `<article class="diary-entry" data-platform="${escapeHtml(item.platform)}">
+          <div class="entry-date"><time datetime="${escapeHtml(item.date)}">${escapeHtml(monthDay)}</time></div>
+          <div class="entry-copy"><p class="entry-tag"><span class="entry-platform">${platformLabel}</span><span>${escapeHtml(item.tag)}</span></p><h3>${escapeHtml(item.title)}</h3>${item.excerpt ? `<p class="entry-excerpt">${escapeHtml(item.excerpt)}</p>` : ""}<a class="source-button" href="${escapeHtml(item.source)}" target="_blank" rel="noopener noreferrer">${sourceLabel} <span aria-hidden="true">↗</span></a></div>
+        </article>`;
+      }).join("")}</div>
+    </section>`).join("") + (shownItems.length < items.length ? `<button class="diary-more" type="button" data-diary-more><span>继续翻阅</span><small>还有 ${items.length - shownItems.length} 则记录</small></button>` : "");
+  };
+  const loadArchive = (path) => fetch(path).then((response) => {
+    if (!response.ok) throw new Error(`archive unavailable: ${path}`);
+    return response.json();
+  });
+  Promise.all([
+    loadArchive("./data/weibo.json"),
+    loadArchive("./data/bilibili.json"),
+  ]).then((archives) => {
+    const visibleRecords = archives.flatMap((archive) => archive.records).filter(item => item.display).map(item => item.display);
+    visibleRecords.sort((a, b) => String(b.date).localeCompare(String(a.date)) || String(b.published_at).localeCompare(String(a.published_at)));
+    fillFilters(visibleRecords);
+    const applyFilters = () => {
+      filteredRecords = visibleRecords.filter((item) => Object.entries(filterState).every(([group, value]) =>
+        value === "all" || (group === "year" ? item.date.startsWith(value) : group === "kind" ? item.kindGroup === value : item[group] === value)
+      ));
+      renderDiary(filteredRecords);
+    };
+    applyFilters();
+    diaryList.addEventListener("click", (event) => {
+      if (!event.target.closest("[data-diary-more]")) return;
+      visibleLimit += diaryPageSize;
+      renderDiary(filteredRecords);
+    });
+    document.querySelectorAll("[data-filter-group-name]").forEach((button) => button.addEventListener("click", () => {
+      const group = button.dataset.filterGroupName;
+      filterState[group] = button.dataset.filterValue;
+      visibleLimit = diaryPageSize;
+      document.querySelectorAll(`[data-filter-group-name="${group}"]`).forEach((item) => { const selected = item === button; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
+      const activeFilterCount = Object.values(filterState).filter((value) => value !== "all").length;
+      const filterSummaryText = document.querySelector("[data-filter-summary]");
+      if (filterSummaryText) filterSummaryText.textContent = activeFilterCount ? `已启用 ${activeFilterCount} 项` : "点击展开";
+      applyFilters();
+    }));
+  }).catch(() => { diaryList.innerHTML = '<p class="source-note">日常记录暂时无法载入。<small lang="ja">投稿データを読み込めませんでした。</small></p>'; });
+}
+
+const noticeList = document.querySelector("[data-notice-list]");
+if (noticeList) {
+  const monthList = document.querySelector("[data-notice-months]");
+  const mobileMonthIndex = window.matchMedia("(max-width: 768px)");
+  const boardFrame = noticeList.closest(".board-frame");
+  const chalkMonth = document.querySelector("[data-notice-chalk]");
+  const updated = document.querySelector("[data-notice-updated]");
+  const escapeNotice = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
+  const embedded = document.querySelector("#notice-data");
+  const loadNotices = embedded?.textContent
+    ? Promise.resolve(JSON.parse(embedded.textContent))
+    : fetch("../data/notices.json").then((response) => response.json());
+
+  loadNotices.then((data) => {
+    const now = Date.now();
+    const publicationTimes = data.items
+      .filter((item) => item.publishAt)
+      .map((item) => Date.parse(item.publishAt))
+      .filter((time) => Number.isFinite(time) && time > now)
+      .sort((a, b) => a - b);
+    if (publicationTimes.length) {
+      setTimeout(() => window.location.reload(), Math.min(publicationTimes[0] - now, 2_147_483_647));
+    }
+    const items = data.items
+      .filter((item) => !item.publishAt || Date.parse(item.publishAt) <= now)
+      .sort((a, b) => b.date.localeCompare(a.date));
+    const months = [...new Set(items.map((item) => item.date.slice(0, 7)))];
+    monthList.innerHTML = `<button class="month-card active" type="button" data-notice-month="all" aria-label="全部月份" aria-pressed="true"><b>ALL</b></button>${months.map((month) => {
+      const [year, number] = month.split("-");
+      return `<button class="month-card" type="button" data-notice-month="${month}" aria-label="${year} 年 ${Number(number)} 月" aria-pressed="false"><b>${number}</b><small>${year}</small></button>`;
+    }).join("")}`;
+    noticeList.innerHTML = items.map((item) => {
+      const classes = ["notice-card", `notice-card--${item.theme || "paper"}`, item.tilt ? `notice-card--tilt-${item.tilt}` : ""].filter(Boolean).join(" ");
+      return `<article class="${classes}" data-notice-card data-notice-month="${item.date.slice(0, 7)}"><i class="pushpin" aria-hidden="true"></i><div class="notice-card-top"><span class="notice-label">${escapeNotice(item.label)}${item.labelJa ? `<small lang="ja">${escapeNotice(item.labelJa)}</small>` : ""}</span><time datetime="${escapeNotice(item.date)}">${escapeNotice(item.displayDate || item.date.replaceAll("-", "."))}</time></div><h3>${escapeNotice(item.title)}</h3><p>${escapeNotice(item.body)}</p>${item.href ? `<a href="${escapeNotice(item.href)}"><span>${escapeNotice(item.linkLabel || "查看详情 ↗")}</span></a>` : ""}${item.signature ? `<span class="notice-signature">${escapeNotice(item.signature)}</span>` : ""}${item.stamp ? `<span class="notice-stamp">${escapeNotice(item.stamp)}</span>` : ""}${item.doodle ? `<span class="notice-doodle" aria-hidden="true">${escapeNotice(item.doodle)}</span>` : ""}</article>`;
+    }).join("");
+    const latestVisibleDate = items.reduce((latest, item) => item.date > latest ? item.date : latest, data.updated || "");
+    if (updated) updated.innerHTML = `最終更新：${latestVisibleDate.replaceAll("-", ".")}`;
+    requestAnimationFrame(() => revealElements(noticeList.querySelectorAll(".notice-card"), { distance: 0 }));
+
+    const buttons = [...document.querySelectorAll(".month-card[data-notice-month]")];
+    const cards = [...document.querySelectorAll("[data-notice-card]")];
+    let activeIndex = 0;
+    let noticeBoardAnimating = false;
+    let queuedIndex = null;
+
+    const applyNoticeMonth = (index) => {
+      const month = buttons[index].dataset.noticeMonth;
+      buttons.forEach((item, itemIndex) => { const selected = itemIndex === index; item.classList.toggle("active", selected); item.setAttribute("aria-pressed", String(selected)); });
+      cards.forEach((card) => { card.hidden = month !== "all" && card.dataset.noticeMonth !== month; });
+      const chalk = month === "all" ? "ALL" : month.slice(-2);
+      if (chalkMonth) {
+        chalkMonth.textContent = chalk;
+        chalkMonth.dataset.text = chalk;
+      }
+      activeIndex = index;
+      buttons[index].scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest", inline: "nearest" });
+    };
+
+    const switchNoticeMonth = async (targetIndex) => {
+      if (!boardFrame || targetIndex === activeIndex) return;
+      if (noticeBoardAnimating) { queuedIndex = targetIndex; return; }
+      noticeBoardAnimating = true;
+      const direction = targetIndex > activeIndex ? 1 : -1;
+      const axis = mobileMonthIndex.matches ? "X" : "Y";
+      const rotation = (degrees) => `rotate${axis}(${degrees}deg)`;
+      boardFrame.classList.add("is-flipping");
+
+      if (reduceMotion) {
+        const fadeOut = boardFrame.animate({ opacity: [1, .35] }, { duration: 80, easing: "ease-out", fill: "forwards" });
+        await fadeOut.finished.catch(() => {});
+        applyNoticeMonth(targetIndex);
+        fadeOut.cancel();
+        const fadeIn = boardFrame.animate({ opacity: [.35, 1] }, { duration: 100, easing: "ease-out" });
+        await fadeIn.finished.catch(() => {});
+      } else {
+        const turnAway = boardFrame.animate([
+          { transform: rotation(0), filter: "brightness(1)" },
+          { transform: rotation(90 * direction), filter: "brightness(.78)" }
+        ], { duration: 320, easing: "cubic-bezier(.55,.06,.68,.19)", fill: "forwards" });
+        await turnAway.finished.catch(() => {});
+        boardFrame.style.transform = rotation(-90 * direction);
+        turnAway.cancel();
+        applyNoticeMonth(targetIndex);
+        const turnBack = boardFrame.animate([
+          { transform: rotation(-90 * direction), filter: "brightness(.78)" },
+          { transform: rotation(0), filter: "brightness(1)" }
+        ], { duration: 340, easing: "cubic-bezier(.22,.61,.36,1)" });
+        await turnBack.finished.catch(() => {});
+        boardFrame.style.transform = "";
+      }
+
+      boardFrame.classList.remove("is-flipping");
+      noticeBoardAnimating = false;
+      if (queuedIndex !== null) {
+        const nextIndex = queuedIndex;
+        queuedIndex = null;
+        if (nextIndex !== activeIndex) switchNoticeMonth(nextIndex);
+      }
+    };
+
+    buttons.forEach((button, index) => button.addEventListener("click", () => {
+      if (index === activeIndex && !noticeBoardAnimating) return;
+      switchNoticeMonth(index);
+    }));
+  }).catch(() => { noticeList.innerHTML = '<p class="source-note">公告暂时无法载入。<small lang="ja">お知らせを読み込めませんでした。</small></p>'; });
+}
+
+const literaryTabsRoot = document.querySelector("[data-literary-tabs]");
+const literaryPanelsRoot = document.querySelector("[data-literary-panels]");
+
+const mobileNav = document.querySelector(".mobile-nav");
+if (mobileNav) {
+  const syncBottomNavSpace = () => {
+    const rect = mobileNav.getBoundingClientRect();
+    const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    const bottomOffset = Math.max(0, viewportHeight - rect.bottom);
+    document.documentElement.style.setProperty("--bottom-nav-space", `${Math.ceil(rect.height + bottomOffset + 16)}px`);
+  };
+  if ("ResizeObserver" in window) new ResizeObserver(syncBottomNavSpace).observe(mobileNav);
+  window.visualViewport?.addEventListener("resize", syncBottomNavSpace);
+  window.addEventListener("resize", syncBottomNavSpace, { passive: true });
+  syncBottomNavSpace();
+}
+
+if (literaryTabsRoot && literaryPanelsRoot) {
+  const escapeLiterary = (value) => String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]));
+  const tanzakuData = JSON.parse(document.querySelector("#tanzaku-data")?.textContent || '{"poems":[],"diaryById":{}}');
+  const renderTanzakuSource = (source) => {
+    if (!source?.url) return "";
+    const sourceType = source.platform === "bilibili" ? "视频" : "微博";
+    return `<a class="tanzaku-source-link" href="${escapeLiterary(source.url)}" target="_blank" rel="noopener noreferrer" aria-label="原${sourceType}を見る">
+      <img src="./assets/tanzaku/source-link-mark.png" alt="">
+    </a>`;
+  };
+  const createTanzakuStyle = (id) => {
+    let state = [...String(id)].reduce((hash, char) => Math.imul(hash ^ char.charCodeAt(0), 16777619), 2166136261) >>> 0;
+    const random = () => {
+      state += 0x6d2b79f5;
+      let value = state;
+      value = Math.imul(value ^ (value >>> 15), value | 1);
+      value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+      return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+    };
+    const between = (min, max, digits = 2) => (min + random() * (max - min)).toFixed(digits);
+    const phase = (range) => `${between(-range, range, 1)}px ${between(-range, range, 1)}px`;
+    const paperShape = `polygon(${between(.25, .7)}% ${between(0, .2)}%,24% ${between(0, .18)}%,53% ${between(0, .2)}%,76% ${between(0, .18)}%,${between(99.3, 99.75)}% ${between(0, .24)}%,${between(99.4, 99.8)}% 18%,${between(99.35, 99.8)}% 43%,${between(99.45, 99.85)}% 68%,${between(99.35, 99.75)}% 86%,${between(99.35, 99.75)}% ${between(99.7, 100)}%,78% ${between(99.72, 100)}%,51% ${between(99.7, 100)}%,27% ${between(99.72, 100)}%,${between(.3, .7)}% ${between(99.7, 100)}%,${between(.15, .55)}% 81%,${between(.15, .55)}% 62%,${between(.15, .55)}% 39%,${between(.25, .65)}% 17%)`;
+    const paperPosition = [
+      `${between(-5, 5, 1)}% ${between(-4, 7, 1)}%`,
+      `${between(-5, 7, 1)}% ${between(-4, 8, 1)}%`,
+      `${between(-4, 6, 1)}% ${between(-5, 7, 1)}%`,
+      `${between(-5, 6, 1)}% ${between(-4, 6, 1)}%`,
+      "0 0",
+      phase(14),
+      phase(16),
+      phase(17),
+      "0 0",
+      "0 0",
+      "0 0",
+    ].join(",");
+    const fiberPosition = ["center bottom", phase(18), phase(20), phase(22), phase(19), phase(23)].join(",");
+    return `--paper-rotate:${between(-.2, .2)}deg;--paper-offset:${between(-1, 2, 1)}px;--paper-shape:${paperShape};--paper-position:${paperPosition};--fiber-position:${fiberPosition}`;
+  };
+  const renderTanzaku = (poem) => {
+    const source = poem.source_id ? tanzakuData.diaryById[poem.source_id] : null;
+    const displayDate = source?.date || poem.date || "";
+    const formLabel = poem.type === "haiku" ? "俳句" : "川柳";
+    const phrases = poem.text.map((line) => `<span class="phrase">${escapeLiterary(line)}</span>`).join("");
+    const title = poem.title ? `<b lang="ja">${escapeLiterary(poem.title)}</b>` : "";
+    const date = displayDate ? `<time datetime="${escapeLiterary(displayDate)}">${escapeLiterary(displayDate.replaceAll("-", "."))}</time>` : "";
+    return `<div class="tanzaku-unit">
+      <article class="tanzaku-card is-${escapeLiterary(poem.season || "none")}" style="${createTanzakuStyle(poem.id)}">
+        <div class="tanzaku-hanging" aria-hidden="true"></div>
+        <div class="tanzaku-paper"><div class="tanzaku-poem" lang="ja">${phrases}</div>${renderTanzakuSource(source)}</div>
+        <div class="tanzaku-caption"><span>${formLabel}</span>${title}${date}</div>
+      </article>
+    </div>`;
+  };
+  const renderLiterary = ({ items }) => {
+    literaryTabsRoot.innerHTML = items.map((item, index) => `<button class="${index === 0 ? "active" : ""}" id="${escapeLiterary(item.id)}-tab" type="button" role="tab" aria-selected="${index === 0}" aria-controls="${escapeLiterary(item.id)}-panel" ${index === 0 ? "" : 'tabindex="-1"'} data-literary-tab="${escapeLiterary(item.id)}"><span>${String(index + 1).padStart(2, "0")}</span><b>${escapeLiterary(item.tabTitle)}</b><small lang="ja">${escapeLiterary(item.tabTitleJa)}</small></button>`).join("");
+    literaryPanelsRoot.innerHTML = items.map((item, index) => {
+      if (item.kind === "short-form-collection") {
+        const entries = tanzakuData.poems.map(renderTanzaku).join("");
+        return `<article class="literary-panel short-form-panel ${index === 0 ? "active" : ""}" id="${escapeLiterary(item.id)}-panel" role="tabpanel" aria-labelledby="${escapeLiterary(item.id)}-tab" data-literary-panel="${escapeLiterary(item.id)}" ${index === 0 ? "" : "hidden"}>
+          <div class="work-meta"><span>TANZAKU GALLERY</span><time datetime="${escapeLiterary(item.date)}">${escapeLiterary(item.date.replaceAll("-", "."))}</time></div>
+          <div class="tanzaku-gallery-shell">
+            <div class="tanzaku-scroll-hint" aria-hidden="true"><span>«</span><span>»</span></div>
+            <div class="tanzaku-gallery" aria-label="短冊作品">${entries}</div>
+          </div>
+        </article>`;
+      }
+      const copyClass = item.kind === "prose" ? "prose-text" : "poem-text";
+      const copy = item.paragraphs.map((lines) => `<p>${lines.map(escapeLiterary).join("<br>")}</p>`).join("");
+      const links = (item.links || []).map((link) => `<a href="${escapeLiterary(link.href)}" target="_blank" rel="noreferrer">${escapeLiterary(link.label)}</a>`).join("　");
+      const footer = `${escapeLiterary(item.footerLabel)}${item.footerLabelJa ? ` <small lang="ja">${escapeLiterary(item.footerLabelJa)}</small>` : ""}${escapeLiterary(item.footerText || (item.footerLabel?.endsWith("：") ? "" : "："))}${links}`;
+      return `<article class="literary-panel ${index === 0 ? "active" : ""} ${item.id === "bangs" ? "bangs-panel" : ""}" id="${escapeLiterary(item.id)}-panel" role="tabpanel" aria-labelledby="${escapeLiterary(item.id)}-tab" data-literary-panel="${escapeLiterary(item.id)}" ${index === 0 ? "" : "hidden"}><div class="work-meta"><span>${escapeLiterary(item.meta)} <small lang="ja">${escapeLiterary(item.metaJa)}</small></span><time datetime="${escapeLiterary(item.date)}">${escapeLiterary(item.date.replaceAll("-", "."))}</time></div><h2${index === 0 ? ' id="literary-title"' : ""}>${escapeLiterary(item.title)}</h2>${item.kind === "poem" ? `<div class="poem-layout"><div class="${copyClass}"${item.language ? ` lang="${escapeLiterary(item.language)}"` : ""}>${copy}</div></div>` : `<div class="${copyClass}">${copy}</div>`}<p class="inspiration">${footer}</p></article>`;
+    }).join("");
+
+    const shortFormPanel = literaryPanelsRoot.querySelector(".short-form-panel");
+    if (shortFormPanel && document.fonts) {
+      const fontSample = `${tanzakuData.poems.flatMap((poem) => poem.text).join("")}妮`;
+      Promise.all([
+        document.fonts.load('400 20px "Yuji Syuku"', fontSample),
+        document.fonts.load('400 20px "Ma Shan Zheng"', "妮"),
+      ]).catch(() => []).finally(() => shortFormPanel.classList.add("is-font-ready"));
+    } else {
+      shortFormPanel?.classList.add("is-font-ready");
+    }
+
+    const literaryTabs = [...literaryTabsRoot.querySelectorAll("[data-literary-tab]")];
+    const literaryPanels = [...literaryPanelsRoot.querySelectorAll("[data-literary-panel]")];
+    literaryTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.literaryTab;
+        literaryTabs.forEach((item) => {
+          const selected = item === tab;
+          item.classList.toggle("active", selected);
+          item.setAttribute("aria-selected", String(selected));
+          item.tabIndex = selected ? 0 : -1;
+        });
+        literaryPanels.forEach((panel) => {
+          const selected = panel.dataset.literaryPanel === target;
+          panel.hidden = !selected;
+          panel.classList.toggle("active", selected);
+        });
+      });
+      tab.addEventListener("keydown", (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const current = literaryTabs.indexOf(tab);
+        const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? literaryTabs.length - 1 : (current + (event.key === "ArrowRight" ? 1 : -1) + literaryTabs.length) % literaryTabs.length;
+        literaryTabs[nextIndex].click();
+        literaryTabs[nextIndex].focus();
+      });
+    });
+  };
+  const embedded = document.querySelector("#hymn-data");
+  const loadHymns = embedded?.textContent
+    ? Promise.resolve(JSON.parse(embedded.textContent))
+    : fetch("../data/hymns.json").then((response) => {
+        if (!response.ok) throw new Error("hymn data unavailable");
+        return response.json();
+      });
+  loadHymns.then(renderLiterary).catch(() => {
+    literaryPanelsRoot.innerHTML = '<p class="source-note">安妮颂暂时无法载入。<small lang="ja">賛歌を読み込めませんでした。</small></p>';
+  });
+}
+
+const pageRevealSelectors = {
+  home: ".love-hero h1, .home-bento",
+  profile: ".page-hero, .profile-visual, .profile-content, .social-section",
+  diary: ".diary-hero, .filter-bar",
+  notices: ".page-hero, .month-index, .board-frame",
+  hymn: ".page-hero, .literary-stage",
+  games: ".games-heading, .game-library",
+  "redbean-breakout": ".game-heading, .game-layout",
+};
+const pageRevealSelector = pageRevealSelectors[document.body.dataset.page];
+if (pageRevealSelector) revealElements(document.querySelectorAll(pageRevealSelector), { step: .06 });
+
+document.querySelectorAll(".copy-color").forEach((button) => {
+  button.addEventListener("click", async () => {
+    const color = button.dataset.color;
+    const label = button.querySelector("b");
+    if (!color || !label) return;
+    try {
+      await navigator.clipboard.writeText(color);
+      label.innerHTML = '已复制<small lang="ja">コピー済み</small>';
+    } catch {
+      label.innerHTML = '请长按色值<small lang="ja">長押ししてください</small>';
+    }
+    window.setTimeout(() => { label.innerHTML = '复制色值<small lang="ja">色コードをコピー</small>'; }, 1600);
+  });
+});
+
+const cheerButton = document.querySelector(".cheer-button");
+const cheerLabel = cheerButton?.querySelector(".cheer-label");
+
+const loveHero = document.querySelector(".love-hero");
+const homeBento = document.querySelector(".home-bento");
+const loveScroll = document.querySelector(".love-scroll");
+
+if (loveHero && homeBento) {
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  let scrollLocked = false;
+  const showPanel = (panel, immediate = false) => {
+    const headerHeight = document.querySelector(".site-header")?.offsetHeight ?? 0;
+    const top = panel === loveHero ? 0 : Math.max(0, panel.offsetTop - headerHeight);
+    if (immediate || reducedMotion.matches) {
+      const previousBehavior = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = "auto";
+      window.scrollTo(0, top);
+      document.documentElement.style.scrollBehavior = previousBehavior;
+    } else {
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+    scrollLocked = true;
+    window.setTimeout(() => { scrollLocked = false; }, immediate || reducedMotion.matches ? 50 : 650);
+  };
+
+  loveScroll?.addEventListener("click", (event) => {
+    event.preventDefault();
+    showPanel(homeBento);
+  });
+
+  window.addEventListener("wheel", (event) => {
+    if (scrollLocked || Math.abs(event.deltaY) < 12 || event.ctrlKey) return;
+    const onHero = window.scrollY < loveHero.offsetHeight / 2;
+    const onBento = window.scrollY >= loveHero.offsetHeight / 2
+      && window.scrollY < loveHero.offsetHeight + homeBento.offsetHeight;
+    if (event.deltaY > 0 && onHero) {
+      event.preventDefault();
+      showPanel(homeBento);
+    } else if (event.deltaY < 0 && onBento) {
+      event.preventDefault();
+      showPanel(loveHero);
+    }
+  }, { passive: false });
+
+  if (location.hash === "#explore") {
+    window.setTimeout(() => showPanel(homeBento, true), 50);
+  }
+}
+
+cheerButton?.addEventListener("click", () => {
+  const particles = ["✦", "♡", "✿", "✧", "·", "✦", "♡"];
+  cheerButton.classList.remove("is-sent");
+  void cheerButton.offsetWidth;
+  cheerButton.classList.add("is-sent");
+  if (cheerLabel) cheerLabel.innerHTML = '应援已送达 ✦<small lang="ja">応援を届けました</small>';
+
+  particles.forEach((symbol, index) => {
+    const particle = document.createElement("i");
+    particle.className = "cheer-particle";
+    particle.textContent = symbol;
+    particle.style.setProperty("--particle-x", `${(index - 3) * 42 + (index % 2 ? 10 : -8)}px`);
+    particle.style.setProperty("--particle-y", `${-28 - (index % 3) * 19}px`);
+    particle.style.setProperty("--particle-rotate", `${(index - 3) * 28}deg`);
+    particle.style.setProperty("--particle-size", `${.75 + (index % 3) * .2}rem`);
+    particle.style.setProperty("--particle-color", index % 2 ? "var(--blush)" : "var(--cream)");
+    particle.addEventListener("animationend", () => particle.remove(), { once: true });
+    cheerButton.append(particle);
+  });
+
+  window.clearTimeout(cheerButton.resetTimer);
+  cheerButton.resetTimer = window.setTimeout(() => {
+    cheerButton.classList.remove("is-sent");
+    if (cheerLabel) cheerLabel.innerHTML = '为安妮应援<small lang="ja">安妮を応援する</small>';
+  }, 1400);
+});

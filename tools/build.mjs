@@ -8,7 +8,12 @@ const source = join(root, "src");
 const pages = join(source, "pages");
 const partials = join(source, "partials");
 const games = join(source, "games");
-const dist = join(root, "dist");
+const outputArgumentIndex = process.argv.indexOf("--output");
+const outputDirectoryName = outputArgumentIndex === -1 ? "dist" : process.argv[outputArgumentIndex + 1];
+if (!new Set(["dist", "docs"]).has(outputDirectoryName)) {
+  throw new Error('Build output must be either "dist" or "docs".');
+}
+const dist = join(root, outputDirectoryName);
 const beanlandRoot = join(games, "beanland-amusement-park");
 const dadidouRoot = join(games, "dadidou");
 
@@ -56,6 +61,7 @@ validateStandaloneGame({
 
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
+if (outputDirectoryName === "docs") await writeFile(join(dist, ".nojekyll"), "");
 const header = await readFile(join(partials, "header.html"), "utf8");
 const footer = await readFile(join(partials, "footer.html"), "utf8");
 const noticeData = await readFile(join(source, "data/notices.json"), "utf8");
@@ -282,6 +288,6 @@ const publicBilibili = {
 await writeFile(join(dist, "data/bilibili.json"), JSON.stringify(publicBilibili));
 console.log(`Bilibili archive: ${bilibiliStats.total} total, ${bilibiliStats.visible} visible, ${bilibiliStats.hidden} hidden`);
 
-console.log(`Built ${await readdir(dist).then(files => files.length)} files in dist/`);
+console.log(`Built ${await readdir(dist).then(files => files.length)} files in ${outputDirectoryName}/`);
 console.log(`Beanland game: v${beanlandVersion}`);
 console.log(`Dadidou game: v${dadidouVersion}`);

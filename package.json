@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "node tools/build.mjs",
+    "build:pages": "node tools/build.mjs --output docs",
     "preview": "node tools/preview.mjs",
     "audit:mobile": "node tools/mobile-audit.mjs",
     "audit:desktop": "node tools/desktop-density-smoke.mjs",
