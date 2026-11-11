@@ -2,6 +2,89 @@
   "schema_version": 2,
   "records": [
     {
+      "id": "5363422499439912",
+      "raw": {
+        "id": "5363422499439912",
+        "mid": "5363422499439912",
+        "bid": "RqBUlDBKE",
+        "created_at": "Mon Nov 09 19:17:14 +0800 2026",
+        "text": "#安妮的小日记本#\n国风组公演终于在大家的期待下千呼万唤始出来了\n在惴惴不安的心情中\n向大家展现了与之前的TSH48截然不同的风格\n万幸这样的尝试\n好像是大家乐于见到的\n\n感谢公司的老师们全力支持国风组公演的推进\n感谢安导、舞蹈瑶瑶老师、声乐bowi老师、戏曲指导林老师的指导\n感谢南京米漫传媒 猛犸文化/风华音纪 上海诩霓文化 南京克莱普文化\n也感谢大家愿意支持国风组 支持《绝世名伶 夜未央》\n#AKB48TeamSH王安妮[超话]#",
+        "raw_text": "#安妮的小日记本#\n国风组公演终于在大家的期待下千呼万唤始出来了\n在惴惴不安的心情中\n向大家展现了与之前的TSH48截然不同的风格\n万幸这样的尝试\n好像是大家乐于见到的\n\n感谢公司的老师们全力支持国风组公演的推进\n感谢安导、舞蹈瑶瑶老师、声乐bowi老师、戏曲指导林老师的指导\n感谢南京米漫传媒 猛犸文化/风华音纪 上海诩霓文化 南京克莱普文化\n也感谢大家愿意支持国风组 支持《绝世名伶 夜未央》",
+        "full_text": "#安妮的小日记本#\n国风组公演终于在大家的期待下千呼万唤始出来了\n在惴惴不安的心情中\n向大家展现了与之前的TSH48截然不同的风格\n万幸这样的尝试\n好像是大家乐于见到的\n\n感谢公司的老师们全力支持国风组公演的推进\n感谢安导、舞蹈瑶瑶老师、声乐bowi老师、戏曲指导林老师的指导\n感谢南京米漫传媒 猛犸文化/风华音纪 上海诩霓文化 南京克莱普文化\n也感谢大家愿意支持国风组 支持《绝世名伶 夜未央》",
+        "source": "AKB48TeamSH王安妮超话",
+        "client_source": "iPhone 17",
+        "region_name": "发布于 上海",
+        "isLongText": true,
+        "textLength": 396,
+        "reposts_count": 2,
+        "comments_count": 24,
+        "attitudes_count": 117,
+        "pic_num": 6,
+        "media_summary": "六张照片均与《绝世名伶 夜未央》首演相关。王安妮身穿蓝金配色国风演出服，其中两张在窗边拍摄，四张记录她与现场应援展示板的合影。",
+        "pics": [
+          {
+            "pid": "008bNUxAgy1iiw5fe7xqlj33b04eo1l1",
+            "type": "image",
+            "url": "https://wx4.sinaimg.cn/mw2000/008bNUxAgy1iiw5fe7xqlj33b04eo1l1.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iiw5exwuvlj335s2jz4qr",
+            "type": "image",
+            "url": "https://wx2.sinaimg.cn/mw2000/008bNUxAgy1iiw5exwuvlj335s2jz4qr.jpg",
+            "width": 2048,
+            "height": 1655
+          },
+          {
+            "pid": "008bNUxAgy1iiw5fg24h0j33b04eo7wl",
+            "type": "image",
+            "url": "https://wx2.sinaimg.cn/mw2000/008bNUxAgy1iiw5fg24h0j33b04eo7wl.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iiw5fa9okbj32bh3wmx6y",
+            "type": "image",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAgy1iiw5fa9okbj32bh3wmx6y.jpg",
+            "width": 2048,
+            "height": 3449
+          },
+          {
+            "pid": "008bNUxAgy1iiw5fc1oo0j32dc35su0y",
+            "type": "image",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAgy1iiw5fc1oo0j32dc35su0y.jpg",
+            "width": 2048,
+            "height": 2730
+          },
+          {
+            "pid": "008bNUxAgy1iiw5fcrf1uj31z23981ky",
+            "type": "image",
+            "url": "https://wx3.sinaimg.cn/mw2000/008bNUxAgy1iiw5fcrf1uj31z23981ky.jpg",
+            "width": 2048,
+            "height": 3378
+          }
+        ]
+      },
+      "display": {
+        "date": "2026-11-09",
+        "platform": "weibo",
+        "tag": "绝世名伶 夜未央",
+        "title": "国风新尝试，终于迎来首演",
+        "excerpt": "万幸这样的尝试 好像是大家乐于见到的",
+        "note": "《绝世名伶 夜未央》国风组公演完成首演后，王安妮回顾了这次区别于TSH48以往风格的尝试，并向参与公演推进、编排与指导的工作人员及合作单位致谢。",
+        "source": "https://m.weibo.cn/status/RqBUlDBKE",
+        "kind": "舞台演出",
+        "post_id": "5363422499439912",
+        "published_at": "Mon Nov 09 19:17:14 +0800 2026",
+        "related_posts": [
+          "5362754548139476"
+        ],
+        "confidence": "high",
+        "review_status": "manually_reviewed"
+      }
+    },
+    {
       "id": "5362754548139476",
       "raw": {
         "id": "5362754548139476",
