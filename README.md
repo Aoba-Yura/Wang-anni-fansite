@@ -44,7 +44,7 @@ GitHub Actions 不参与网站构建。准备发布版本时，在本地运行�
 npm run build:pages
 ```
 
-该命令会重新生成可直接发布的 `docs/`。请将源码变更与 `docs/` 一起提交并推送到 `main`。
+该命令会重新生成可直接发布的 `docs/`，并把仓库根目录的 `CNAME` 复制到发布目录。请将源码变更与 `docs/` 一起提交并推送到 `main`。
 
 首次切换发布方式时，请在仓库的 **Settings → Pages** 中选择 **Deploy from a branch**，分支选择 `main`，目录选择 `/docs`，然后保存。此后 GitHub Pages 会直接发布已经在本地编译完成的静态文件，不再依赖项目的自定义 Actions 工作流。
 

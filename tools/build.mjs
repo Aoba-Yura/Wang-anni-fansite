@@ -232,6 +232,7 @@ await writeFile(join(dist, "script.js"), mainScript
 await cp(join(source, "scripts/game.js"), join(dist, "game.js"));
 await cp(join(root, "node_modules/framer-motion/dist/dom-mini.js"), join(dist, "motion.js"));
 await cp(join(source, "assets/icons/favicon.svg"), join(dist, "favicon.svg"));
+await cp(join(root, "CNAME"), join(dist, "CNAME"));
 await cp(join(source, "assets"), join(dist, "assets"), { recursive: true });
 await cp(join(source, "data"), join(dist, "data"), { recursive: true });
 await cp(games, join(dist, "games"), { recursive: true });
